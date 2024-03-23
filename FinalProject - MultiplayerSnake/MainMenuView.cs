@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -29,19 +31,26 @@ namespace CS5410
         }
         public override GameStateEnum processInput(GameTime gameTime)
         {
-            // This is the technique I'm using to ensure one keypress makes one menu navigation move
             if (!m_waitForKeyRelease)
             {
                 // Arrow keys to navigate the menu
                 if (Keyboard.GetState().IsKeyDown(Keys.Down))
                 {
-                    m_currentSelection = m_currentSelection + 1;
-                    m_waitForKeyRelease = true;
+                    int maxValue = Enum.GetValues(typeof(MenuState)).Cast<int>().Max();
+                    if ((int)(m_currentSelection + 1) <= maxValue)
+                    {
+                        m_currentSelection = m_currentSelection + 1;
+                        m_waitForKeyRelease = true;
+                    }
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Up))
                 {
-                    m_currentSelection = m_currentSelection - 1;
-                    m_waitForKeyRelease = true;
+                    int lowestValue = 0;
+                    if ((int)(m_currentSelection - 1) >= lowestValue)
+                    {
+                        m_currentSelection = m_currentSelection - 1;
+                        m_waitForKeyRelease = true;
+                    }
                 }
                 
                 // If enter is pressed, return the appropriate new state

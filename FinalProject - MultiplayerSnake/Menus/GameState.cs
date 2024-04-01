@@ -63,10 +63,15 @@ namespace CS5410
             if (nextStateEnum == GameStateEnum.Exit)
             {
                 Exit();
-            }
+            } 
             else
             {
                 m_currentState.update(gameTime);
+                // reload content?
+                // if (m_currentState != m_states[nextStateEnum] && nextStateEnum == GameStateEnum.GamePlay)
+                // {
+                //     m_states[nextStateEnum].loadContent(Content);
+                // }
                 m_currentState = m_states[nextStateEnum];
             }
 

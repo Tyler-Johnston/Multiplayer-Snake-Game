@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 namespace CS5410
 {
-    public class GameStateDemo : Game
+    public class GameState : Game
     {
         private GraphicsDeviceManager m_graphics;
         private IGameState m_currentState;
         private Dictionary<GameStateEnum, IGameState> m_states;
 
-        public GameStateDemo()
+        public GameState()
         {
             m_graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";

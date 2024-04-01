@@ -12,6 +12,11 @@ namespace CS5410
         private SpriteFont m_font;
         private GameModel m_gameModel = new GameModel();
         private const string MESSAGE = "Isn't this game fun!";
+        private void resetGameState()
+        {
+                MessageQueueClient.instance.sendMessage(new Shared.Messages.Disconnect());
+                MessageQueueClient.instance.shutdown();
+        }
         public override void loadContent(ContentManager contentManager)
         {
             m_gameModel.initialize(contentManager);
@@ -23,8 +28,8 @@ namespace CS5410
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
-                MessageQueueClient.instance.sendMessage(new Shared.Messages.Disconnect());
-                MessageQueueClient.instance.shutdown();
+                // resetGameState();
+                return GameStateEnum.MainMenu;
             }
 
             foreach (var key in m_previouslyDown)

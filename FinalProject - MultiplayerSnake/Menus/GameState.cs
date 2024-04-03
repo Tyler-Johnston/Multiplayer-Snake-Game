@@ -32,8 +32,8 @@ namespace CS5410
                 { GameStateEnum.MainMenu, new MainMenuView() },
                 { GameStateEnum.GamePlay, new GamePlayView() },
                 { GameStateEnum.HighScores, new HighScoresView() },
-                { GameStateEnum.Help, new HelpView() },
-                { GameStateEnum.About, new AboutView() }
+                { GameStateEnum.CustomizeControls, new CustomizeControlsView() },
+                { GameStateEnum.Credits, new CreditsView() }
             };
 
             // Give all game states a chance to initialize, other than constructor

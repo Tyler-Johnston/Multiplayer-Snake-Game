@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CS5410
 {
-    public class AboutView : GameStateView
+    public class CreditsView : GameStateView
     {
         private SpriteFont m_font;
         private const string MESSAGE = "*I* wrote this amazing game!";
@@ -22,7 +22,7 @@ namespace CS5410
                 return GameStateEnum.MainMenu;
             }
 
-            return GameStateEnum.About;
+            return GameStateEnum.Credits;
         }
 
         public override void render(GameTime gameTime)

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using Client;
+
 
 namespace CS5410
 {
@@ -62,16 +64,18 @@ namespace CS5410
             // Special case for exiting the game
             if (nextStateEnum == GameStateEnum.Exit)
             {
+                MessageQueueClient.instance.sendMessage(new Shared.Messages.Disconnect());
+                MessageQueueClient.instance.shutdown();
                 Exit();
             } 
             else
             {
                 m_currentState.update(gameTime);
                 // reload content?
-                // if (m_currentState != m_states[nextStateEnum] && nextStateEnum == GameStateEnum.GamePlay)
-                // {
-                //     m_states[nextStateEnum].loadContent(Content);
-                // }
+                if (m_currentState != m_states[nextStateEnum] && nextStateEnum == GameStateEnum.GamePlay)
+                {
+                    m_states[nextStateEnum].loadContent(Content);
+                }
                 m_currentState = m_states[nextStateEnum];
             }
 

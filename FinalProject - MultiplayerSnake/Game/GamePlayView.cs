@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Client;
+using Microsoft.Xna.Framework.Media;
 
 namespace CS5410
 {
@@ -12,6 +13,7 @@ namespace CS5410
         private SpriteFont m_font;
         private GameModel m_gameModel = new GameModel();
         private const string MESSAGE = "Isn't this game fun!";
+        private Song m_music;
         private void resetGameState()
         {
                 MessageQueueClient.instance.sendMessage(new Shared.Messages.Disconnect());
@@ -21,7 +23,11 @@ namespace CS5410
         {
             m_gameModel.initialize(contentManager);
             m_font = contentManager.Load<SpriteFont>("Fonts/menu");
+            m_music = contentManager.Load<Song>("Sounds/Riverside Ride Long Loop");
             MessageQueueClient.instance.initialize("localhost", 3000);
+
+            MediaPlayer.Play(m_music);
+            MediaPlayer.IsRepeating = true;
         }
 
         public override GameStateEnum processInput(GameTime gameTime)

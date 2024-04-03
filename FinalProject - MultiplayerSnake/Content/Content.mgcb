@@ -51,3 +51,9 @@
 /processorParam:TextureFormat=Color
 /build:Textures/playerShip1_red.png
 
+#begin Sounds/Riverside Ride Long Loop.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/Riverside Ride Long Loop.mp3
+

@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Client;
+using CS5410.Controls;
+using CS5410.HighScores;
 
 
 namespace CS5410

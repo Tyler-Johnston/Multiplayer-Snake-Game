@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using Shared.Entities;
 using System;
 using System.Collections.Generic;
+using CS5410.Controls;
 
 namespace Client
 {

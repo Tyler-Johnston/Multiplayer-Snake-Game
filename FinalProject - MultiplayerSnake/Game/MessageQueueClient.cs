@@ -78,9 +78,22 @@ namespace Client
         {
             m_keepRunning = false;
             m_eventSendMessages.Set();
-            m_socketServer.Shutdown(SocketShutdown.Both);
-            m_socketServer.Disconnect(false);
-            m_socketServer.Close();
+            if (m_socketServer != null && m_socketServer.Connected)
+            {
+                try
+                {
+                    m_socketServer.Shutdown(SocketShutdown.Both);
+                    m_socketServer.Disconnect(false);
+                }
+                catch (SocketException e)
+                {
+                    Console.WriteLine($"Shutdown SocketException: {e.Message}");
+                }
+                finally
+                {
+                    m_socketServer.Close();
+                }
+            }
         }
 
         /// <summary>

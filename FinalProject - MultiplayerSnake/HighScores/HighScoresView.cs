@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace CS5410
+namespace CS5410.HighScores
 {
     public class HighScoresView : GameStateView
     {

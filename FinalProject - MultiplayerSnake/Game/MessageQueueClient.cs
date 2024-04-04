@@ -74,28 +74,15 @@ namespace Client
         /// <summary>
         /// Gracefully shutdown the network connection and related activities
         /// </summary>
+        /// 
         public void shutdown()
         {
             m_keepRunning = false;
             m_eventSendMessages.Set();
-            if (m_socketServer != null && m_socketServer.Connected)
-            {
-                try
-                {
-                    m_socketServer.Shutdown(SocketShutdown.Both);
-                    m_socketServer.Disconnect(false);
-                }
-                catch (SocketException e)
-                {
-                    Console.WriteLine($"Shutdown SocketException: {e.Message}");
-                }
-                finally
-                {
-                    m_socketServer.Close();
-                }
-            }
+            m_socketServer.Shutdown(SocketShutdown.Both);
+            m_socketServer.Disconnect(false);
+            m_socketServer.Close();
         }
-
         /// <summary>
         /// Two steps in sending a message:
         ///  1. Add the message the the message queue

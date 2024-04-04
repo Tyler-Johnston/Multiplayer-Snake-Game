@@ -24,10 +24,10 @@ namespace CS5410
                 m_gameModel.initialize(contentManager);
                 m_font = contentManager.Load<SpriteFont>("Fonts/menu");
                 m_music = contentManager.Load<Song>("Sounds/Riverside Ride Long Loop");
+                MediaPlayer.Play(m_music);
+                MediaPlayer.IsRepeating = true;
                 m_loaded = true;
             }
-            MediaPlayer.Play(m_music);
-            MediaPlayer.IsRepeating = true;
         }
 
         public override GameStateEnum processInput(GameTime gameTime)

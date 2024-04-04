@@ -51,11 +51,25 @@ namespace Client
                 Tuple.Create(Shared.Components.Input.Type.RotateRight, ControlsManager.Controls["RotateRight"])
             });
 
+            ControlsManager.ControlsUpdated += UpdateSystemKeyboardInput;
+
             return true;
         }
         public void shutdown()
         {
 
+        }
+
+        public void UpdateSystemKeyboardInput()
+        {
+            var newMappings = new List<Tuple<Shared.Components.Input.Type, Keys>>
+            {
+                Tuple.Create(Shared.Components.Input.Type.Thrust, ControlsManager.Controls["Thrust"]),
+                Tuple.Create(Shared.Components.Input.Type.RotateLeft, ControlsManager.Controls["RotateLeft"]),
+                Tuple.Create(Shared.Components.Input.Type.RotateRight, ControlsManager.Controls["RotateRight"])
+            };
+
+            m_systemKeyboardInput.UpdateControlMappings(newMappings);
         }
 
         public void signalKeyPressed(Keys key)

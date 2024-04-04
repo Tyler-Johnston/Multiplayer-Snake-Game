@@ -4,13 +4,13 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Client;
-using CS5410.Controls;
 using Microsoft.Xna.Framework.Media;
 
 namespace CS5410
 {
     public class GamePlayView : GameStateView
     {
+        private bool m_loaded = false;
         private SpriteFont m_font;
         private GameModel m_gameModel = new GameModel();
         private const string MESSAGE = "Isn't this game fun!";
@@ -18,12 +18,14 @@ namespace CS5410
 
         public override void loadContent(ContentManager contentManager)
         {
-
-            MessageQueueClient.instance.initialize("localhost", 3000);
-            m_gameModel.initialize(contentManager);
-            m_font = contentManager.Load<SpriteFont>("Fonts/menu");
-            m_music = contentManager.Load<Song>("Sounds/Riverside Ride Long Loop");
-
+            if (!m_loaded)
+            {
+                MessageQueueClient.instance.initialize("localhost", 3000);
+                m_gameModel.initialize(contentManager);
+                m_font = contentManager.Load<SpriteFont>("Fonts/menu");
+                m_music = contentManager.Load<Song>("Sounds/Riverside Ride Long Loop");
+                m_loaded = true;
+            }
             MediaPlayer.Play(m_music);
             MediaPlayer.IsRepeating = true;
         }
@@ -52,7 +54,6 @@ namespace CS5410
                     m_previouslyDown.Add(key);
                 }
             }
-
             return GameStateEnum.GamePlay;
         }
 

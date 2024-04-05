@@ -6,6 +6,7 @@
         GamePlay,
         HighScores,
         CustomizeControls,
+        InitialSetup,
         Credits,
         Exit
     }

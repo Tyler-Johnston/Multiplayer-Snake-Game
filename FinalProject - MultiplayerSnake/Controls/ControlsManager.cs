@@ -59,9 +59,8 @@ namespace CS5410.Controls
 
         private static void SetDefaultControls()
         {
-            Controls["Thrust"] = Keys.Up;
-            Controls["RotateLeft"] = Keys.Left;
-            Controls["RotateRight"] = Keys.Right;
+            Controls["RotateLeft"] = Keys.A;
+            Controls["RotateRight"] = Keys.D;
             SaveControls();
         }
 

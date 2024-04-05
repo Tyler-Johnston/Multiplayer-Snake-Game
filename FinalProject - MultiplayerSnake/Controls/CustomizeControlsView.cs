@@ -16,11 +16,10 @@ namespace CS5410.Controls
         private const string MESSAGE = "Select 'enter' followed by your new desired key binding";
         private enum MenuState
         {
-            ThrustControl,
             LeftControl,
             RightControl
         }
-        private MenuState m_currentSelection = MenuState.ThrustControl;
+        private MenuState m_currentSelection = MenuState.LeftControl;
 
         public override void loadContent(ContentManager contentManager)
         {
@@ -66,9 +65,6 @@ namespace CS5410.Controls
                 {
                     switch (m_currentSelection)
                     {
-                        case MenuState.ThrustControl:
-                            ControlsManager.SetControl("Thrust", newKey);
-                            break;
                         case MenuState.LeftControl:
                             ControlsManager.SetControl("RotateLeft", newKey);
                             break;
@@ -98,19 +94,10 @@ namespace CS5410.Controls
         {
             m_spriteBatch.Begin();
 
-            // Draw the message at the top
             Vector2 messageSize = m_fontMenu.MeasureString(MESSAGE);
             m_spriteBatch.DrawString(m_fontMenu, MESSAGE, new Vector2(m_graphics.PreferredBackBufferWidth / 2 - messageSize.X / 2, 100), Color.White);
 
-            // Increment the starting position for menu items
             float bottom = 150 + messageSize.Y;
-
-            // Drawing menu items
-            bottom = drawMenuItem(
-                m_currentSelection == MenuState.ThrustControl ? m_fontMenuSelect : m_fontMenu, 
-                $"Thrust Controls: {ControlsManager.Controls["Thrust"]}",
-                bottom, 
-                m_currentSelection == MenuState.ThrustControl ? Color.Yellow : Color.Blue);
             bottom = drawMenuItem(
                 m_currentSelection == MenuState.LeftControl ? m_fontMenuSelect : m_fontMenu, 
                 $"Left Rotate: {ControlsManager.Controls["RotateLeft"]}",

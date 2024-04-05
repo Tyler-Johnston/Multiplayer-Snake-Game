@@ -89,7 +89,7 @@ namespace Client
                     m_instance = null;
                 }
             }
-            catch (SocketException e)
+            catch (SocketException)
             {
             }
         }

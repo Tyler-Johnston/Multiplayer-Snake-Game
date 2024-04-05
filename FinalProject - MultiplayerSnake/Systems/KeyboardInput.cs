@@ -53,25 +53,28 @@ namespace Client.Systems
             }
         }
 
-
         public override void update(TimeSpan elapsedTime)
         {
             foreach (var item in m_entities)
             {
-                List<Shared.Components.Input.Type> inputs = new List<Shared.Components.Input.Type>();
+                // Always add the Thrust input type for constant movement
+                List<Shared.Components.Input.Type> inputs = new List<Shared.Components.Input.Type>() { Shared.Components.Input.Type.Thrust };
+
                 foreach (var key in m_keysPressed)
                 {
                     if (m_keyToFunction[item.Key].m_keyToType.ContainsKey(key))
                     {
                         var type = m_keyToFunction[item.Key].m_keyToType[key];
-                        inputs.Add(type);
+                        // Only add rotation inputs from key presses, thrust is already included
+                        if (type == Shared.Components.Input.Type.RotateLeft || type == Shared.Components.Input.Type.RotateRight)
+                        {
+                            inputs.Add(type);
+                        }
 
                         // Client-side prediction of the input
+                        // Since Thrust is always on, the switch now only handles rotations
                         switch (type)
                         {
-                            case Shared.Components.Input.Type.Thrust:
-                                Shared.Entities.Utility.thrust(item.Value, elapsedTime);
-                                break;
                             case Shared.Components.Input.Type.RotateLeft:
                                 Shared.Entities.Utility.rotateLeft(item.Value, elapsedTime);
                                 break;
@@ -81,12 +84,17 @@ namespace Client.Systems
                         }
                     }
                 }
+
+                // Since Thrust is always active, we ensure it's always processed
+                Shared.Entities.Utility.thrust(item.Value, elapsedTime);
+
                 if (inputs.Count > 0)
                 {
                     MessageQueueClient.instance.sendMessageWithId(new Shared.Messages.Input(item.Key, inputs, elapsedTime));
                 }
             }
         }
+
 
         public override bool add(Entity entity)
         {

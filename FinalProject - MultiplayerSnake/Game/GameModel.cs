@@ -1,4 +1,5 @@
 ﻿using CS5410;
+using CS5410.Controls;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;

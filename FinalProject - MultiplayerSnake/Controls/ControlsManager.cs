@@ -10,8 +10,6 @@ namespace CS5410.Controls
     public static class ControlsManager
     {
         public static Dictionary<string, Keys> Controls { get; private set; } = new Dictionary<string, Keys>();
-        public static event Action ControlsUpdated;
-
 
         static ControlsManager()
         {
@@ -54,13 +52,13 @@ namespace CS5410.Controls
                     serializer.WriteObject(fs, Controls);
                 }
             }
-            ControlsUpdated?.Invoke();
         }
 
         private static void SetDefaultControls()
         {
-            Controls["RotateLeft"] = Keys.A;
-            Controls["RotateRight"] = Keys.D;
+            Controls["Thrust"] = Keys.Up;
+            Controls["RotateLeft"] = Keys.Left;
+            Controls["RotateRight"] = Keys.Right;
             SaveControls();
         }
 

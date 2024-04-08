@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Client;
+using CS5410.Controls;
+using CS5410.HighScores;
 
 
 namespace CS5410
@@ -33,6 +35,7 @@ namespace CS5410
                 { GameStateEnum.GamePlay, new GamePlayView() },
                 { GameStateEnum.HighScores, new HighScoresView() },
                 { GameStateEnum.CustomizeControls, new CustomizeControlsView() },
+                { GameStateEnum.InitialSetup, new InitialSetupView() },
                 { GameStateEnum.Credits, new CreditsView() }
             };
 
@@ -60,6 +63,12 @@ namespace CS5410
         protected override void Update(GameTime gameTime)
         {
             GameStateEnum nextStateEnum = m_currentState.processInput(gameTime);
+
+            // Special case; after initial set up view is done, let gameplayview know about it so it doesnt render that anymore
+            if (nextStateEnum == GameStateEnum.GamePlay && m_currentState is InitialSetupView setupView && setupView.IsSetupFinished)
+            {
+                ((GamePlayView)m_states[GameStateEnum.GamePlay]).InitialSetUpCompleted = true;
+            }
 
             // Special case for exiting the game
             if (nextStateEnum == GameStateEnum.Exit)

@@ -61,6 +61,32 @@ namespace Client.Systems
             }
         }
 
+        public void UpdateControlMappings(List<Tuple<Shared.Components.Input.Type, Keys>> newMappings)
+        {
+            // Update m_typeToKey with new mappings
+            m_typeToKey.Clear();
+            foreach (var mapping in newMappings)
+            {
+                m_typeToKey[mapping.Item1] = mapping.Item2;
+            }
+
+            // Update each entity's m_keyToFunction to reflect the new mappings
+            foreach (var entityKey in m_keyToFunction.Keys)
+            {
+                var entityMappings = m_keyToFunction[entityKey];
+                entityMappings.m_keyToType.Clear();
+                var entityInputs = m_entities[entityKey].get<Shared.Components.Input>().inputs;
+
+                foreach (var inputType in entityInputs)
+                {
+                    if (m_typeToKey.TryGetValue(inputType, out var key))
+                    {
+                        entityMappings.m_keyToType[key] = inputType;
+                    }
+                }
+            }
+        }
+
         public override bool add(Entity entity)
         {
             if (!base.add(entity))

@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
+using CS5410.Controls;
 
 namespace CS5410
 {
@@ -50,7 +51,7 @@ namespace CS5410
                 if (keyboardState.IsKeyDown(Keys.Enter) && (currentStep > 0 || playerName.Length > 0))
                 {
                     currentStep++;
-                    if (currentStep > 3)
+                    if (currentStep > 1)
                     {
                         m_finished = true;
                         return GameStateEnum.GamePlay;
@@ -80,16 +81,10 @@ namespace CS5410
             switch (currentStep)
             {
                 case 0:
-                    message = "Enter Name: [Use Keyboard, press Enter to advance]";
+                    message = "Enter Name:";
                     break;
                 case 1:
-                    message = "Choose Input Method: Mouse/Keyboard";
-                    break;
-                case 2:
-                    message = "Snake changes direction with WASD. ";
-                    break;
-                case 3:
-                    message = "Get ready! Eat as much food as possible and kill enemy players!";
+                    message = "Snake changes direction with keyboard controls";
                     break;
             }
             stringSize = font.MeasureString(message);
@@ -100,7 +95,7 @@ namespace CS5410
 
             if (currentStep == 0)
             {
-                string nameMessage = $"Name: {playerName}";
+                string nameMessage = $"{playerName}";
                 Vector2 nameSize = font.MeasureString(nameMessage);
                 m_spriteBatch.DrawString(font, nameMessage,
                     new Vector2(m_graphics.PreferredBackBufferWidth / 2 - nameSize.X / 2,

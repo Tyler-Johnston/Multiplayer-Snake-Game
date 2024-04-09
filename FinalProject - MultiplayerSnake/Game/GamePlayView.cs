@@ -11,10 +11,10 @@ namespace CS5410
     public class GamePlayView : GameStateView
     {
         private bool m_loaded = false;
+        private Texture2D m_background;
         private bool initialSetupCompleted = false;
         private SpriteFont m_font;
         private GameModel m_gameModel = new GameModel();
-        private const string MESSAGE = "Isn't this game fun!";
         private Song m_music;
 
         public bool InitialSetUpCompleted
@@ -30,6 +30,7 @@ namespace CS5410
                 MessageQueueClient.instance.initialize("localhost", 3000);
                 m_gameModel.initialize(contentManager);
                 m_font = contentManager.Load<SpriteFont>("Fonts/menu");
+                m_background = contentManager.Load<Texture2D>("background");
                 m_music = contentManager.Load<Song>("Sounds/Riverside Ride Long Loop");
                 MediaPlayer.Play(m_music);
                 MediaPlayer.IsRepeating = true;
@@ -72,14 +73,13 @@ namespace CS5410
 
         public override void render(GameTime gameTime)
         {
-            m_spriteBatch.Begin();
-
-            Vector2 stringSize = m_font.MeasureString(MESSAGE);
-            m_spriteBatch.DrawString(m_font, MESSAGE,
-                new Vector2(m_graphics.PreferredBackBufferWidth / 2 - stringSize.X / 2, m_graphics.PreferredBackBufferHeight / 2 - stringSize.Y), Color.Yellow);
-            m_spriteBatch.End();
-
-            m_gameModel.render(gameTime.ElapsedGameTime, m_spriteBatch);
+            if (initialSetupCompleted)
+            {
+                m_spriteBatch.Begin();
+                m_spriteBatch.Draw(m_background, new Rectangle(0, 0, m_graphics.GraphicsDevice.Viewport.Width, m_graphics.GraphicsDevice.Viewport.Height), Color.White);
+                m_spriteBatch.End();
+                m_gameModel.render(gameTime.ElapsedGameTime, m_spriteBatch);
+            }
         }
         private HashSet<Keys> m_previouslyDown = new HashSet<Keys>();
         public override void update(GameTime gameTime)

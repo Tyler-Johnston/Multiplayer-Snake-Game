@@ -3,8 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Client;
 using CS5410.Controls;
-using CS5410.HighScores;
-
 
 namespace CS5410
 {
@@ -23,8 +21,8 @@ namespace CS5410
 
         protected override void Initialize()
         {
-            m_graphics.PreferredBackBufferWidth = 1920;
-            m_graphics.PreferredBackBufferHeight = 1080;
+            m_graphics.PreferredBackBufferWidth = 1300;
+            m_graphics.PreferredBackBufferHeight = 750;
 
             m_graphics.ApplyChanges();
 

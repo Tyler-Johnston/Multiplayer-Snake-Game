@@ -18,6 +18,9 @@ namespace Client
         private Systems.Interpolation m_systemInterpolation = new Systems.Interpolation();
         private Systems.Renderer m_systemRenderer = new Systems.Renderer();
 
+        public int WorldWidth {get; private set; }
+        public int WorldHeight {get; private set;}
+
         /// <summary>
         /// This is where everything performs its update.
         /// </summary>
@@ -38,12 +41,15 @@ namespace Client
         /// of this "game', start by initializing the systems and then
         /// loading the art assets.
         /// </summary>
-        public bool initialize(ContentManager contentManager)
+        public bool initialize(ContentManager contentManager, int screenWidth, int screenHeight)
         {
             m_contentManager = contentManager;
 
             m_systemNetwork.registerNewEntityHandler(handleNewEntity);
             m_systemNetwork.registerRemoveEntityHandler(handleRemoveEntity);
+
+            WorldWidth = screenWidth * 3;
+            WorldHeight = screenHeight * 3;
 
             m_systemKeyboardInput = new Systems.KeyboardInput(new List<Tuple<Shared.Components.Input.Type, Keys>>
             {

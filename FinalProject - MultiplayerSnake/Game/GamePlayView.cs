@@ -17,6 +17,9 @@ namespace CS5410
         private GameModel m_gameModel = new GameModel();
         private Song m_music;
 
+        public int ScreenWidth { get; set; }
+        public int ScreenHeight { get; set; }
+
         public bool InitialSetUpCompleted
         {
             get { return initialSetupCompleted; }
@@ -28,7 +31,7 @@ namespace CS5410
             if (!m_loaded)
             {
                 MessageQueueClient.instance.initialize("localhost", 3000);
-                m_gameModel.initialize(contentManager);
+                m_gameModel.initialize(contentManager, ScreenWidth, ScreenHeight);
                 m_font = contentManager.Load<SpriteFont>("Fonts/menu");
                 m_background = contentManager.Load<Texture2D>("background");
                 m_music = contentManager.Load<Song>("Sounds/Riverside Ride Long Loop");

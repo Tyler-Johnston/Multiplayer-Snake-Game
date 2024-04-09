@@ -43,6 +43,10 @@ namespace CS5410
                 item.Value.initialize(this.GraphicsDevice, m_graphics);
             }
 
+            // pass in the screen height and width to gameplay view so it will be used for the world size in game model
+            ((GamePlayView)m_states[GameStateEnum.GamePlay]).ScreenHeight = m_graphics.PreferredBackBufferHeight;
+            ((GamePlayView)m_states[GameStateEnum.GamePlay]).ScreenWidth = m_graphics.PreferredBackBufferWidth;
+
             // We are starting with the main menu
             m_currentState = m_states[GameStateEnum.MainMenu];
 

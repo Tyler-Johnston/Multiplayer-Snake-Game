@@ -58,7 +58,8 @@ namespace Client.Systems
             foreach (var item in m_entities)
             {
                 // Always add the Thrust input type for constant movement
-                List<Shared.Components.Input.Type> inputs = new List<Shared.Components.Input.Type>() { Shared.Components.Input.Type.Thrust };
+                //Shared.Components.Input.Type.Thrust 
+                List<Shared.Components.Input.Type> inputs = new List<Shared.Components.Input.Type>() { };
 
                 foreach (var key in m_keysPressed)
                 {
@@ -106,7 +107,14 @@ namespace Client.Systems
             KeyToType map = new KeyToType();
             foreach (var input in entity.get<Shared.Components.Input>().inputs)
             {
-                map.m_keyToType[m_typeToKey[input]] = input;
+                try
+                {
+                    map.m_keyToType[m_typeToKey[input]] = input;
+                }
+                catch (Exception ex)
+                {
+                    
+                }
             }
             m_keyToFunction[entity.id] = map;
 

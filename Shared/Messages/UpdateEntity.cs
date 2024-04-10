@@ -14,6 +14,11 @@ namespace Shared.Messages
             if (entity.contains<Position>())
             {
                 this.hasPosition = true;
+                // Add movement constantly
+                Vector2 posUpdate = new Vector2(
+                    (float)(entity.get<Position>().position.X * Math.Cos(entity.get<Position>().orientation)), 
+                    (float)(entity.get<Position>().position.Y * Math.Sin(entity.get<Position>().orientation))
+                    ) * (float)(updateWindow.TotalMilliseconds / 1000);
                 this.position = entity.get<Position>().position;
                 this.orientation = entity.get<Position>().orientation;
             }

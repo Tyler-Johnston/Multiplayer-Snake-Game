@@ -46,7 +46,7 @@ namespace Client
 
             m_systemKeyboardInput = new Systems.KeyboardInput(new List<Tuple<Shared.Components.Input.Type, Keys>>
             {
-                Tuple.Create(Shared.Components.Input.Type.Thrust, ControlsManager.Controls["Thrust"]),
+                // Tuple.Create(Shared.Components.Input.Type.Thrust, ControlsManager.Controls["Thrust"]),
                 Tuple.Create(Shared.Components.Input.Type.RotateLeft, ControlsManager.Controls["RotateLeft"]),
                 Tuple.Create(Shared.Components.Input.Type.RotateRight, ControlsManager.Controls["RotateRight"])
             });
@@ -64,7 +64,7 @@ namespace Client
         {
             var newMappings = new List<Tuple<Shared.Components.Input.Type, Keys>>
             {
-                Tuple.Create(Shared.Components.Input.Type.Thrust, ControlsManager.Controls["Thrust"]),
+                // Tuple.Create(Shared.Components.Input.Type.Thrust, ControlsManager.Controls["Thrust"]),
                 Tuple.Create(Shared.Components.Input.Type.RotateLeft, ControlsManager.Controls["RotateLeft"]),
                 Tuple.Create(Shared.Components.Input.Type.RotateRight, ControlsManager.Controls["RotateRight"])
             };

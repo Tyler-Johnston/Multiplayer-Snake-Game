@@ -16,7 +16,7 @@ namespace Shared.Entities
             entity.add(new Movement(moveRate, rotateRate));
 
             List<Input.Type> inputs = new List<Input.Type>();
-            inputs.Add(Input.Type.Thrust);
+            // inputs.Add(Input.Type.Thrust);
             inputs.Add(Input.Type.RotateLeft);
             inputs.Add(Input.Type.RotateRight);
             entity.add(new Input(inputs));

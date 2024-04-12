@@ -11,12 +11,13 @@ namespace CS5410
     public class GamePlayView : GameStateView
     {
         private bool m_loaded = false;
-        public string m_name;
+        public string m_name = "None";
         private Texture2D m_background;
         private bool initialSetupCompleted = false;
         private SpriteFont m_font;
         private GameModel m_gameModel = new GameModel();
         private Song m_music;
+        private bool m_joined = false;
 
         public int ScreenWidth { get; set; }
         public int ScreenHeight { get; set; }
@@ -95,6 +96,10 @@ namespace CS5410
         public override void update(GameTime gameTime)
         {
             m_gameModel.update(gameTime.ElapsedGameTime);
+            if (!m_joined && initialSetupCompleted)
+            {
+                m_gameModel.join(m_name);
+            }
         }
     }
 }

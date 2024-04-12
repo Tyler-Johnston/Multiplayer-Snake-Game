@@ -69,11 +69,12 @@ namespace CS5410
             // Special case; after initial set up view is done, let gameplayview know about it so it doesnt render that anymore
             if (nextStateEnum == GameStateEnum.GamePlay && m_currentState is InitialSetupView setupView && setupView.IsSetupFinished)
             {
-                ((GamePlayView)m_states[GameStateEnum.GamePlay]).InitialSetUpCompleted = true;
                 GamePlayView play = (GamePlayView)m_states[GameStateEnum.GamePlay];
                 InitialSetupView view = (InitialSetupView)m_states[GameStateEnum.InitialSetup];
 
                 play.m_name = view.playerName;
+                
+                ((GamePlayView)m_states[GameStateEnum.GamePlay]).InitialSetUpCompleted = true;
             }
 
             // Special case for exiting the game

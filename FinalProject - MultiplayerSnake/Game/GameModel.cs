@@ -63,6 +63,11 @@ namespace Client
             return true;
         }
 
+        public void join(string name)
+        {
+            m_systemNetwork.join(name);
+        }
+
         public void UpdateSystemKeyboardInput()
         {
             var newMappings = new List<Tuple<Shared.Components.Input.Type, Keys>>

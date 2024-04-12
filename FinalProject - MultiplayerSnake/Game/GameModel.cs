@@ -98,6 +98,11 @@ namespace Client
         {
             Entity entity = new Entity(message.id);
 
+            if (message.hasName)
+            {
+                entity.add(new Shared.Components.Name(message.name));
+            }
+
             if (message.hasAppearance)
             {
                 Texture2D texture = m_contentManager.Load<Texture2D>(message.texture);

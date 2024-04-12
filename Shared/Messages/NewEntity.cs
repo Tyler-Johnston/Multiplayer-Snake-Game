@@ -11,6 +11,13 @@ namespace Shared.Messages
         {
             this.id = entity.id;
 
+            if (entity.contains<Name>())
+            {
+                this.hasName = true;
+                this.name = entity.get<Name>().name;
+
+            }
+
             if (entity.contains<Appearance>())
             {
                 this.hasAppearance = true;
@@ -59,6 +66,9 @@ namespace Shared.Messages
 
         public uint id { get; private set; }
 
+        public bool hasName { get; private set; } = false;
+        public string name { get; private set; }
+
         // Appearance
         public bool hasAppearance { get; private set; } = false;
         public string texture { get; private set; }
@@ -87,6 +97,13 @@ namespace Shared.Messages
 
             data.AddRange(base.serialize());
             data.AddRange(BitConverter.GetBytes(id));
+
+            data.AddRange(BitConverter.GetBytes(hasName));
+            if (hasAppearance)
+            {
+                data.AddRange(BitConverter.GetBytes(name.Length));
+                data.AddRange(Encoding.UTF8.GetBytes(name));
+            }
 
             data.AddRange(BitConverter.GetBytes(hasAppearance));
             if (hasAppearance)
@@ -136,6 +153,16 @@ namespace Shared.Messages
 
             this.id = BitConverter.ToUInt32(data, offset);
             offset += sizeof(uint);
+
+            this.hasName = BitConverter.ToBoolean(data, offset);
+            offset += sizeof(bool);
+            if (hasName)
+            {
+                int nameSize = BitConverter.ToInt32(data, offset);
+                offset += sizeof(Int32);
+                this.name = Encoding.UTF8.GetString(data, offset, nameSize);
+                offset += nameSize;
+            }
 
             this.hasAppearance = BitConverter.ToBoolean(data, offset);
             offset += sizeof(bool);

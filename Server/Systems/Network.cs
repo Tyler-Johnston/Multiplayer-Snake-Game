@@ -7,12 +7,10 @@ namespace Server.Systems
     public class Network : Shared.Systems.System
     {
         public delegate void Handler(int clientId, TimeSpan elapsedTime, Shared.Messages.Message message);
-        public delegate void JoinHandler(int clientId);
         public delegate void DisconnectHandler(int clientId);
         public delegate void InputHandler(Entity entity, Shared.Components.Input.Type type, TimeSpan elapsedTime);
 
         private Dictionary<Shared.Messages.Type, Handler> m_commandMap = new Dictionary<Shared.Messages.Type, Handler>();
-        private JoinHandler m_joinHandler;
         private DisconnectHandler m_disconnectHandler;
 
         private HashSet<uint> m_reportThese = new HashSet<uint>();
@@ -27,14 +25,6 @@ namespace Server.Systems
                 typeof(Shared.Components.Position)
             )
         {
-            // Register our own join handler
-            registerHandler(Shared.Messages.Type.Join, (int clientId, TimeSpan elapsedTime, Shared.Messages.Message message) =>
-            {
-                if (m_joinHandler != null)
-                {
-                    m_joinHandler(clientId);
-                }
-            });
 
             // Register our own disconnect handler
             registerHandler(Shared.Messages.Type.Disconnect, (int clientId, TimeSpan elapsedTime, Shared.Messages.Message message) =>
@@ -96,17 +86,12 @@ namespace Server.Systems
             updateClients(elapsedTime);
         }
 
-        public void registerJoinHandler(JoinHandler handler)
-        {
-            m_joinHandler = handler;
-        }
-
         public void registerDisconnectHandler(DisconnectHandler handler)
         {
             m_disconnectHandler = handler;
         }
 
-        private void registerHandler(Shared.Messages.Type type, Handler handler)
+        public void registerHandler(Shared.Messages.Type type, Handler handler)
         {
             m_commandMap[type] = handler;
         }

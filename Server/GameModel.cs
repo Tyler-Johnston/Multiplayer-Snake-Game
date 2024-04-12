@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Shared.Components;
 using Shared.Entities;
 using Shared.Messages;
+using System;
 
 namespace Server
 {
@@ -29,7 +30,7 @@ namespace Server
         /// </summary>
         public bool initialize()
         {
-            m_systemNetwork.registerJoinHandler(handleJoin);
+            m_systemNetwork.registerHandler(Shared.Messages.Type.Join, handleJoin);
             m_systemNetwork.registerDisconnectHandler(handleDisconnect);
 
             MessageQueueServer.instance.registerConnectHandler(handleConnect);
@@ -117,14 +118,16 @@ namespace Server
         /// added to the server game model, and notifies the requesting client
         /// of the player.
         /// </summary>
-        private void handleJoin(int clientId)
+        private void handleJoin(int clientId, TimeSpan elapsedTime, Shared.Messages.Message message)
         {
+
+            Shared.Messages.Join messageJoin = (Shared.Messages.Join) message;
             // Step 1: Tell the newly connected player about all other entities
             reportAllEntities(clientId);
 
             // Step 2: Create an entity for the newly joined player and sent it
             //         to the newly joined client
-            Entity player = Shared.Entities.Player.create("Textures/playerShip1_blue", new Vector2(100, 100), 50, 0.1f, (float)Math.PI / 1000);
+            Entity player = Shared.Entities.Player.create("Textures/playerShip1_blue", messageJoin.name, new Vector2(100, 100), 50, 0.1f, (float)Math.PI / 1000);
             addEntity(player);
             m_clientToEntityId[clientId] = player.id;
 
@@ -141,12 +144,12 @@ namespace Server
             // Remove components not needed for "other" players
             player.remove<Shared.Components.Input>();
 
-            Message message = new NewEntity(player);
+            Message messageNewEntity = new NewEntity(player);
             foreach (int otherId in m_clients)
             {
                 if (otherId != clientId)
                 {
-                    MessageQueueServer.instance.sendMessage(otherId, message);
+                    MessageQueueServer.instance.sendMessage(otherId, messageNewEntity);
                 }
             }
         }

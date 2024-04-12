@@ -104,16 +104,20 @@ namespace Server.Systems
             {
                 switch (input)
                 {
-                    // case Shared.Components.Input.Type.Thrust:
-                    //     Shared.Entities.Utility.thrust(entity, message.elapsedTime);
-                    //     m_reportThese.Add(message.entityId);
-                    //     break;
-                    case Shared.Components.Input.Type.RotateLeft:
-                        Shared.Entities.Utility.rotateLeft(entity, message.elapsedTime);
+                    case Shared.Components.Input.Type.TurnLeft:
+                        Shared.Entities.Utility.turnLeft(entity, message.elapsedTime);
                         m_reportThese.Add(message.entityId);
                         break;
-                    case Shared.Components.Input.Type.RotateRight:
-                        Shared.Entities.Utility.rotateRight(entity, message.elapsedTime);
+                    case Shared.Components.Input.Type.TurnRight:
+                        Shared.Entities.Utility.turnRight(entity, message.elapsedTime);
+                        m_reportThese.Add(message.entityId);
+                        break;
+                    case Shared.Components.Input.Type.TurnUp:
+                        Shared.Entities.Utility.turnUp(entity, message.elapsedTime);
+                        m_reportThese.Add(message.entityId);
+                        break;
+                    case Shared.Components.Input.Type.TurnDown:
+                        Shared.Entities.Utility.turnDown(entity, message.elapsedTime);
                         m_reportThese.Add(message.entityId);
                         break;
                 }

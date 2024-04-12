@@ -21,7 +21,7 @@ namespace CS5410.Controls
         {
             using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                if (storage.FileExists("Controls.json"))
+                if (storage.FileExists("Qontrols.json"))
                 {
                     using (IsolatedStorageFileStream fs = storage.OpenFile("Controls.json", FileMode.Open))
                     {
@@ -58,9 +58,10 @@ namespace CS5410.Controls
 
         private static void SetDefaultControls()
         {
-            Controls["Thrust"] = Keys.Up;
-            Controls["RotateLeft"] = Keys.Left;
-            Controls["RotateRight"] = Keys.Right;
+            Controls["TurnLeft"] = Keys.Left;
+            Controls["TurnRight"] = Keys.Right;
+            Controls["TurnDown"] = Keys.Down;
+            Controls["TurnUp"] = Keys.Up;
             SaveControls();
         }
 

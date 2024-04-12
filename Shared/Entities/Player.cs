@@ -54,9 +54,9 @@ namespace Shared.Entities
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
 
-            if (position.orientation != (float)(Math.PI * 3 / 2))
+            if (position.orientation != (float)(Math.PI / 2))
             {
-                position.orientation = (float)(Math.PI / 2);
+                position.orientation = (float)(Math.PI * 3 / 2);
             }
         }
 
@@ -65,9 +65,9 @@ namespace Shared.Entities
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
 
-            if (position.orientation != (float)(Math.PI / 2))
+            if (position.orientation != (float)(Math.PI * 3 / 2))
             {
-                position.orientation = (float)(Math.PI * 3 / 2);
+                position.orientation = (float)(Math.PI / 2);
             }
         }
         public static void turnDownLeft(Entity entity, TimeSpan elapsedTime)

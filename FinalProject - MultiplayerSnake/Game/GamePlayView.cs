@@ -99,6 +99,7 @@ namespace CS5410
             if (!m_joined && initialSetupCompleted)
             {
                 m_gameModel.join(m_name);
+                m_joined = true;
             }
         }
     }

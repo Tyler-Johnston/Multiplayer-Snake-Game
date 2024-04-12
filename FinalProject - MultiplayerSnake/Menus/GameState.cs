@@ -70,6 +70,10 @@ namespace CS5410
             if (nextStateEnum == GameStateEnum.GamePlay && m_currentState is InitialSetupView setupView && setupView.IsSetupFinished)
             {
                 ((GamePlayView)m_states[GameStateEnum.GamePlay]).InitialSetUpCompleted = true;
+                GamePlayView play = (GamePlayView)m_states[GameStateEnum.GamePlay];
+                InitialSetupView view = (InitialSetupView)m_states[GameStateEnum.InitialSetup];
+
+                play.m_name = view.playerName;
             }
 
             // Special case for exiting the game

@@ -131,6 +131,10 @@ namespace Client.Systems
         /// </summary>
         private void handleConnectAck(TimeSpan elapsedTime, ConnectAck message) 
         {
+        }
+
+        public void join(string name)
+        {
             MessageQueueClient.instance.sendMessage(new Join("Player 1"));
         }
 

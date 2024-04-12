@@ -11,6 +11,7 @@ namespace CS5410
     public class GamePlayView : GameStateView
     {
         private bool m_loaded = false;
+        public string m_name;
         private Texture2D m_background;
         private bool initialSetupCompleted = false;
         private SpriteFont m_font;
@@ -80,8 +81,14 @@ namespace CS5410
             {
                 m_spriteBatch.Begin();
                 m_spriteBatch.Draw(m_background, new Rectangle(0, 0, m_graphics.GraphicsDevice.Viewport.Width, m_graphics.GraphicsDevice.Viewport.Height), Color.White);
+                m_spriteBatch.DrawString(m_font, m_name,
+                    new Vector2(m_graphics.PreferredBackBufferWidth / 2,
+                                m_graphics.PreferredBackBufferHeight / 2
+                    ),
+                    Color.White);
                 m_spriteBatch.End();
                 m_gameModel.render(gameTime.ElapsedGameTime, m_spriteBatch);
+                
             }
         }
         private HashSet<Keys> m_previouslyDown = new HashSet<Keys>();

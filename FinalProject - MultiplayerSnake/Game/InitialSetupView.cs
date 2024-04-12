@@ -12,7 +12,7 @@ namespace CS5410
         private int currentStep = 0;
         private bool m_finished = false;
         private bool m_waitForKeyRelease = false;
-        private string playerName = "";
+        public string playerName = "";
         public bool IsSetupFinished
         {
             get { return m_finished; }

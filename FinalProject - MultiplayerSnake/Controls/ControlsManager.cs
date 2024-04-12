@@ -21,7 +21,7 @@ namespace CS5410.Controls
         {
             using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                if (storage.FileExists("Controls.json"))
+                if (storage.FileExists("Qontrols.json"))
                 {
                     using (IsolatedStorageFileStream fs = storage.OpenFile("Controls.json", FileMode.Open))
                     {

@@ -104,14 +104,43 @@ namespace Client.Systems
 
                 // Calculate the position for the name text to appear above the entity
                 Vector2 textPosition = new Vector2(
-                    VPW / 2, 
-                    VPH / 2 - 70);
+                    playerX, 
+                    playerY - 70);
 
                 // Draw the name text above the entity
                 spriteBatch.DrawString(m_font, name, textPosition, Color.White);
             }
 
             spriteBatch.End();
+        }
+
+        public void RenderEntity(Entity entity, SpriteBatch spriteBatch)
+        {
+            var pos = entity.get<Shared.Components.Position>().position;
+            var orientation = entity.get<Shared.Components.Position>().orientation;
+            int entityX = (int)(pos.X - m_viewportOffsetX);
+            int entityY = (int)(pos.Y - m_viewportOffsetY);
+            var size = entity.get<Shared.Components.Size>().size;
+            var texture = entity.get<Components.Sprite>().texture;
+            var texCenter = entity.get<Components.Sprite>().center;
+
+            Rectangle rectangle = new Rectangle(
+                entityX,
+                entityY,
+                (int)size.X,
+                (int)size.Y
+            );
+
+            spriteBatch.Draw(
+                texture, 
+                rectangle, 
+                null,
+                Color.White,
+                orientation,
+                texCenter,
+                SpriteEffects.None,
+                0
+            );
         }
     }
 }

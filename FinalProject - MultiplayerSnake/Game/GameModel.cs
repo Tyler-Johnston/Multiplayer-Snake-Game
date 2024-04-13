@@ -12,7 +12,7 @@ namespace Client
     public class GameModel
     {
         private ContentManager m_contentManager;
-        private Dictionary<uint, Entity> m_entities = new Dictionary<uint, Entity>();
+        public Dictionary<uint, Entity> m_entities = new Dictionary<uint, Entity>();
         private Systems.Network m_systemNetwork = new Systems.Network();
         private Systems.KeyboardInput m_systemKeyboardInput;
         private Systems.Interpolation m_systemInterpolation = new Systems.Interpolation();
@@ -51,8 +51,8 @@ namespace Client
             m_systemNetwork.registerNewEntityHandler(handleNewEntity);
             m_systemNetwork.registerRemoveEntityHandler(handleRemoveEntity);
 
-            WorldWidth = screenWidth * 3;
-            WorldHeight = screenHeight * 3;
+            WorldWidth = 750 * 3;
+            WorldHeight = 750 * 3;
 
             m_systemKeyboardInput = new Systems.KeyboardInput(new List<Tuple<Shared.Components.Input.Type, Keys>>
             {

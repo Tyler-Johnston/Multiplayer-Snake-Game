@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Client;
 using Microsoft.Xna.Framework.Media;
+using System;
 
 namespace CS5410
 {
@@ -12,6 +13,7 @@ namespace CS5410
     {
         private bool m_loaded = false;
         public string m_name = "None";
+        private uint m_playerId = 99;
         private Texture2D m_background;
         private bool initialSetupCompleted = false;
         private SpriteFont m_font;
@@ -21,6 +23,8 @@ namespace CS5410
 
         public int ScreenWidth { get; set; }
         public int ScreenHeight { get; set; }
+        public int m_viewportOffsetX = 0;
+        public int m_viewportOffsetY = 0;
 
         public bool InitialSetUpCompleted
         {
@@ -81,7 +85,7 @@ namespace CS5410
             if (initialSetupCompleted)
             {
                 m_spriteBatch.Begin();
-                m_spriteBatch.Draw(m_background, new Rectangle(0, 0, m_graphics.GraphicsDevice.Viewport.Width, m_graphics.GraphicsDevice.Viewport.Height), Color.White);
+
                 m_spriteBatch.End();
                 m_gameModel.render(gameTime.ElapsedGameTime, m_spriteBatch);
                 

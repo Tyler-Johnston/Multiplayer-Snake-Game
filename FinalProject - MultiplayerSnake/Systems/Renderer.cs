@@ -74,14 +74,17 @@ namespace Client.Systems
                 // Build a rectangle centered at position, with width/height of size
                 int playerX = (m_viewportOffsetX == 0 || m_viewportOffsetX == WorldWidth - VPW) ? (int)position.X : (int)(VPW / 2);
                 int playerY = (m_viewportOffsetY == 0 || m_viewportOffsetY == WorldWidth - VPH) ? (int)position.Y : (int)(VPH / 2);
-
-                if (playerX > 1600)
+                int viewportMaxXThreshold = WorldWidth - VPW / 2;
+                int playerXOffset = WorldWidth - VPW;
+                if (playerX > viewportMaxXThreshold)
                 {
-                    playerX = playerX - 950;
+                    playerX = playerX - playerXOffset;
                 }
-                if (playerY > 1825)
+                int viewportMaxYThreshold = WorldWidth - VPH / 2;
+                int playerYOffset = WorldWidth - VPH;
+                if (playerY > viewportMaxYThreshold)
                 {
-                    playerY = playerY - 1500;
+                    playerY = playerY - playerYOffset;
                 }
                 Rectangle rectangle = new Rectangle(
                     playerX,

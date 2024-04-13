@@ -51,8 +51,8 @@ namespace Client
             m_systemNetwork.registerNewEntityHandler(handleNewEntity);
             m_systemNetwork.registerRemoveEntityHandler(handleRemoveEntity);
 
-            WorldWidth = screenWidth * 3;
-            WorldHeight = screenHeight * 3;
+            WorldWidth = 750 * 3;
+            WorldHeight = 750 * 3;
 
             m_systemKeyboardInput = new Systems.KeyboardInput(new List<Tuple<Shared.Components.Input.Type, Keys>>
             {
@@ -67,9 +67,9 @@ namespace Client
             return true;
         }
 
-        public void join(string name)
+        public uint join(string name)
         {
-            m_systemNetwork.join(name);
+            return m_systemNetwork.join(name);
         }
 
         public void UpdateSystemKeyboardInput()

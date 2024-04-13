@@ -63,25 +63,6 @@ namespace Server.Systems
                 }
             }
 
-            foreach (Entity entity in m_entities.Values)
-            {
-                if (entity.contains<Shared.Components.Movement>())
-                {   
-                    var position = entity.get<Shared.Components.Position>();
-                    var movement = entity.get<Shared.Components.Movement>();
-
-                    var vectorX = Math.Cos(position.orientation);
-                    var vectorY = Math.Sin(position.orientation);
-
-                    position.position = new Vector2(
-                        (float)(position.position.X + vectorX * movement.moveRate * elapsedTime.Milliseconds),
-                        (float)(position.position.Y + vectorY * movement.moveRate * elapsedTime.Milliseconds)
-                    );
-                    var message = new Shared.Messages.UpdateEntity(entity, elapsedTime);
-                    MessageQueueServer.instance.broadcastMessage(message);
-                }
-            }
-
             // Send updated game state updates back out to connected clients
             updateClients(elapsedTime);
         }
@@ -108,16 +89,20 @@ namespace Server.Systems
             {
                 switch (input)
                 {
-                    // case Shared.Components.Input.Type.Thrust:
-                    //     Shared.Entities.Utility.thrust(entity, message.elapsedTime);
-                    //     m_reportThese.Add(message.entityId);
-                    //     break;
-                    case Shared.Components.Input.Type.RotateLeft:
-                        Shared.Entities.Utility.rotateLeft(entity, message.elapsedTime);
+                    case Shared.Components.Input.Type.TurnLeft:
+                        Shared.Entities.Utility.turnLeft(entity, message.elapsedTime);
                         m_reportThese.Add(message.entityId);
                         break;
-                    case Shared.Components.Input.Type.RotateRight:
-                        Shared.Entities.Utility.rotateRight(entity, message.elapsedTime);
+                    case Shared.Components.Input.Type.TurnRight:
+                        Shared.Entities.Utility.turnRight(entity, message.elapsedTime);
+                        m_reportThese.Add(message.entityId);
+                        break;
+                    case Shared.Components.Input.Type.TurnUp:
+                        Shared.Entities.Utility.turnUp(entity, message.elapsedTime);
+                        m_reportThese.Add(message.entityId);
+                        break;
+                    case Shared.Components.Input.Type.TurnDown:
+                        Shared.Entities.Utility.turnDown(entity, message.elapsedTime);
                         m_reportThese.Add(message.entityId);
                         break;
                 }

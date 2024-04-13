@@ -16,11 +16,12 @@ namespace CS5410.Controls
         private const string MESSAGE = "Select 'enter' followed by your new desired key binding";
         private enum MenuState
         {
-            ThrustControl,
+            UpControl,
             LeftControl,
-            RightControl
+            RightControl,
+            DownControl
         }
-        private MenuState m_currentSelection = MenuState.ThrustControl;
+        private MenuState m_currentSelection = MenuState.UpControl;
 
         public override void loadContent(ContentManager contentManager)
         {
@@ -66,14 +67,17 @@ namespace CS5410.Controls
                 {
                     switch (m_currentSelection)
                     {
-                        case MenuState.ThrustControl:
-                            ControlsManager.SetControl("Thrust", newKey);
+                        case MenuState.DownControl:
+                            ControlsManager.SetControl("TurnDown", newKey);
                             break;
                         case MenuState.LeftControl:
-                            ControlsManager.SetControl("RotateLeft", newKey);
+                            ControlsManager.SetControl("TurnLeft", newKey);
                             break;
                         case MenuState.RightControl:
-                            ControlsManager.SetControl("RotateRight", newKey);
+                            ControlsManager.SetControl("TurnRight", newKey);
+                            break;
+                        case MenuState.UpControl:
+                            ControlsManager.SetControl("TurnUp", newKey);
                             break;
                     }
                     m_waitingForKeyPress = false;
@@ -107,20 +111,25 @@ namespace CS5410.Controls
 
             // Drawing menu items
             bottom = drawMenuItem(
-                m_currentSelection == MenuState.ThrustControl ? m_fontMenuSelect : m_fontMenu, 
-                $"Thrust Controls: {ControlsManager.Controls["Thrust"]}",
+                m_currentSelection == MenuState.UpControl ? m_fontMenuSelect : m_fontMenu, 
+                $"Turn Up: {ControlsManager.Controls["TurnUp"]}",
                 bottom, 
-                m_currentSelection == MenuState.ThrustControl ? Color.Yellow : Color.Blue);
+                m_currentSelection == MenuState.UpControl ? Color.Yellow : Color.Blue);
             bottom = drawMenuItem(
                 m_currentSelection == MenuState.LeftControl ? m_fontMenuSelect : m_fontMenu, 
-                $"Left Rotate: {ControlsManager.Controls["RotateLeft"]}",
+                $"Turn Left: {ControlsManager.Controls["TurnLeft"]}",
                 bottom, 
                 m_currentSelection == MenuState.LeftControl ? Color.Yellow : Color.Blue);
             bottom = drawMenuItem(
                 m_currentSelection == MenuState.RightControl ? m_fontMenuSelect : m_fontMenu, 
-                $"Right Rotate: {ControlsManager.Controls["RotateRight"]}",
+                $"Turn Right: {ControlsManager.Controls["TurnRight"]}",
                 bottom, 
                 m_currentSelection == MenuState.RightControl ? Color.Yellow : Color.Blue);
+            bottom = drawMenuItem(
+                m_currentSelection == MenuState.DownControl ? m_fontMenuSelect : m_fontMenu, 
+                $"Turn Down: {ControlsManager.Controls["TurnDown"]}",
+                bottom, 
+                m_currentSelection == MenuState.DownControl ? Color.Yellow : Color.Blue);
 
             // Visual feedback for setting a new key
             if (m_waitingForKeyPress)

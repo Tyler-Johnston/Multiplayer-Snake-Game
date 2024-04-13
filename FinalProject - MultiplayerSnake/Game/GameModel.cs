@@ -56,9 +56,10 @@ namespace Client
 
             m_systemKeyboardInput = new Systems.KeyboardInput(new List<Tuple<Shared.Components.Input.Type, Keys>>
             {
-                Tuple.Create(Shared.Components.Input.Type.Thrust, ControlsManager.Controls["Thrust"]),
-                Tuple.Create(Shared.Components.Input.Type.RotateLeft, ControlsManager.Controls["RotateLeft"]),
-                Tuple.Create(Shared.Components.Input.Type.RotateRight, ControlsManager.Controls["RotateRight"])
+                Tuple.Create(Shared.Components.Input.Type.TurnUp, ControlsManager.Controls["TurnUp"]),
+                Tuple.Create(Shared.Components.Input.Type.TurnDown, ControlsManager.Controls["TurnDown"]),
+                Tuple.Create(Shared.Components.Input.Type.TurnLeft, ControlsManager.Controls["TurnLeft"]),
+                Tuple.Create(Shared.Components.Input.Type.TurnRight, ControlsManager.Controls["TurnRight"])
             });
 
             ControlsManager.ControlsUpdated += UpdateSystemKeyboardInput;
@@ -75,9 +76,10 @@ namespace Client
         {
             var newMappings = new List<Tuple<Shared.Components.Input.Type, Keys>>
             {
-                Tuple.Create(Shared.Components.Input.Type.Thrust, ControlsManager.Controls["Thrust"]),
-                Tuple.Create(Shared.Components.Input.Type.RotateLeft, ControlsManager.Controls["RotateLeft"]),
-                Tuple.Create(Shared.Components.Input.Type.RotateRight, ControlsManager.Controls["RotateRight"])
+                Tuple.Create(Shared.Components.Input.Type.TurnUp, ControlsManager.Controls["TurnUp"]),
+                Tuple.Create(Shared.Components.Input.Type.TurnDown, ControlsManager.Controls["TurnDown"]),
+                Tuple.Create(Shared.Components.Input.Type.TurnLeft, ControlsManager.Controls["TurnLeft"]),
+                Tuple.Create(Shared.Components.Input.Type.TurnRight, ControlsManager.Controls["TurnRight"])
             };
 
             m_systemKeyboardInput.UpdateControlMappings(newMappings);

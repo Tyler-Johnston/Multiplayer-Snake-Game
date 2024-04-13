@@ -22,6 +22,24 @@ namespace Server
         /// </summary>
         public void update(TimeSpan elapsedTime)
         {
+            foreach (Entity entity in m_entities.Values)
+            {
+                if (entity.contains<Shared.Components.Movement>())
+                {   
+                    var position = entity.get<Shared.Components.Position>();
+                    var movement = entity.get<Shared.Components.Movement>();
+
+                    var vectorX = Math.Cos(position.orientation);
+                    var vectorY = Math.Sin(position.orientation);
+
+                    position.position = new Vector2(
+                        (float)(position.position.X + vectorX * movement.moveRate * elapsedTime.Milliseconds),
+                        (float)(position.position.Y + vectorY * movement.moveRate * elapsedTime.Milliseconds)
+                    );
+                    var message = new Shared.Messages.UpdateEntity(entity, elapsedTime);
+                    MessageQueueServer.instance.broadcastMessage(message);
+                }
+            }
             m_systemNetwork.update(elapsedTime, MessageQueueServer.instance.getMessages());
         }
 

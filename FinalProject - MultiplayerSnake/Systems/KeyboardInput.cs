@@ -42,14 +42,29 @@ namespace Client.Systems
                         // Client-side prediction of the input
                         switch (type)
                         {
-                            // case Shared.Components.Input.Type.Thrust:
-                            //     Shared.Entities.Utility.thrust(item.Value, elapsedTime);
-                            //     break;
-                            case Shared.Components.Input.Type.RotateLeft:
-                                Shared.Entities.Utility.rotateLeft(item.Value, elapsedTime);
+                            case Shared.Components.Input.Type.TurnLeft:
+                                Shared.Entities.Utility.turnLeft(item.Value, elapsedTime);
                                 break;
-                            case Shared.Components.Input.Type.RotateRight:
-                                Shared.Entities.Utility.rotateRight(item.Value, elapsedTime);
+                            case Shared.Components.Input.Type.TurnRight:
+                                Shared.Entities.Utility.turnRight(item.Value, elapsedTime);
+                                break;
+                            case Shared.Components.Input.Type.TurnUp:
+                                Shared.Entities.Utility.turnUp(item.Value, elapsedTime);
+                                break;
+                            case Shared.Components.Input.Type.TurnDown:
+                                Shared.Entities.Utility.turnDown(item.Value, elapsedTime);
+                                break;
+                            case Shared.Components.Input.Type.TurnDownLeft:
+                                Shared.Entities.Utility.turnDownLeft(item.Value, elapsedTime);
+                                break;
+                            case Shared.Components.Input.Type.TurnDownRight:
+                                Shared.Entities.Utility.turnDownRight(item.Value, elapsedTime);
+                                break;
+                            case Shared.Components.Input.Type.TurnUpRight:
+                                Shared.Entities.Utility.turnUpRight(item.Value, elapsedTime);
+                                break;
+                            case Shared.Components.Input.Type.TurnUpLeft:
+                                Shared.Entities.Utility.turnUpLeft(item.Value, elapsedTime);
                                 break;
                         }
                     }

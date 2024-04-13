@@ -85,11 +85,6 @@ namespace CS5410
             if (initialSetupCompleted)
             {
                 m_spriteBatch.Begin();
-<<<<<<< HEAD
-                m_spriteBatch.Draw(m_background, new Rectangle(0, 0, m_gameModel.WorldWidth, m_gameModel.WorldHeight), Color.White);
-=======
-
->>>>>>> liam.viewport
                 m_spriteBatch.End();
                 m_gameModel.render(gameTime.ElapsedGameTime, m_spriteBatch);
                 

@@ -45,6 +45,9 @@ namespace Client
         {
             m_contentManager = contentManager;
 
+
+            m_systemRenderer.ContentManager = m_contentManager;
+            
             m_systemNetwork.registerNewEntityHandler(handleNewEntity);
             m_systemNetwork.registerRemoveEntityHandler(handleRemoveEntity);
 

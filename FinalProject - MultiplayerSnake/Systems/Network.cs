@@ -135,7 +135,7 @@ namespace Client.Systems
 
         public void join(string name)
         {
-            MessageQueueClient.instance.sendMessage(new Join("Player 1"));
+            MessageQueueClient.instance.sendMessage(new Join(name));
         }
 
         /// <summary>

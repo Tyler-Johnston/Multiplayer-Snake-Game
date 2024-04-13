@@ -67,9 +67,9 @@ namespace Client
             return true;
         }
 
-        public uint join(string name)
+        public void join(string name)
         {
-            return m_systemNetwork.join(name);
+            m_systemNetwork.join(name);
         }
 
         public void UpdateSystemKeyboardInput()

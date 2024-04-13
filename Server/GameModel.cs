@@ -145,7 +145,7 @@ namespace Server
 
             // Step 2: Create an entity for the newly joined player and sent it
             //         to the newly joined client
-            Entity player = Shared.Entities.Player.create("Textures/head", new Vector2(100, 100), 50, 0.1f, (float)Math.PI / 1000);
+            Entity player = Shared.Entities.Player.create("Textures/head", messageJoin.name, new Vector2(100, 100), 50, 0.1f, (float)Math.PI / 1000);
             addEntity(player);
             m_clientToEntityId[clientId] = player.id;
 
@@ -157,7 +157,7 @@ namespace Server
 
             // We change the appearance for a player ship entity for all other clients to a different texture
             player.remove<Appearance>();
-            player.add(new Appearance("Textures/playerShip1_red"));
+            player.add(new Appearance("Textures/head_enemy"));
 
             // Remove components not needed for "other" players
             player.remove<Shared.Components.Input>();

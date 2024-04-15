@@ -20,7 +20,7 @@ namespace Client.Systems
 
         private int WorldHeight = 750 * 3;
         private int WorldWidth = 750 * 3;     
-        private uint? m_playerId = null;
+        public uint? m_playerId = null;
 
         public ContentManager ContentManager
         {

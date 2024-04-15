@@ -18,6 +18,8 @@ namespace Client
         private Systems.Interpolation m_systemInterpolation = new Systems.Interpolation();
         private Systems.Renderer m_systemRenderer = new Systems.Renderer();
 
+        private bool isFirstEntityReceived = false;
+
         public int WorldWidth {get; private set; }
         public int WorldHeight {get; private set;}
 
@@ -155,6 +157,12 @@ namespace Client
             }
 
             m_entities[entity.id] = entity;
+            if (!isFirstEntityReceived)
+            {
+                isFirstEntityReceived = true;
+                m_systemRenderer.m_playerId = entity.id;
+            }
+
             m_systemKeyboardInput.add(entity);
             m_systemRenderer.add(entity);
             m_systemNetwork.add(entity);

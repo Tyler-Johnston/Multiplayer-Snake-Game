@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Net.Sockets;
-
+﻿
 namespace Server
 {
     class ServerMain
@@ -12,7 +9,7 @@ namespace Server
             {
                 if (MessageQueueServer.instance.initialize(port))
                 {
-                    Console.WriteLine("Server waiting for incomming connections on port {0}", port);
+                    Console.WriteLine("Server waiting for incoming connections on port {0}", port);
                     startServer();
                     MessageQueueServer.instance.shutdown();
                 }
@@ -61,7 +58,7 @@ namespace Server
 
         private static void startServer()
         {
-            TimeSpan SIMULATION_UPDATE_RATE_MS = TimeSpan.FromMilliseconds(33);
+            TimeSpan SIMULATION_UPDATE_RATE_MS = TimeSpan.FromMilliseconds(16);
 
             GameModel model = new GameModel();
             bool running = model.initialize();
@@ -69,23 +66,16 @@ namespace Server
             DateTime previousTime = DateTime.Now;
             while (running)
             {
-                // work out the elapsed time
-                DateTime currentTime = DateTime.Now;
-                TimeSpan elapsedTime = currentTime - previousTime;
-                previousTime = currentTime;
-
-                // If we are running faster than the simulation update rate, then go to sleep
-                // for a bit so we don't burn up the CPU unnecessarily.
-                TimeSpan sleepTime = SIMULATION_UPDATE_RATE_MS - elapsedTime;
-                if (sleepTime > TimeSpan.Zero)
+                // Busy wait until we hit the simulation update rate
+                // The busy wait isn't a great approach, but it is what we
+                // are going to do right now.
+                TimeSpan elapsedTime = DateTime.Now - previousTime;
+                while (elapsedTime < SIMULATION_UPDATE_RATE_MS)
                 {
-                    //Console.WriteLine("Sleep: {0}", sleepTime.TotalMilliseconds);
-                    System.Threading.Thread.Sleep(sleepTime);
+                    elapsedTime = DateTime.Now - previousTime;
                 }
+                previousTime = DateTime.Now;
 
-                // Now, after having slept for a bit, now compute the elapsed time and perform
-                // the game model update.
-                elapsedTime += (sleepTime > TimeSpan.Zero ? sleepTime : TimeSpan.Zero);
                 model.update(elapsedTime);
             }
 

@@ -46,16 +46,35 @@ namespace Shared.Systems
         /// Adds an entity to this system, if <see cref="isInterested(Entity)"/> returns true for <paramref name="entity"/>.
         /// </summary>
         /// <returns>Returns true if the given entity was added to this system. Otherwise returns false.</returns>
+        // public virtual bool add(Entity entity)
+        // {
+        //     bool interested = isInterested(entity);
+        //     if (interested)
+        //     {
+        //         // HERE IS THE ERROR
+        //         m_entities.Add(entity.id, entity);
+        //     }
+
+        //     return interested;
+        // }
+
         public virtual bool add(Entity entity)
         {
-            bool interested = isInterested(entity);
-            if (interested)
+            lock (m_entities)
             {
-                m_entities.Add(entity.id, entity);
-            }
+                bool interested = isInterested(entity);
+                if (interested)
+                {
+                    if (!m_entities.ContainsKey(entity.id))
+                    {
+                        m_entities.Add(entity.id, entity);
+                    }
+                }
 
-            return interested;
+                return interested;
+            }
         }
+
 
         /// <summary>
         /// Removes the <see cref="Entity"/> with the given ID from this system if it is found in it.

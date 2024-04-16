@@ -8,11 +8,13 @@ namespace Server
 {
     public class GameModel
     {
+        private int m_nextSnakeId = 0;
         private HashSet<int> m_clients = new HashSet<int>();
         private Dictionary<uint, Entity> m_entities = new Dictionary<uint, Entity>();
         private Dictionary<int, uint> m_clientToEntityId = new Dictionary<int, uint>();
 
         Systems.Network m_systemNetwork = new Server.Systems.Network();
+        Shared.Systems.Movement m_systemMovement = new Shared.Systems.Movement();
 
         /// <summary>
         /// This is where the server-side simulation takes place.  Messages
@@ -21,25 +23,14 @@ namespace Server
         /// </summary>
         public void update(TimeSpan elapsedTime)
         {
-            foreach (Entity entity in m_entities.Values)
-            {
-                if (entity.contains<Shared.Components.Movement>())
-                {   
-                    var position = entity.get<Shared.Components.Position>();
-                    var movement = entity.get<Shared.Components.Movement>();
-
-                    var vectorX = Math.Cos(position.orientation);
-                    var vectorY = Math.Sin(position.orientation);
-
-                    position.position = new Vector2(
-                        (float)(position.position.X + vectorX * movement.moveRate * elapsedTime.Milliseconds),
-                        (float)(position.position.Y + vectorY * movement.moveRate * elapsedTime.Milliseconds)
-                    );
-                    var message = new Shared.Messages.UpdateEntity(entity, elapsedTime);
-                    MessageQueueServer.instance.broadcastMessage(message);
-                }
-            }
             m_systemNetwork.update(elapsedTime, MessageQueueServer.instance.getMessages());
+            m_systemMovement.update(elapsedTime);
+
+            //foreach (var entity in m_entities.Values)
+            //{
+            //    var message = new Shared.Messages.UpdateEntity(entity, elapsedTime);
+            //    MessageQueueServer.instance.broadcastMessage(message);
+            //}
         }
 
         /// <summary>
@@ -144,7 +135,7 @@ namespace Server
 
             // Step 2: Create an entity for the newly joined player and sent it
             //         to the newly joined client
-            Entity player = Shared.Entities.Player.create("Textures/head", messageJoin.name, new Vector2(100, 100), 50, 0.1f, (float)Math.PI / 1000);
+            Entity player = Shared.Entities.Snake.createHead(m_nextSnakeId++, "Textures/playerShip1_blue", new Vector2(100, 100), 50, 0.1f, (float)Math.PI / 1000);
             addEntity(player);
             m_clientToEntityId[clientId] = player.id;
 

@@ -20,7 +20,6 @@ namespace CS5410
         private GameModel m_gameModel = new GameModel();
         private Song m_music;
         private bool m_joined = false;
-
         public int ScreenWidth { get; set; }
         public int ScreenHeight { get; set; }
         public int m_viewportOffsetX = 0;

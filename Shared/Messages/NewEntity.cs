@@ -99,7 +99,7 @@ namespace Shared.Messages
             data.AddRange(BitConverter.GetBytes(id));
 
             data.AddRange(BitConverter.GetBytes(hasName));
-            if (hasAppearance)
+            if (hasName)
             {
                 data.AddRange(BitConverter.GetBytes(name.Length));
                 data.AddRange(Encoding.UTF8.GetBytes(name));

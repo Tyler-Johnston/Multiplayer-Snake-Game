@@ -21,6 +21,7 @@ namespace Server
         /// </summary>
         public void update(TimeSpan elapsedTime)
         {
+
             foreach (Entity entity in m_entities.Values)
             {
                 if (entity.contains<Shared.Components.Movement>())
@@ -50,6 +51,10 @@ namespace Server
             // m_systemNetwork.registerJoinHandler(handleJoin);
             m_systemNetwork.registerHandler(Shared.Messages.Type.Join, handleJoin);
             m_systemNetwork.registerDisconnectHandler(handleDisconnect);
+
+            // Entity food = Shared.Entities.Food.create("Textures/egg", new Vector2(200, 200), 50);
+            // addEntity(food);
+            // MessageQueueServer.instance.broadcastMessageWithLastId(new NewEntity(food));
 
             MessageQueueServer.instance.registerConnectHandler(handleConnect);
 

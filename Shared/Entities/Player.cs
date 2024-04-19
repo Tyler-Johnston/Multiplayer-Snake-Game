@@ -85,9 +85,9 @@ namespace Shared.Entities
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
 
-            if (position.orientation != (float)(Math.PI * 3 / 4))
+            if (position.orientation != (float)(Math.PI * 7 / 4))
             {
-                position.orientation = (float)(Math.PI * 7 / 4);
+                position.orientation = (float)(Math.PI * 3 / 4);
             }
         }
         public static void turnUpRight(Entity entity, TimeSpan elapsedTime)
@@ -105,9 +105,9 @@ namespace Shared.Entities
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
 
-            if (position.orientation != (float)(Math.PI * 7 / 4))
+            if (position.orientation != (float)(Math.PI * 3 / 4))
             {
-                position.orientation = (float)(Math.PI * 3 / 4);
+                position.orientation = (float)(Math.PI * 7 / 4);
             }
         }
     }

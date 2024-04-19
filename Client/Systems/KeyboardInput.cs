@@ -28,69 +28,68 @@ namespace Client.Systems
             }
         }
 
-public override void update(TimeSpan elapsedTime)
-{
-    foreach (var item in m_entities)
-    {
-        List<Shared.Components.Input.Type> inputs = new List<Shared.Components.Input.Type>();
-        var keyMap = m_keyToFunction[item.Key].m_keyToType;
-
-        if (m_keysPressed.Contains(ControlsManager.Controls["TurnUp"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnRight"]))
+        public override void update(TimeSpan elapsedTime)
         {
-            inputs.Add(Shared.Components.Input.Type.TurnUpRight);
-            Shared.Entities.Utility.turnUpRight(item.Value, elapsedTime);
-        } 
-        else if (m_keysPressed.Contains(ControlsManager.Controls["TurnDown"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnRight"]))
-        {
-            inputs.Add(Shared.Components.Input.Type.TurnDownRight);
-            Shared.Entities.Utility.turnDownRight(item.Value, elapsedTime);
-        }
-        else if (m_keysPressed.Contains(ControlsManager.Controls["TurnUp"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnLeft"]))
-        {
-            inputs.Add(Shared.Components.Input.Type.TurnUpLeft);
-            Shared.Entities.Utility.turnUpLeft(item.Value, elapsedTime);
-        }
-        else if (m_keysPressed.Contains(ControlsManager.Controls["TurnDown"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnLeft"]))
-        {
-            inputs.Add(Shared.Components.Input.Type.TurnDownLeft);
-            Shared.Entities.Utility.turnDownLeft(item.Value, elapsedTime);
-        }
-        else
-        {
-            // Continue with individual key checks
-            foreach (var key in m_keysPressed)
+            foreach (var item in m_entities)
             {
-                if (keyMap.ContainsKey(key))
-                {
-                    var type = keyMap[key];
-                    inputs.Add(type);
+                List<Shared.Components.Input.Type> inputs = new List<Shared.Components.Input.Type>();
+                var keyMap = m_keyToFunction[item.Key].m_keyToType;
 
-                    // Client-side prediction of the input
-                    switch (type)
+                if (m_keysPressed.Contains(ControlsManager.Controls["TurnUp"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnRight"]))
+                {
+                    inputs.Add(Shared.Components.Input.Type.TurnUpRight);
+                    Shared.Entities.Utility.turnUpRight(item.Value, elapsedTime);
+                } 
+                else if (m_keysPressed.Contains(ControlsManager.Controls["TurnDown"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnRight"]))
+                {
+                    inputs.Add(Shared.Components.Input.Type.TurnDownRight);
+                    Shared.Entities.Utility.turnDownRight(item.Value, elapsedTime);
+                }
+                else if (m_keysPressed.Contains(ControlsManager.Controls["TurnUp"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnLeft"]))
+                {
+                    inputs.Add(Shared.Components.Input.Type.TurnUpLeft);
+                    Shared.Entities.Utility.turnUpLeft(item.Value, elapsedTime);
+                }
+                else if (m_keysPressed.Contains(ControlsManager.Controls["TurnDown"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnLeft"]))
+                {
+                    inputs.Add(Shared.Components.Input.Type.TurnDownLeft);
+                    Shared.Entities.Utility.turnDownLeft(item.Value, elapsedTime);
+                }
+                else
+                {
+                    foreach (var key in m_keysPressed)
                     {
-                        case Shared.Components.Input.Type.TurnLeft:
-                            Shared.Entities.Utility.turnLeft(item.Value, elapsedTime);
-                            break;
-                        case Shared.Components.Input.Type.TurnRight:
-                            Shared.Entities.Utility.turnRight(item.Value, elapsedTime);
-                            break;
-                        case Shared.Components.Input.Type.TurnUp:
-                            Shared.Entities.Utility.turnUp(item.Value, elapsedTime);
-                            break;
-                        case Shared.Components.Input.Type.TurnDown:
-                            Shared.Entities.Utility.turnDown(item.Value, elapsedTime);
-                            break;
+                        if (keyMap.ContainsKey(key))
+                        {
+                            var type = keyMap[key];
+                            inputs.Add(type);
+
+                            // Client-side prediction of the input
+                            switch (type)
+                            {
+                                case Shared.Components.Input.Type.TurnLeft:
+                                    Shared.Entities.Utility.turnLeft(item.Value, elapsedTime);
+                                    break;
+                                case Shared.Components.Input.Type.TurnRight:
+                                    Shared.Entities.Utility.turnRight(item.Value, elapsedTime);
+                                    break;
+                                case Shared.Components.Input.Type.TurnUp:
+                                    Shared.Entities.Utility.turnUp(item.Value, elapsedTime);
+                                    break;
+                                case Shared.Components.Input.Type.TurnDown:
+                                    Shared.Entities.Utility.turnDown(item.Value, elapsedTime);
+                                    break;
+                            }
+                        }
                     }
+                }
+
+                if (inputs.Count > 0)
+                {
+                    MessageQueueClient.instance.sendMessageWithId(new Shared.Messages.Input(item.Key, inputs, elapsedTime));
                 }
             }
         }
-
-        if (inputs.Count > 0)
-        {
-            MessageQueueClient.instance.sendMessageWithId(new Shared.Messages.Input(item.Key, inputs, elapsedTime));
-        }
-    }
-}
 
 
         public void UpdateControlMappings(List<Tuple<Shared.Components.Input.Type, Keys>> newMappings)

@@ -57,10 +57,16 @@ namespace Client.Systems
         {
             spriteBatch.Begin();
             spriteBatch.Draw(m_background, new Rectangle(-m_viewportOffsetX, -m_viewportOffsetY, WorldWidth, WorldHeight), Color.White);
+            updatePlayer(elapsedTime, spriteBatch);
 
+            spriteBatch.End();
+        }
 
-            foreach (Entity entity in m_entities.Values)
+        public void updatePlayer(TimeSpan elapsedTime, SpriteBatch spriteBatch)
+        {
+            if (m_playerId != null)
             {
+                Entity entity = m_entities[m_playerId.Value];
                 var position = entity.get<Shared.Components.Position>().position;
                 var orientation = entity.get<Shared.Components.Position>().orientation;
                 var name = entity.get<Shared.Components.Name>().name;
@@ -110,8 +116,6 @@ namespace Client.Systems
                 // Draw the name text above the entity
                 spriteBatch.DrawString(m_font, name, textPosition, Color.White);
             }
-
-            spriteBatch.End();
         }
 
         public void RenderEntity(Entity entity, SpriteBatch spriteBatch)

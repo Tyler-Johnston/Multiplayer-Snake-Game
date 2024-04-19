@@ -59,7 +59,6 @@ namespace Shared.Entities
                 position.orientation = (float)(Math.PI * 3 / 2);
             }
         }
-
         public static void turnDown(Entity entity, TimeSpan elapsedTime)
         {
             var position = entity.get<Position>();
@@ -75,22 +74,19 @@ namespace Shared.Entities
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
 
-            if (position.orientation != (float)(Math.PI / 4))
-            {
-                position.orientation = (float)(Math.PI * 5 / 4);
-            }
-        }
-        public static void turnDownRight(Entity entity, TimeSpan elapsedTime)
-        {
-            var position = entity.get<Position>();
-            var movement = entity.get<Movement>();
 
             if (position.orientation != (float)(Math.PI * 7 / 4))
             {
                 position.orientation = (float)(Math.PI * 3 / 4);
             }
+
+            // // og
+            // if (position.orientation != (float)(Math.PI / 4))
+            // {
+            //     position.orientation = (float)(Math.PI * 5 / 4);
+            // }
         }
-        public static void turnUpRight(Entity entity, TimeSpan elapsedTime)
+        public static void turnDownRight(Entity entity, TimeSpan elapsedTime)
         {
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
@@ -99,16 +95,44 @@ namespace Shared.Entities
             {
                 position.orientation = (float)(Math.PI / 4);
             }
+
+            // og
+            // if (position.orientation != (float)(Math.PI * 7 / 4))
+            // {
+            //     position.orientation = (float)(Math.PI * 3 / 4);
+            // }
+        }
+        public static void turnUpRight(Entity entity, TimeSpan elapsedTime)
+        {
+            var position = entity.get<Position>();
+            var movement = entity.get<Movement>();
+
+
+            if (position.orientation != (float)(Math.PI * 3 / 4))
+            {
+                position.orientation = (float)(Math.PI * 7 / 4);
+            }
+            // og
+            // if (position.orientation != (float)(Math.PI * 5 / 4))
+            // {
+            //     position.orientation = (float)(Math.PI / 4);
+            // }
         }
         public static void turnUpLeft(Entity entity, TimeSpan elapsedTime)
         {
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
 
-            if (position.orientation != (float)(Math.PI * 3 / 4))
+            if (position.orientation != (float)(Math.PI / 4))
             {
-                position.orientation = (float)(Math.PI * 7 / 4);
+                position.orientation = (float)(Math.PI * 5 / 4);
             }
+
+            // // og
+            // if (position.orientation != (float)(Math.PI * 3 / 4))
+            // {
+            //     position.orientation = (float)(Math.PI * 7 / 4);
+            // }
         }
     }
 }

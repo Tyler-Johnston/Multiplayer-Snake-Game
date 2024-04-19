@@ -105,6 +105,18 @@ namespace Server.Systems
                         Shared.Entities.Utility.turnDown(entity, message.elapsedTime);
                         m_reportThese.Add(message.entityId);
                         break;
+                    case Shared.Components.Input.Type.TurnUpRight:
+                        Shared.Entities.Utility.turnUpRight(entity, message.elapsedTime);
+                        break;
+                    case Shared.Components.Input.Type.TurnDownRight:
+                        Shared.Entities.Utility.turnDownRight(entity, message.elapsedTime);
+                        break;
+                    case Shared.Components.Input.Type.TurnUpLeft:
+                        Shared.Entities.Utility.turnUpLeft(entity, message.elapsedTime);
+                        break;
+                    case Shared.Components.Input.Type.TurnDownLeft:
+                        Shared.Entities.Utility.turnDownLeft(entity, message.elapsedTime);
+                        break;
                 }
             }
         }

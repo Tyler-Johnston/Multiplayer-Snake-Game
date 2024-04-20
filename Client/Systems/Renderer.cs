@@ -36,8 +36,8 @@ namespace Client.Systems
             base(
                 typeof(Client.Components.Sprite),
                 typeof(Shared.Components.Position),
-                typeof(Shared.Components.Size),
-                typeof(Shared.Components.Name)
+                typeof(Shared.Components.Size)
+                // typeof(Shared.Components.Name)
                 )
         {
         }
@@ -56,14 +56,13 @@ namespace Client.Systems
         public void update(TimeSpan elapsedTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(m_background, new Rectangle(-m_viewportOffsetX, -m_viewportOffsetY, WorldWidth, WorldHeight), Color.White);
+            updateViewport();
 
+            spriteBatch.Draw(m_background, new Rectangle(-m_viewportOffsetX, -m_viewportOffsetY, WorldWidth, WorldHeight), Color.White);
             foreach (Entity entity in m_entities.Values)
             {
                 RenderEntity(entity, spriteBatch);
             }
-
-            updateViewport();
 
             spriteBatch.End();
         }
@@ -110,7 +109,7 @@ namespace Client.Systems
             var size = entity.get<Shared.Components.Size>().size;
             var texture = entity.get<Components.Sprite>().texture;
             var texCenter = entity.get<Components.Sprite>().center;
-            var name = entity.get<Shared.Components.Name>().name;
+            // var name = entity.get<Shared.Components.Name>().name;
 
             Rectangle rectangle = new Rectangle(
                 entityX,
@@ -130,13 +129,13 @@ namespace Client.Systems
                 0
             );
 
-            // Calculate the position for the name text to appear above the entity
-            Vector2 textPosition = new Vector2(
-                entityX, 
-                entityY - 70);
+            // // Calculate the position for the name text to appear above the entity
+            // Vector2 textPosition = new Vector2(
+            //     entityX, 
+            //     entityY - 70);
 
-            // Draw the name text above the entity
-            spriteBatch.DrawString(m_font, name, textPosition, Color.White);
+            // // Draw the name text above the entity
+            // spriteBatch.DrawString(m_font, name, textPosition, Color.White);
         }
     }
 }

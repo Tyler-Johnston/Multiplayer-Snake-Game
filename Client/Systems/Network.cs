@@ -97,16 +97,16 @@ namespace Client.Systems
                                 //     Shared.Entities.Utility.thrust(entity, message.elapsedTime);
                                 //     break;
                                 case Shared.Components.Input.Type.TurnLeft:
-                                    Shared.Entities.Utility.turnLeft(entity, message.elapsedTime);
+                                    Shared.Entities.Utility.turnLeft(entity);
                                     break;
                                 case Shared.Components.Input.Type.TurnRight:
-                                    Shared.Entities.Utility.turnRight(entity, message.elapsedTime);
+                                    Shared.Entities.Utility.turnRight(entity);
                                     break;
                                 case Shared.Components.Input.Type.TurnUp:
-                                    Shared.Entities.Utility.turnUp(entity, message.elapsedTime);
+                                    Shared.Entities.Utility.turnUp(entity);
                                     break;
                                 case Shared.Components.Input.Type.TurnDown:
-                                    Shared.Entities.Utility.turnDown(entity, message.elapsedTime);
+                                    Shared.Entities.Utility.turnDown(entity);
                                     break;
                             }
                         }

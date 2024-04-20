@@ -4,8 +4,6 @@ using Shared.Components;
 using Shared.Messages;
 using System;
 using System.Collections.Generic;
-using System.Net.Mail;
-using System.Runtime.InteropServices;
 
 namespace Client.Systems
 {
@@ -81,38 +79,38 @@ namespace Client.Systems
             // After processing all the messages, perform server reconciliation by
             // resimulating the inputs from any sent messages not yet acknowledged by the server.
             var sent = MessageQueueClient.instance.getSendMessageHistory(m_lastMessageId);
-            while (sent.Count > 0)
-            {
-                var message = (Shared.Messages.Input)sent.Dequeue();
-                if (message.type == Shared.Messages.Type.Input)
-                {
-                    var entity = m_entities[message.entityId];
-                    if (m_updatedEntities.Contains(entity.id))
-                    {
-                        foreach (var input in message.inputs)
-                        {
-                            switch (input)
-                            {
-                                // case Shared.Components.Input.Type.Thrust:
-                                //     Shared.Entities.Utility.thrust(entity, message.elapsedTime);
-                                //     break;
-                                case Shared.Components.Input.Type.TurnLeft:
-                                    Shared.Entities.Utility.turnLeft(entity, message.elapsedTime);
-                                    break;
-                                case Shared.Components.Input.Type.TurnRight:
-                                    Shared.Entities.Utility.turnRight(entity, message.elapsedTime);
-                                    break;
-                                case Shared.Components.Input.Type.TurnUp:
-                                    Shared.Entities.Utility.turnUp(entity, message.elapsedTime);
-                                    break;
-                                case Shared.Components.Input.Type.TurnDown:
-                                    Shared.Entities.Utility.turnDown(entity, message.elapsedTime);
-                                    break;
-                            }
-                        }
-                    }
-                }
-            }
+            // while (sent.Count > 0)
+            // {
+            //     var message = (Shared.Messages.Input)sent.Dequeue();
+            //     if (message.type == Shared.Messages.Type.Input)
+            //     {
+            //         var entity = m_entities[message.entityId];
+            //         if (m_updatedEntities.Contains(entity.id))
+            //         {
+            //             foreach (var input in message.inputs)
+            //             {
+            //                 switch (input)
+            //                 {
+            //                     // case Shared.Components.Input.Type.Thrust:
+            //                     //     Shared.Entities.Utility.thrust(entity, message.elapsedTime);
+            //                     //     break;
+            //                     case Shared.Components.Input.Type.TurnLeft:
+            //                         Shared.Entities.Utility.turnLeft(entity, message.elapsedTime);
+            //                         break;
+            //                     case Shared.Components.Input.Type.TurnRight:
+            //                         Shared.Entities.Utility.turnRight(entity, message.elapsedTime);
+            //                         break;
+            //                     case Shared.Components.Input.Type.TurnUp:
+            //                         Shared.Entities.Utility.turnUp(entity, message.elapsedTime);
+            //                         break;
+            //                     case Shared.Components.Input.Type.TurnDown:
+            //                         Shared.Entities.Utility.turnDown(entity, message.elapsedTime);
+            //                         break;
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
         }
 
         private void registerHandler(Shared.Messages.Type type, Handler handler)

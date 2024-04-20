@@ -3,6 +3,8 @@ using CS5410.Controls;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Shared.Components;
+using Shared.Messages;
 using Shared.Entities;
 using System;
 using System.Collections.Generic;
@@ -115,6 +117,16 @@ namespace Client
             if (message.hasName)
             {
                 entity.add(new Shared.Components.Name(message.name));
+            }
+
+                        if (message.hasSnakeId)
+            {
+                entity.add(new SnakeId(message.snakeId));
+            }
+
+            if (message.hasTurnPoint)
+            {
+                entity.add(new Shared.Components.TurnPoint());
             }
 
             if (message.hasAppearance)

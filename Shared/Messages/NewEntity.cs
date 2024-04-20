@@ -18,6 +18,17 @@ namespace Shared.Messages
 
             }
 
+            if (entity.contains<SnakeId>())
+            {
+                this.hasSnakeId = true;
+                this.snakeId = entity.get<SnakeId>().id;
+            }
+
+            if (entity.contains<Shared.Components.TurnPoint>())
+            {
+                this.hasTurnPoint = true;
+            }
+
             if (entity.contains<Appearance>())
             {
                 this.hasAppearance = true;
@@ -69,6 +80,13 @@ namespace Shared.Messages
         public bool hasName { get; private set; } = false;
         public string name { get; private set; }
 
+        // SnakeId
+        public bool hasSnakeId { get; private set; } = false;
+        public int snakeId {  get; private set; }
+
+        // Turn Point
+        public bool hasTurnPoint { get; private set; } = false;
+
         // Appearance
         public bool hasAppearance { get; private set; } = false;
         public string texture { get; private set; }
@@ -104,6 +122,18 @@ namespace Shared.Messages
                 data.AddRange(BitConverter.GetBytes(name.Length));
                 data.AddRange(Encoding.UTF8.GetBytes(name));
             }
+
+            data.AddRange(BitConverter.GetBytes(hasSnakeId));
+            if (hasSnakeId)
+            {
+                data.AddRange(BitConverter.GetBytes(snakeId));
+            }
+
+            data.AddRange(BitConverter.GetBytes(hasTurnPoint));
+            // Nothing else to do for a  turn point, because marking it
+            // as a turn point is all the info we need.  The position
+            // and direction of the turn point are contained in the Position component
+            // on the entity.
 
             data.AddRange(BitConverter.GetBytes(hasAppearance));
             if (hasAppearance)
@@ -163,6 +193,17 @@ namespace Shared.Messages
                 this.name = Encoding.UTF8.GetString(data, offset, nameSize);
                 offset += nameSize;
             }
+
+            this.hasSnakeId = BitConverter.ToBoolean(data, offset);
+            offset += sizeof(bool);
+            if (hasSnakeId)
+            {
+                this.snakeId = BitConverter.ToInt32(data, offset);
+                offset += sizeof(Int32);
+            }
+
+            this.hasTurnPoint = BitConverter.ToBoolean(data, offset);
+            offset+= sizeof(bool);
 
             this.hasAppearance = BitConverter.ToBoolean(data, offset);
             offset += sizeof(bool);

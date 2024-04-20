@@ -8,6 +8,7 @@ namespace Server
 {
     public class GameModel
     {
+        private int m_nextSnakeId = 0;
         private HashSet<int> m_clients = new HashSet<int>();
         private Dictionary<uint, Entity> m_entities = new Dictionary<uint, Entity>();
         private Dictionary<int, uint> m_clientToEntityId = new Dictionary<int, uint>();
@@ -22,24 +23,6 @@ namespace Server
         /// </summary>
         public void update(TimeSpan elapsedTime)
         {
-            // foreach (Entity entity in m_entities.Values)
-            // {
-            //     if (entity.contains<Shared.Components.Movement>())
-            //     {   
-            //         var position = entity.get<Shared.Components.Position>();
-            //         var movement = entity.get<Shared.Components.Movement>();
-
-            //         var vectorX = Math.Cos(position.orientation);
-            //         var vectorY = Math.Sin(position.orientation);
-
-            //         position.position = new Vector2(
-            //             (float)(position.position.X + vectorX * movement.moveRate * elapsedTime.Milliseconds),
-            //             (float)(position.position.Y + vectorY * movement.moveRate * elapsedTime.Milliseconds)
-            //         );
-            //         var message = new Shared.Messages.UpdateEntity(entity, elapsedTime);
-            //         MessageQueueServer.instance.broadcastMessage(message);
-            //     }
-            // }
             m_systemNetwork.update(elapsedTime, MessageQueueServer.instance.getMessages());
             m_systemMovement.update(elapsedTime);
         }
@@ -53,10 +36,10 @@ namespace Server
             m_systemNetwork.registerHandler(Shared.Messages.Type.Join, handleJoin);
             m_systemNetwork.registerDisconnectHandler(handleDisconnect);
 
-            Entity food = Shared.Entities.Food.create("Textures/egg", new Vector2(120, 100), 50);
-            var message = new Shared.Messages.NewEntity(food);
-            addEntity(food);
-            MessageQueueServer.instance.broadcastMessage(message);
+            // Entity food = Shared.Entities.Food.create("Textures/egg", new Vector2(120, 100), 50);
+            // var message = new Shared.Messages.NewEntity(food);
+            // addEntity(food);
+            // MessageQueueServer.instance.broadcastMessage(message);
 
             // Entity food2 = Shared.Entities.Food.create("Textures/egg", new Vector2(120, 120), 50);
             // var message2 = new Shared.Messages.NewEntity(food2);
@@ -161,7 +144,7 @@ namespace Server
 
             // Step 2: Create an entity for the newly joined player and sent it
             //         to the newly joined client
-            Entity player = Shared.Entities.Player.create("Textures/head", messageJoin.name, new Vector2(100, 100), 50, 0.2f, (float)Math.PI / 1000);
+            Entity player = Shared.Entities.Player.create(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(100, 100), 50, 0.2f);
             addEntity(player);
             m_clientToEntityId[clientId] = player.id;
 

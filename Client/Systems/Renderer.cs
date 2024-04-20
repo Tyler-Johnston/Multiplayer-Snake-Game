@@ -109,7 +109,7 @@ namespace Client.Systems
             var size = entity.get<Shared.Components.Size>().size;
             var texture = entity.get<Components.Sprite>().texture;
             var texCenter = entity.get<Components.Sprite>().center;
-            var name = entity.get<Shared.Components.Name>().name;
+            // var name = entity.get<Shared.Components.Name>().name;
 
             Rectangle rectangle = new Rectangle(
                 entityX,
@@ -129,13 +129,13 @@ namespace Client.Systems
                 0
             );
 
-            // Calculate the position for the name text to appear above the entity
-            Vector2 textPosition = new Vector2(
-                entityX, 
-                entityY - 70);
+            // // Calculate the position for the name text to appear above the entity
+            // Vector2 textPosition = new Vector2(
+            //     entityX, 
+            //     entityY - 70);
 
-            // Draw the name text above the entity
-            spriteBatch.DrawString(m_font, name, textPosition, Color.White);
+            // // Draw the name text above the entity
+            // spriteBatch.DrawString(m_font, name, textPosition, Color.White);
         }
     }
 }

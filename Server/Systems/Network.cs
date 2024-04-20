@@ -85,44 +85,48 @@ namespace Server.Systems
         private void handleInput(Shared.Messages.Input message)
         {
             var entity = m_entities[message.entityId];
+            Entity? turnPoint = null;
             foreach (var input in message.inputs)
             {
-                Entity? turnPoint = null;
                 switch (input)
                 {
                     case Shared.Components.Input.Type.TurnLeft:
-                        Shared.Entities.Utility.turnLeft(entity);
+                        turnPoint = Shared.Entities.Utility.turnLeft(entity);
                         m_reportThese.Add(message.entityId);
                         break;
                     case Shared.Components.Input.Type.TurnRight:
-                        Shared.Entities.Utility.turnRight(entity);
+                        turnPoint = Shared.Entities.Utility.turnRight(entity);
                         m_reportThese.Add(message.entityId);
                         break;
                     case Shared.Components.Input.Type.TurnUp:
-                        Shared.Entities.Utility.turnUp(entity);
+                        turnPoint = Shared.Entities.Utility.turnUp(entity);
                         m_reportThese.Add(message.entityId);
                         break;
                     case Shared.Components.Input.Type.TurnDown:
-                        Shared.Entities.Utility.turnDown(entity);
+                        turnPoint = Shared.Entities.Utility.turnDown(entity);
                         m_reportThese.Add(message.entityId);
                         break;
                     case Shared.Components.Input.Type.TurnUpRight:
-                        Shared.Entities.Utility.turnUpRight(entity);
+                        turnPoint = Shared.Entities.Utility.turnUpRight(entity);
                         m_reportThese.Add(message.entityId);
                         break;
                     case Shared.Components.Input.Type.TurnDownRight:
-                        Shared.Entities.Utility.turnDownRight(entity);
+                        turnPoint = Shared.Entities.Utility.turnDownRight(entity);
                         m_reportThese.Add(message.entityId);
                         break;
                     case Shared.Components.Input.Type.TurnUpLeft:
-                        Shared.Entities.Utility.turnUpLeft(entity);
+                        turnPoint = Shared.Entities.Utility.turnUpLeft(entity);
                         m_reportThese.Add(message.entityId);
                         break;
                     case Shared.Components.Input.Type.TurnDownLeft:
-                        Shared.Entities.Utility.turnDownLeft(entity);
+                        turnPoint = Shared.Entities.Utility.turnDownLeft(entity);
                         m_reportThese.Add(message.entityId);
                         break;
                 }
+            }
+            if (turnPoint != null)
+            {
+                MessageQueueServer.instance.broadcastMessage(new NewEntity(turnPoint));
             }
         }
 

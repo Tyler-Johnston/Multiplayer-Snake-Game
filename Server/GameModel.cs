@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Shared.Components;
 using Shared.Entities;
 using Shared.Messages;
+using System;
 
 namespace Server
 {
@@ -23,24 +24,6 @@ namespace Server
         /// </summary>
         public void update(TimeSpan elapsedTime)
         {
-            // foreach (Entity entity in m_entities.Values)
-            // {
-            //     if (entity.contains<Shared.Components.Movement>())
-            //     {   
-            //         var position = entity.get<Shared.Components.Position>();
-            //         var movement = entity.get<Shared.Components.Movement>();
-
-            //         var vectorX = Math.Cos(position.orientation);
-            //         var vectorY = Math.Sin(position.orientation);
-
-            //         position.position = new Vector2(
-            //             (float)(position.position.X + vectorX * movement.moveRate * elapsedTime.Milliseconds),
-            //             (float)(position.position.Y + vectorY * movement.moveRate * elapsedTime.Milliseconds)
-            //         );
-            //         var message = new Shared.Messages.UpdateEntity(entity, elapsedTime);
-            //         MessageQueueServer.instance.broadcastMessage(message);
-            //     }
-            // }
             m_systemNetwork.update(elapsedTime, MessageQueueServer.instance.getMessages());
             m_systemMovement.update(elapsedTime);
         }
@@ -50,10 +33,14 @@ namespace Server
         /// </summary>
         public bool initialize()
         {
-            // m_systemNetwork.registerJoinHandler(handleJoin);
             m_systemNetwork.registerHandler(Shared.Messages.Type.Join, handleJoin);
             m_systemNetwork.registerDisconnectHandler(handleDisconnect);
 
+            // the 'addEntity' crashes with that dictionary key error
+            // the error is likely happening in System
+
+            // Entity food = Shared.Entities.Food.create("Textures/egg", new Vector2(120, 100), 50);
+            // var message = new Shared.Messages.NewEntity(food);
             // Entity food = Shared.Entities.Food.create("Textures/egg", new Vector2(120, 100), 50);
             // var message = new Shared.Messages.NewEntity(food);
             // addEntity(food);
@@ -65,7 +52,7 @@ namespace Server
 
             // Entity food = Shared.Entities.Food.create("Textures/egg", new Vector2(200, 200), 50);
             // addEntity(food);
-            // MessageQueueServer.instance.broadcastMessageWithLastId(new NewEntity(food));
+            // MessageQueueServer.instance.broadcastMessage(message);
 
             MessageQueueServer.instance.registerConnectHandler(handleConnect);
 
@@ -162,6 +149,15 @@ namespace Server
 
             // Step 2: Create an entity for the newly joined player and sent it
             //         to the newly joined client
+            int minX = 100;
+            int minY = 100;
+            int maxX = 2100;
+            int maxY = 2100;
+            Random random = new Random();
+            int x = random.Next(minX, maxX + 1);
+            int y = random.Next(minY, maxY + 1);
+
+            Entity player = Shared.Entities.Player.create("Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f, (float)Math.PI / 1000);
             Entity player = Shared.Entities.Snake.createHead(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(100, 100), 50, 0.2f, (float)Math.PI / 1000);
             addEntity(player);
             m_clientToEntityId[clientId] = player.id;

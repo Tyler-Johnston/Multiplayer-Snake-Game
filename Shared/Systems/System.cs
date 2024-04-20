@@ -46,20 +46,10 @@ namespace Shared.Systems
         /// Adds an entity to this system, if <see cref="isInterested(Entity)"/> returns true for <paramref name="entity"/>.
         /// </summary>
         /// <returns>Returns true if the given entity was added to this system. Otherwise returns false.</returns>
-        // public virtual bool add(Entity entity)
-        // {
-        //     bool interested = isInterested(entity);
-        //     if (interested)
-        //     {
-        //         // HERE IS THE ERROR
-        //         m_entities.Add(entity.id, entity);
-        //     }
-
-        //     return interested;
-        // }
-
         public virtual bool add(Entity entity)
         {
+            // to fix the error where if multiple clients join at the same time, lock m_entities
+            // probably a bad solution but it appears to have fixed it
             lock (m_entities)
             {
                 bool interested = isInterested(entity);
@@ -70,11 +60,9 @@ namespace Shared.Systems
                         m_entities.Add(entity.id, entity);
                     }
                 }
-
                 return interested;
             }
         }
-
 
         /// <summary>
         /// Removes the <see cref="Entity"/> with the given ID from this system if it is found in it.

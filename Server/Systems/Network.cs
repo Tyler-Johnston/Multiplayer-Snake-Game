@@ -141,7 +141,7 @@ namespace Server.Systems
             {
                 var entity = m_entities[entityId];
                 var message = new Shared.Messages.UpdateEntity(entity, elapsedTime);
-                MessageQueueServer.instance.broadcastMessageWithLastId(message);
+                MessageQueueServer.instance.broadcastMessage(message);
             }
 
             m_reportThese.Clear();

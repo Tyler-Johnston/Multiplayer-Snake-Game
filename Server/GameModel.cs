@@ -52,6 +52,15 @@ namespace Server
             m_systemNetwork.registerHandler(Shared.Messages.Type.Join, handleJoin);
             m_systemNetwork.registerDisconnectHandler(handleDisconnect);
 
+            Entity food = Shared.Entities.Food.create("Textures/egg", new Vector2(120, 100), 50);
+            var message = new Shared.Messages.NewEntity(food);
+            addEntity(food);
+            MessageQueueServer.instance.broadcastMessage(message);
+
+            // Entity food2 = Shared.Entities.Food.create("Textures/egg", new Vector2(120, 120), 50);
+            // var message2 = new Shared.Messages.NewEntity(food2);
+            // MessageQueueServer.instance.broadcastMessage(message2);
+
             // Entity food = Shared.Entities.Food.create("Textures/egg", new Vector2(200, 200), 50);
             // addEntity(food);
             // MessageQueueServer.instance.broadcastMessageWithLastId(new NewEntity(food));

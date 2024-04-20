@@ -59,25 +59,26 @@ namespace Client.Systems
                 {
                     foreach (var key in m_keysPressed)
                     {
-                        if (keyMap.ContainsKey(key))
+                        if (m_keyToFunction[item.Key].m_keyToType.ContainsKey(key))
                         {
-                            var type = keyMap[key];
+                            // var type = keyMap[key];
+                            var type = m_keyToFunction[item.Key].m_keyToType[key];
                             inputs.Add(type);
 
                             // Client-side prediction of the input
                             switch (type)
                             {
-                                case Shared.Components.Input.Type.TurnLeft:
-                                    Shared.Entities.Utility.turnLeft(item.Value);
-                                    break;
-                                case Shared.Components.Input.Type.TurnRight:
-                                    Shared.Entities.Utility.turnRight(item.Value);
-                                    break;
                                 case Shared.Components.Input.Type.TurnUp:
                                     Shared.Entities.Utility.turnUp(item.Value);
                                     break;
                                 case Shared.Components.Input.Type.TurnDown:
                                     Shared.Entities.Utility.turnDown(item.Value);
+                                    break;
+                                case Shared.Components.Input.Type.TurnLeft:
+                                    Shared.Entities.Utility.turnLeft(item.Value);
+                                    break;
+                                case Shared.Components.Input.Type.TurnRight:
+                                    Shared.Entities.Utility.turnRight(item.Value);
                                     break;
                             }
                         }

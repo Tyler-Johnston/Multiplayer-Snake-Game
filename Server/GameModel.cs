@@ -157,7 +157,8 @@ namespace Server
             int x = random.Next(minX, maxX + 1);
             int y = random.Next(minY, maxY + 1);
 
-            Entity player = Shared.Entities.Player.create(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(100, 100), 50, 0.2f);
+            Entity player = Shared.Entities.Snake.createHead(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(100, 100), 50, 0.2f);
+            // Entity player = Shared.Entities.Player.create(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(100, 100), 50, 0.2f);
             addEntity(player);
             m_clientToEntityId[clientId] = player.id;
 

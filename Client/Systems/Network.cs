@@ -79,6 +79,7 @@ namespace Client.Systems
             // After processing all the messages, perform server reconciliation by
             // resimulating the inputs from any sent messages not yet acknowledged by the server.
             var sent = MessageQueueClient.instance.getSendMessageHistory(m_lastMessageId);
+<<<<<<< HEAD
             // while (sent.Count > 0)
             // {
             //     var message = (Shared.Messages.Input)sent.Dequeue();
@@ -111,6 +112,40 @@ namespace Client.Systems
             //         }
             //     }
             // }
+=======
+            while (sent.Count > 0)
+            {
+                var message = (Shared.Messages.Input)sent.Dequeue();
+                if (message.type == Shared.Messages.Type.Input)
+                {
+                    var entity = m_entities[message.entityId];
+                    if (m_updatedEntities.Contains(entity.id))
+                    {
+                        foreach (var input in message.inputs)
+                        {
+                            switch (input)
+                            {
+                                // case Shared.Components.Input.Type.Thrust:
+                                //     Shared.Entities.Utility.thrust(entity, message.elapsedTime);
+                                //     break;
+                                case Shared.Components.Input.Type.TurnLeft:
+                                    Shared.Entities.Utility.turnLeft(entity);
+                                    break;
+                                case Shared.Components.Input.Type.TurnRight:
+                                    Shared.Entities.Utility.turnRight(entity);
+                                    break;
+                                case Shared.Components.Input.Type.TurnUp:
+                                    Shared.Entities.Utility.turnUp(entity);
+                                    break;
+                                case Shared.Components.Input.Type.TurnDown:
+                                    Shared.Entities.Utility.turnDown(entity);
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+>>>>>>> main
         }
 
         private void registerHandler(Shared.Messages.Type type, Handler handler)

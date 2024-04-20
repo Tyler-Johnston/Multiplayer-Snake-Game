@@ -84,6 +84,7 @@ namespace Server.Systems
         private void handleInput(Shared.Messages.Input message)
         {
             var entity = m_entities[message.entityId];
+            Entity? turnPoint = null;
             foreach (var input in message.inputs)
             {
                 Entity? turnPoint = null;
@@ -128,6 +129,10 @@ namespace Server.Systems
                 {
                     MessageQueueServer.instance.broadcastMessage(new NewEntity(turnPoint));
                 }
+            }
+            if (turnPoint != null)
+            {
+                MessageQueueServer.instance.broadcastMessage(new NewEntity(turnPoint));
             }
         }
 

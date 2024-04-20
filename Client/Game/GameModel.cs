@@ -114,6 +114,16 @@ namespace Client
         {
             Entity entity = new Entity(message.id);
 
+            if (message.hasSnakeId)
+            {
+                entity.add(new Shared.Components.SnakeId(message.snakeId));
+            }
+
+            if (message.hasTurnPoint)
+            {
+                entity.add(new Shared.Components.TurnPoint());
+            }
+
             if (message.hasName)
             {
                 entity.add(new Shared.Components.Name(message.name));
@@ -147,7 +157,7 @@ namespace Client
 
             if (message.hasMovement)
             {
-                entity.add(new Shared.Components.Movement(message.moveRate, message.rotateRate));
+                entity.add(new Shared.Components.Movement(message.moveRate));
             }
 
             if (message.hasInput)

@@ -11,11 +11,21 @@ namespace Shared.Messages
         {
             this.id = entity.id;
 
+            if (entity.contains<SnakeId>())
+            {
+                this.hasSnakeId = true;
+                this.snakeId = entity.get<SnakeId>().id;
+            }
+
+            if (entity.contains<Shared.Components.TurnPoint>())
+            {
+                this.hasTurnPoint = true;
+            }
+
             if (entity.contains<Name>())
             {
                 this.hasName = true;
                 this.name = entity.get<Name>().name;
-
             }
 
             if (entity.contains<SnakeId>())
@@ -56,7 +66,6 @@ namespace Shared.Messages
             {
                 this.hasMovement = true;
                 this.moveRate = entity.get<Movement>().moveRate;
-                this.rotateRate = entity.get<Movement>().rotateRate;
             }
 
             if (entity.contains<Components.Input>())
@@ -76,6 +85,13 @@ namespace Shared.Messages
         }
 
         public uint id { get; private set; }
+
+        // SnakeId
+        public bool hasSnakeId { get; private set; } = false;
+        public int snakeId {  get; private set; }
+
+        // Turn Point
+        public bool hasTurnPoint { get; private set; } = false;
 
         public bool hasName { get; private set; } = false;
         public string name { get; private set; }
@@ -103,7 +119,6 @@ namespace Shared.Messages
         // Movement
         public bool hasMovement { get; private set; } = false;
         public float moveRate { get; private set; }
-        public float rotateRate { get; private set; }
 
         // Input
         public bool hasInput { get; private set; } = false;
@@ -115,6 +130,14 @@ namespace Shared.Messages
 
             data.AddRange(base.serialize());
             data.AddRange(BitConverter.GetBytes(id));
+
+            data.AddRange(BitConverter.GetBytes(hasSnakeId));
+            if (hasSnakeId)
+            {
+                data.AddRange(BitConverter.GetBytes(snakeId));
+            }
+
+            data.AddRange(BitConverter.GetBytes(hasTurnPoint));
 
             data.AddRange(BitConverter.GetBytes(hasName));
             if (hasName)
@@ -161,7 +184,6 @@ namespace Shared.Messages
             if (hasMovement)
             {
                 data.AddRange(BitConverter.GetBytes(moveRate));
-                data.AddRange(BitConverter.GetBytes(rotateRate));
             }
 
             data.AddRange(BitConverter.GetBytes(hasInput));
@@ -183,6 +205,17 @@ namespace Shared.Messages
 
             this.id = BitConverter.ToUInt32(data, offset);
             offset += sizeof(uint);
+
+            this.hasSnakeId = BitConverter.ToBoolean(data, offset);
+            offset += sizeof(bool);
+            if (hasSnakeId)
+            {
+                this.snakeId = BitConverter.ToInt32(data, offset);
+                offset += sizeof(Int32);
+            }
+
+            this.hasTurnPoint = BitConverter.ToBoolean(data, offset);
+            offset+= sizeof(bool);
 
             this.hasName = BitConverter.ToBoolean(data, offset);
             offset += sizeof(bool);
@@ -245,8 +278,6 @@ namespace Shared.Messages
             if (hasMovement)
             {
                 this.moveRate = BitConverter.ToSingle(data, offset);
-                offset += sizeof(Single);
-                this.rotateRate = BitConverter.ToSingle(data, offset);
                 offset += sizeof(Single);
             }
 

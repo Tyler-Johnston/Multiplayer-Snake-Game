@@ -43,7 +43,7 @@ namespace Shared.Entities
                 (float)(position.position.Y + vectorY * movement.moveRate * elapsedTime.Milliseconds));
         }
 
-        public static Entity? turnLeft(Entity entity, TimeSpan elapsedTime)
+        public static Entity? turnLeft(Entity entity)
         {
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
@@ -56,7 +56,7 @@ namespace Shared.Entities
             }
             return null;
         }
-        public static Entity? turnRight(Entity entity, TimeSpan elapsedTime)
+        public static Entity? turnRight(Entity entity)
         {
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
@@ -69,7 +69,7 @@ namespace Shared.Entities
             }
             return null;
         }
-        public static Entity? turnUp(Entity entity, TimeSpan elapsedTime)
+        public static Entity? turnUp(Entity entity)
         {
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
@@ -82,7 +82,7 @@ namespace Shared.Entities
             }
             return null;
         }
-        public static Entity? turnDown(Entity entity, TimeSpan elapsedTime)
+        public static Entity? turnDown(Entity entity)
         {
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
@@ -95,7 +95,7 @@ namespace Shared.Entities
             }
             return null;
         }
-        public static Entity? turnDownLeft(Entity entity, TimeSpan elapsedTime)
+        public static Entity? turnDownLeft(Entity entity)
         {
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
@@ -109,7 +109,7 @@ namespace Shared.Entities
             }
             return null;
         }
-        public static Entity? turnDownRight(Entity entity, TimeSpan elapsedTime)
+        public static Entity? turnDownRight(Entity entity)
         {
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
@@ -122,7 +122,7 @@ namespace Shared.Entities
             }
             return null;
         }
-        public static Entity? turnUpRight(Entity entity, TimeSpan elapsedTime)
+        public static Entity? turnUpRight(Entity entity)
         {
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
@@ -136,7 +136,7 @@ namespace Shared.Entities
             }
             return null;
         }
-        public static Entity? turnUpLeft(Entity entity, TimeSpan elapsedTime)
+        public static Entity? turnUpLeft(Entity entity)
         {
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();

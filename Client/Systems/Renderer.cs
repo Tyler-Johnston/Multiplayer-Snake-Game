@@ -36,8 +36,8 @@ namespace Client.Systems
             base(
                 typeof(Client.Components.Sprite),
                 typeof(Shared.Components.Position),
-                typeof(Shared.Components.Size),
-                typeof(Shared.Components.Name)
+                typeof(Shared.Components.Size)
+                // typeof(Shared.Components.Name)
                 )
         {
         }
@@ -56,49 +56,48 @@ namespace Client.Systems
         public void update(TimeSpan elapsedTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(m_background, new Rectangle(-m_viewportOffsetX, -m_viewportOffsetY, WorldWidth, WorldHeight), Color.White);
+            updateViewport();
 
+            spriteBatch.Draw(m_background, new Rectangle(-m_viewportOffsetX, -m_viewportOffsetY, WorldWidth, WorldHeight), Color.White);
             foreach (Entity entity in m_entities.Values)
             {
                 RenderEntity(entity, spriteBatch);
             }
-
-            updateViewport();
 
             spriteBatch.End();
         }
 
         public void updateViewport()
         {
-            // if (m_playerId != null)
-            // {
-            //     Entity entity = m_entities[m_playerId.Value];
-            //     var position = entity.get<Shared.Components.Position>().position;
-            //     var orientation = entity.get<Shared.Components.Position>().orientation;
-            //     var name = entity.get<Shared.Components.Name>().name;
-            //     var size = entity.get<Shared.Components.Size>().size;
-            //     var texture = entity.get<Components.Sprite>().texture;
-            //     var texCenter = entity.get<Components.Sprite>().center;
+            if (m_playerId != null)
+            {
+                Entity entity = m_entities[m_playerId.Value];
+                var position = entity.get<Shared.Components.Position>().position;
+                var orientation = entity.get<Shared.Components.Position>().orientation;
+                var name = entity.get<Shared.Components.Name>().name;
+                var size = entity.get<Shared.Components.Size>().size;
+                var texture = entity.get<Components.Sprite>().texture;
+                var texCenter = entity.get<Components.Sprite>().center;
 
-            //     m_viewportOffsetX = (int)Math.Min(Math.Max(position.X - VPW / 2, 0), WorldWidth - VPW);
-            //     m_viewportOffsetY = (int)Math.Min(Math.Max(position.Y - VPH / 2, 0), WorldWidth - VPH);
+                m_viewportOffsetX = (int)Math.Min(Math.Max(position.X - VPW / 2, 0), WorldWidth - VPW);
+                m_viewportOffsetY = (int)Math.Min(Math.Max(position.Y - VPH / 2, 0), WorldWidth - VPH);
 
-            //     // Build a rectangle centered at position, with width/height of size
-            //     int playerX = (m_viewportOffsetX == 0 || m_viewportOffsetX == WorldWidth - VPW) ? (int)position.X : (int)(VPW / 2);
-            //     int playerY = (m_viewportOffsetY == 0 || m_viewportOffsetY == WorldWidth - VPH) ? (int)position.Y : (int)(VPH / 2);
-            //     int viewportMaxXThreshold = WorldWidth - VPW / 2;
-            //     int playerXOffset = WorldWidth - VPW;
-            //     if (playerX > viewportMaxXThreshold)
-            //     {
-            //         playerX = playerX - playerXOffset;
-            //     }
-            //     int viewportMaxYThreshold = WorldWidth - VPH / 2;
-            //     int playerYOffset = WorldWidth - VPH;
-            //     if (playerY > viewportMaxYThreshold)
-            //     {
-            //         playerY = playerY - playerYOffset;
-            //     }
-            // }
+                // Build a rectangle centered at position, with width/height of size
+                int playerX = (m_viewportOffsetX == 0 || m_viewportOffsetX == WorldWidth - VPW) ? (int)position.X : (int)(VPW / 2);
+                int playerY = (m_viewportOffsetY == 0 || m_viewportOffsetY == WorldWidth - VPH) ? (int)position.Y : (int)(VPH / 2);
+                int viewportMaxXThreshold = WorldWidth - VPW / 2;
+                int playerXOffset = WorldWidth - VPW;
+                if (playerX > viewportMaxXThreshold)
+                {
+                    playerX = playerX - playerXOffset;
+                }
+                int viewportMaxYThreshold = WorldWidth - VPH / 2;
+                int playerYOffset = WorldWidth - VPH;
+                if (playerY > viewportMaxYThreshold)
+                {
+                    playerY = playerY - playerYOffset;
+                }
+            }
         }
 
         public void RenderEntity(Entity entity, SpriteBatch spriteBatch)

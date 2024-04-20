@@ -13,7 +13,6 @@ namespace CS5410
     {
         private bool m_loaded = false;
         public string m_name = "None";
-        private uint m_playerId = 9;
         private Texture2D m_background;
         private bool initialSetupCompleted = false;
         private SpriteFont m_font;

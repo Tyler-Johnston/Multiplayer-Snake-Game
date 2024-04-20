@@ -117,6 +117,11 @@ namespace Client
                 entity.add(new Shared.Components.SnakeId(message.snakeId));
             }
 
+            if (message.hasFood)
+            {
+                entity.add(new Shared.Components.Food());
+            }
+
             if (message.hasTurnPoint)
             {
                 entity.add(new Shared.Components.TurnPoint());

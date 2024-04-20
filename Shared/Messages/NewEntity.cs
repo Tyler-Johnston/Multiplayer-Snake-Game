@@ -22,6 +22,11 @@ namespace Shared.Messages
                 this.hasTurnPoint = true;
             }
 
+            if (entity.contains<Shared.Components.Food>())
+            {
+                this.hasFood = true;
+            }
+
             if (entity.contains<Name>())
             {
                 this.hasName = true;
@@ -75,6 +80,9 @@ namespace Shared.Messages
 
         public uint id { get; private set; }
 
+        // Food Component
+        public bool hasFood { get; private set; } = false;
+
         // SnakeId
         public bool hasSnakeId { get; private set; } = false;
         public int snakeId {  get; private set; }
@@ -120,6 +128,8 @@ namespace Shared.Messages
             }
 
             data.AddRange(BitConverter.GetBytes(hasTurnPoint));
+
+            data.AddRange(BitConverter.GetBytes(hasFood));
 
             data.AddRange(BitConverter.GetBytes(hasName));
             if (hasName)
@@ -185,6 +195,9 @@ namespace Shared.Messages
             }
 
             this.hasTurnPoint = BitConverter.ToBoolean(data, offset);
+            offset+= sizeof(bool);
+
+            this.hasFood = BitConverter.ToBoolean(data, offset);
             offset+= sizeof(bool);
 
             this.hasName = BitConverter.ToBoolean(data, offset);

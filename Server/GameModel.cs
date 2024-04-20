@@ -36,22 +36,9 @@ namespace Server
             m_systemNetwork.registerHandler(Shared.Messages.Type.Join, handleJoin);
             m_systemNetwork.registerDisconnectHandler(handleDisconnect);
 
-            // Entity food = Shared.Entities.Food.create("Textures/egg", new Vector2(120, 100), 50);
-            // var message = new Shared.Messages.NewEntity(food);
-            // addEntity(food);
-            // MessageQueueServer.instance.broadcastMessage(message);
-
-            // Entity food2 = Shared.Entities.Food.create("Textures/egg", new Vector2(120, 120), 50);
-            // var message2 = new Shared.Messages.NewEntity(food2);
-            // MessageQueueServer.instance.broadcastMessage(message2);
-
-            // Entity food = Shared.Entities.Food.create("Textures/egg", new Vector2(200, 200), 50);
-            // the 'addEntity' crashes with that dictionary key error
-            // the error is likely happening in System
-
-            // Entity food = Shared.Entities.Food.create("Textures/egg", new Vector2(120, 100), 50);
-            // var message = new Shared.Messages.NewEntity(food);
-            // addEntity(food);
+            Entity food = Shared.Entities.Food.create("Textures/egg", new Vector2(120, 100), 50);
+            var message = new Shared.Messages.NewEntity(food);
+            addEntity(food);
             // MessageQueueServer.instance.broadcastMessage(message);
 
             MessageQueueServer.instance.registerConnectHandler(handleConnect);
@@ -158,7 +145,6 @@ namespace Server
             int y = random.Next(minY, maxY + 1);
 
             Entity player = Shared.Entities.Snake.createHead(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(100, 100), 50, 0.2f);
-            // Entity player = Shared.Entities.Player.create(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(100, 100), 50, 0.2f);
             addEntity(player);
             m_clientToEntityId[clientId] = player.id;
 

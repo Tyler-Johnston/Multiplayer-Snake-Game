@@ -9,6 +9,7 @@ namespace Shared.Entities
         {
             Entity entity = new Entity();
 
+            entity.add(new Shared.Components.Food());
             entity.add(new Appearance(texture));
             entity.add(new Position(position));
             entity.add(new Size(new Vector2(size, size)));

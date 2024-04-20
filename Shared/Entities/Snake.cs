@@ -47,7 +47,7 @@ namespace Shared.Entities
                 (float)(position.position.Y + vectorY * movement.moveRate * elapsedTime.Milliseconds));
         }
         
-               public static Entity? turnUp(Entity entity)
+        public static Entity? turnUp(Entity entity)
         {
             var position = entity.get<Position>();
 
@@ -79,7 +79,7 @@ namespace Shared.Entities
             return null;
         }
 
-        public static Entity? turnLeft(Entity entity)
+        public static Entity? turnRight(Entity entity)
         {
             var position = entity.get<Position>();
 
@@ -95,7 +95,7 @@ namespace Shared.Entities
             return null;
         }
 
-        public static Entity? turnRight(Entity entity)
+        public static Entity? turnLeft(Entity entity)
         {
             var position = entity.get<Position>();
 
@@ -108,6 +108,64 @@ namespace Shared.Entities
                 return Shared.Entities.TurnPoint.create(snakeId, position.position, position.orientation);
             }
 
+            return null;
+        }
+
+        public static Entity? turnDownLeft(Entity entity)
+        {
+            var position = entity.get<Position>();
+            var movement = entity.get<Movement>();
+
+
+            if (position.orientation != (float)(Math.PI * 7 / 4))
+            {
+                position.orientation = (float)(Math.PI * 3 / 4);
+                int snakeId = entity.get<SnakeId>().id;
+                return Shared.Entities.TurnPoint.create(snakeId, position.position, position.orientation);
+            }
+            return null;
+        }
+
+        public static Entity? turnDownRight(Entity entity)
+        {
+            var position = entity.get<Position>();
+            var movement = entity.get<Movement>();
+
+            if (position.orientation != (float)(Math.PI * 5 / 4))
+            {
+                position.orientation = (float)(Math.PI / 4);
+                int snakeId = entity.get<SnakeId>().id;
+                return Shared.Entities.TurnPoint.create(snakeId, position.position, position.orientation);
+            }
+            return null;
+        }
+
+        public static Entity? turnUpRight(Entity entity)
+        {
+            var position = entity.get<Position>();
+            var movement = entity.get<Movement>();
+
+
+            if (position.orientation != (float)(Math.PI * 3 / 4))
+            {
+                position.orientation = (float)(Math.PI * 7 / 4);
+                int snakeId = entity.get<SnakeId>().id;
+                return Shared.Entities.TurnPoint.create(snakeId, position.position, position.orientation);
+            }
+            return null;
+        }
+
+        public static Entity? turnUpLeft(Entity entity)
+        {
+            var position = entity.get<Position>();
+            var movement = entity.get<Movement>();
+
+            if (position.orientation != (float)(Math.PI / 4))
+            {
+                position.orientation = (float)(Math.PI * 5 / 4);
+                int snakeId = entity.get<SnakeId>().id;
+                return Shared.Entities.TurnPoint.create(snakeId, position.position, position.orientation);
+            }
             return null;
         }
     }

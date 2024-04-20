@@ -33,30 +33,30 @@ namespace Client.Systems
             foreach (var item in m_entities)
             {
                 List<Shared.Components.Input.Type> inputs = new List<Shared.Components.Input.Type>();
-                // var keyMap = m_keyToFunction[item.Key].m_keyToType;
+                var keyMap = m_keyToFunction[item.Key].m_keyToType;
 
-                // if (m_keysPressed.Contains(ControlsManager.Controls["TurnUp"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnRight"]))
-                // {
-                //     inputs.Add(Shared.Components.Input.Type.TurnUpRight);
-                //     Shared.Entities.Utility.turnUpRight(item.Value, elapsedTime);
-                // } 
-                // else if (m_keysPressed.Contains(ControlsManager.Controls["TurnDown"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnRight"]))
-                // {
-                //     inputs.Add(Shared.Components.Input.Type.TurnDownRight);
-                //     Shared.Entities.Utility.turnDownRight(item.Value, elapsedTime);
-                // }
-                // else if (m_keysPressed.Contains(ControlsManager.Controls["TurnUp"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnLeft"]))
-                // {
-                //     inputs.Add(Shared.Components.Input.Type.TurnUpLeft);
-                //     Shared.Entities.Utility.turnUpLeft(item.Value, elapsedTime);
-                // }
-                // else if (m_keysPressed.Contains(ControlsManager.Controls["TurnDown"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnLeft"]))
-                // {
-                //     inputs.Add(Shared.Components.Input.Type.TurnDownLeft);
-                //     Shared.Entities.Utility.turnDownLeft(item.Value, elapsedTime);
-                // }
-                // else
-                // {
+                if (m_keysPressed.Contains(ControlsManager.Controls["TurnUp"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnRight"]))
+                {
+                    inputs.Add(Shared.Components.Input.Type.TurnUpRight);
+                    Shared.Entities.Utility.turnUpRight(item.Value);
+                } 
+                else if (m_keysPressed.Contains(ControlsManager.Controls["TurnDown"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnRight"]))
+                {
+                    inputs.Add(Shared.Components.Input.Type.TurnDownRight);
+                    Shared.Entities.Utility.turnDownRight(item.Value);
+                }
+                else if (m_keysPressed.Contains(ControlsManager.Controls["TurnUp"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnLeft"]))
+                {
+                    inputs.Add(Shared.Components.Input.Type.TurnUpLeft);
+                    Shared.Entities.Utility.turnUpLeft(item.Value);
+                }
+                else if (m_keysPressed.Contains(ControlsManager.Controls["TurnDown"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnLeft"]))
+                {
+                    inputs.Add(Shared.Components.Input.Type.TurnDownLeft);
+                    Shared.Entities.Utility.turnDownLeft(item.Value);
+                }
+                else
+                {
                     foreach (var key in m_keysPressed)
                     {
                         if (m_keyToFunction[item.Key].m_keyToType.ContainsKey(key))
@@ -83,7 +83,7 @@ namespace Client.Systems
                             }
                         }
                     }
-                // }
+                }
 
                 if (inputs.Count > 0)
                 {

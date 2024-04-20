@@ -105,18 +105,22 @@ namespace Server.Systems
                         turnPoint = Shared.Entities.Utility.turnRight(entity);
                         m_reportThese.Add(message.entityId);
                         break;
-                    // case Shared.Components.Input.Type.TurnUpRight:
-                    //     Shared.Entities.Utility.turnUpRight(entity, message.elapsedTime);
-                    //     break;
-                    // case Shared.Components.Input.Type.TurnDownRight:
-                    //     Shared.Entities.Utility.turnDownRight(entity, message.elapsedTime);
-                    //     break;
-                    // case Shared.Components.Input.Type.TurnUpLeft:
-                    //     Shared.Entities.Utility.turnUpLeft(entity, message.elapsedTime);
-                    //     break;
-                    // case Shared.Components.Input.Type.TurnDownLeft:
-                    //     Shared.Entities.Utility.turnDownLeft(entity, message.elapsedTime);
-                    //     break;
+                    case Shared.Components.Input.Type.TurnUpRight:
+                        turnPoint = Shared.Entities.Utility.turnUpRight(entity);
+                        m_reportThese.Add(message.entityId);
+                        break;
+                    case Shared.Components.Input.Type.TurnDownRight:
+                        turnPoint = Shared.Entities.Utility.turnDownRight(entity);
+                        m_reportThese.Add(message.entityId);
+                        break;
+                    case Shared.Components.Input.Type.TurnUpLeft:
+                        turnPoint = Shared.Entities.Utility.turnUpLeft(entity);
+                        m_reportThese.Add(message.entityId);
+                        break;
+                    case Shared.Components.Input.Type.TurnDownLeft:
+                        turnPoint = Shared.Entities.Utility.turnDownLeft(entity);
+                        m_reportThese.Add(message.entityId);
+                        break;
                 }
 
                 // If we actually turned, send the new turn point out to all connected clients

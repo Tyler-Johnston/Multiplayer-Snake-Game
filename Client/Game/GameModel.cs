@@ -119,7 +119,7 @@ namespace Client
                 entity.add(new Shared.Components.Name(message.name));
             }
 
-                        if (message.hasSnakeId)
+            if (message.hasSnakeId)
             {
                 entity.add(new SnakeId(message.snakeId));
             }

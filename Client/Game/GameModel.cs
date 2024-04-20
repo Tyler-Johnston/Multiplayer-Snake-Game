@@ -17,6 +17,7 @@ namespace Client
         private Systems.KeyboardInput m_systemKeyboardInput;
         private Systems.Interpolation m_systemInterpolation = new Systems.Interpolation();
         private Systems.Renderer m_systemRenderer = new Systems.Renderer();
+        private Shared.Systems.Movement m_systemMovement = new Shared.Systems.Movement();
 
         private bool isFirstEntityReceived = false;
 
@@ -31,6 +32,7 @@ namespace Client
             m_systemNetwork.update(elapsedTime, MessageQueueClient.instance.getMessages());
             m_systemKeyboardInput.update(elapsedTime);
             m_systemInterpolation.update(elapsedTime);
+            m_systemMovement.update(elapsedTime);
         }
 
         public void render(TimeSpan elapsedTime, SpriteBatch spriteBatch)
@@ -167,6 +169,7 @@ namespace Client
             m_systemRenderer.add(entity);
             m_systemNetwork.add(entity);
             m_systemInterpolation.add(entity);
+            m_systemMovement.add(entity);
         }
 
         /// <summary>
@@ -181,6 +184,7 @@ namespace Client
             m_systemNetwork.remove(id);
             m_systemRenderer.remove(id);
             m_systemInterpolation.remove(id);
+            m_systemMovement.remove(id);
         }
 
         private void handleNewEntity(Shared.Messages.NewEntity message)

@@ -13,6 +13,7 @@ namespace Server
         private Dictionary<int, uint> m_clientToEntityId = new Dictionary<int, uint>();
 
         Systems.Network m_systemNetwork = new Server.Systems.Network();
+        Shared.Systems.Movement m_systemMovement = new Shared.Systems.Movement();
 
         /// <summary>
         /// This is where the server-side simulation takes place.  Messages
@@ -21,26 +22,26 @@ namespace Server
         /// </summary>
         public void update(TimeSpan elapsedTime)
         {
+            // foreach (Entity entity in m_entities.Values)
+            // {
+            //     if (entity.contains<Shared.Components.Movement>())
+            //     {   
+            //         var position = entity.get<Shared.Components.Position>();
+            //         var movement = entity.get<Shared.Components.Movement>();
 
-            foreach (Entity entity in m_entities.Values)
-            {
-                if (entity.contains<Shared.Components.Movement>())
-                {   
-                    var position = entity.get<Shared.Components.Position>();
-                    var movement = entity.get<Shared.Components.Movement>();
+            //         var vectorX = Math.Cos(position.orientation);
+            //         var vectorY = Math.Sin(position.orientation);
 
-                    var vectorX = Math.Cos(position.orientation);
-                    var vectorY = Math.Sin(position.orientation);
-
-                    position.position = new Vector2(
-                        (float)(position.position.X + vectorX * movement.moveRate * elapsedTime.Milliseconds),
-                        (float)(position.position.Y + vectorY * movement.moveRate * elapsedTime.Milliseconds)
-                    );
-                    var message = new Shared.Messages.UpdateEntity(entity, elapsedTime);
-                    MessageQueueServer.instance.broadcastMessage(message);
-                }
-            }
+            //         position.position = new Vector2(
+            //             (float)(position.position.X + vectorX * movement.moveRate * elapsedTime.Milliseconds),
+            //             (float)(position.position.Y + vectorY * movement.moveRate * elapsedTime.Milliseconds)
+            //         );
+            //         var message = new Shared.Messages.UpdateEntity(entity, elapsedTime);
+            //         MessageQueueServer.instance.broadcastMessage(message);
+            //     }
+            // }
             m_systemNetwork.update(elapsedTime, MessageQueueServer.instance.getMessages());
+            m_systemMovement.update(elapsedTime);
         }
 
         /// <summary>
@@ -121,6 +122,7 @@ namespace Server
 
             m_entities[entity.id] = entity;
             m_systemNetwork.add(entity);
+            m_systemMovement.add(entity);
         }
 
         /// <summary>
@@ -131,6 +133,7 @@ namespace Server
         {
             m_entities.Remove(id);
             m_systemNetwork.remove(id);
+            m_systemMovement.remove(id);
         }
 
         /// <summary>

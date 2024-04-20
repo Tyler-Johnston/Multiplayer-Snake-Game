@@ -123,10 +123,11 @@ namespace Server.Systems
                         m_reportThese.Add(message.entityId);
                         break;
                 }
-            }
-            if (turnPoint != null)
-            {
-                MessageQueueServer.instance.broadcastMessage(new NewEntity(turnPoint));
+
+                if (turnPoint != null)
+                {
+                    MessageQueueServer.instance.broadcastMessage(new NewEntity(turnPoint));
+                }
             }
         }
 

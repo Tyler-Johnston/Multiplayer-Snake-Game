@@ -122,7 +122,7 @@ namespace Shared.Entities
             var movement = entity.get<Movement>();
 
 
-            if (position.orientation != DIR_UP_RIGHT)
+            if (position.orientation != DIR_UP_RIGHT && position.orientation != DIR_UP_LEFT && position.orientation != DIR_DOWN_RIGHT)
             {
                 position.orientation = DIR_DOWN_LEFT;
                 int snakeId = entity.get<SnakeId>().id;
@@ -136,7 +136,7 @@ namespace Shared.Entities
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
 
-            if (position.orientation != DIR_UP_LEFT)
+            if (position.orientation != DIR_UP_LEFT && position.orientation != DIR_UP_RIGHT && position.orientation != DIR_DOWN_LEFT)
             {
                 position.orientation = DIR_DOWN_RIGHT;
                 int snakeId = entity.get<SnakeId>().id;
@@ -151,7 +151,7 @@ namespace Shared.Entities
             var movement = entity.get<Movement>();
 
 
-            if (position.orientation != DIR_DOWN_LEFT)
+            if (position.orientation != DIR_DOWN_LEFT && position.orientation != DIR_DOWN_RIGHT && position.orientation != DIR_UP_LEFT)
             {
                 position.orientation = DIR_UP_RIGHT;
                 int snakeId = entity.get<SnakeId>().id;
@@ -165,7 +165,7 @@ namespace Shared.Entities
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
 
-            if (position.orientation != DIR_DOWN_RIGHT)
+            if (position.orientation != DIR_DOWN_RIGHT && position.orientation != DIR_DOWN_LEFT && position.orientation != DIR_UP_RIGHT)
             {
                 position.orientation = DIR_UP_LEFT;
                 int snakeId = entity.get<SnakeId>().id;

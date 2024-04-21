@@ -5,6 +5,7 @@ using Shared.Entities;
 using System;
 using Microsoft.Xna.Framework.Content;
 using Shared.Components;
+using System.Linq;
 
 
 namespace Client.Systems
@@ -75,7 +76,26 @@ namespace Client.Systems
                 }
             }
 
+            RenderScoreBoard(spriteBatch);
+
             spriteBatch.End();
+        }
+
+        private void RenderScoreBoard(SpriteBatch spriteBatch)
+        {
+            var topEntities = m_entities.Values
+                .Where(e => e.contains<Score>())
+                .OrderByDescending(e => e.get<Score>().score)
+                .Take(5);
+
+            int rank = 1;
+            Vector2 scorePosition = new Vector2(1100, 50);
+            foreach (var entity in topEntities)
+            {
+                string scoreText = $"{rank++}) {entity.get<Name>()?.name ?? "Unknown"}: {entity.get<Score>().score}";
+                spriteBatch.DrawString(m_font, scoreText, scorePosition, Color.White);
+                scorePosition.Y += 60;
+            }
         }
 
         public void updateViewport()

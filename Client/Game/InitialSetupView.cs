@@ -39,7 +39,7 @@ namespace CS5410
                             playerName = playerName[..^1];
                             m_waitForKeyRelease = true;
                         }
-                        else if (key >= Keys.A && key <= Keys.Z && playerName.Length < 20)
+                        else if (key >= Keys.A && key <= Keys.Z && playerName.Length < 6)
                         {
                             char keyChar = (keyboardState.IsKeyDown(Keys.LeftShift) || keyboardState.IsKeyDown(Keys.RightShift)) ? key.ToString()[0] : char.ToLower(key.ToString()[0]);
                             playerName += keyChar;

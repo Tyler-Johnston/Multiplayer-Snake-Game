@@ -13,6 +13,12 @@ namespace Server
         private HashSet<int> m_clients = new HashSet<int>();
         private Dictionary<uint, Entity> m_entities = new Dictionary<uint, Entity>();
         private Dictionary<int, uint> m_clientToEntityId = new Dictionary<int, uint>();
+        private List<Entity> m_foodList = new List<Entity>();
+        private int minX = 100;
+        private int minY = 100;
+        private int maxX = 2100;
+        private int maxY = 2100;
+        private Random random = new Random();
 
         Systems.Network m_systemNetwork = new Server.Systems.Network();
         Shared.Systems.Movement m_systemMovement = new Shared.Systems.Movement();
@@ -36,10 +42,15 @@ namespace Server
             m_systemNetwork.registerHandler(Shared.Messages.Type.Join, handleJoin);
             m_systemNetwork.registerDisconnectHandler(handleDisconnect);
 
-            Entity food = Shared.Entities.Food.create("Textures/egg", new Vector2(120, 100), 50);
-            var message = new Shared.Messages.NewEntity(food);
-            addEntity(food);
-            // MessageQueueServer.instance.broadcastMessage(message);
+            for (int i = 0; i < 50; i++)
+            {
+                int x = random.Next(minX, maxX + 1);
+                int y = random.Next(minY, maxY + 1);
+                int size = random.Next(10, 50);
+                Entity food = Shared.Entities.Food.create("Textures/egg", new Vector2(x, y), size);
+                m_foodList.Add(food);
+                addEntity(food);
+            }
 
             MessageQueueServer.instance.registerConnectHandler(handleConnect);
 
@@ -132,7 +143,9 @@ namespace Server
         {
             Shared.Messages.Join messageJoin = (Shared.Messages.Join) message;
 
-            Entity player = Shared.Entities.Snake.createHead(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(100, 100), 50, 0.2f);
+            int x = random.Next(minX, maxX + 1);
+            int y = random.Next(minY, maxY + 1);
+            Entity player = Shared.Entities.Snake.createHead(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f);
             // Step 3: Send the new player entity to the newly joined client
             MessageQueueServer.instance.sendMessage(clientId, new NewEntity(player));
             addEntity(player);
@@ -143,13 +156,6 @@ namespace Server
 
             // Step 2: Create an entity for the newly joined player and sent it
             //         to the newly joined client
-            int minX = 100;
-            int minY = 100;
-            int maxX = 2100;
-            int maxY = 2100;
-            Random random = new Random();
-            int x = random.Next(minX, maxX + 1);
-            int y = random.Next(minY, maxY + 1);
 
             
 

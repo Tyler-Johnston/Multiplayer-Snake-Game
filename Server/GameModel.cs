@@ -10,6 +10,7 @@ namespace Server
     public class GameModel
     {
         private int m_nextSnakeId = 0;
+        private int m_nextFoodId = 0;
         private HashSet<int> m_clients = new HashSet<int>();
         private Dictionary<uint, Entity> m_entities = new Dictionary<uint, Entity>();
         private Dictionary<int, uint> m_clientToEntityId = new Dictionary<int, uint>();
@@ -32,7 +33,41 @@ namespace Server
         {
             m_systemNetwork.update(elapsedTime, MessageQueueServer.instance.getMessages());
             m_systemMovement.update(elapsedTime);
+
+            foreach (Entity entity in m_entities.Values)
+            {
+                if (entity.contains<Shared.Components.SnakeId>())
+                {
+                    var snakePos = entity.get<Shared.Components.Position>().position;
+                    float snakeRadius = entity.get<Shared.Components.Size>().size.X / 2;
+
+                    List<Entity> eatenFoods = new List<Entity>();
+
+                    foreach (var food in m_foodList)
+                    {
+                        var foodPos = food.get<Shared.Components.Position>().position;
+                        float foodRadius = food.get<Shared.Components.Size>().size.X / 2;
+
+                        float dx = snakePos.X - foodPos.X;
+                        float dy = snakePos.Y - foodPos.Y;
+                        float distance = (float)Math.Sqrt(dx * dx + dy * dy);
+
+                        if (distance <= snakeRadius + foodRadius)
+                        {
+                            eatenFoods.Add(food);
+                            Console.WriteLine("we ate a food");
+                        }
+                    }
+
+                    foreach (var food in eatenFoods)
+                    {
+                        m_foodList.Remove(food);
+                        removeEntity(food.id);
+                    }
+                }
+            }
         }
+
 
         /// <summary>
         /// Setup notifications for when new clients connect.
@@ -47,7 +82,7 @@ namespace Server
                 int x = random.Next(minX, maxX + 1);
                 int y = random.Next(minY, maxY + 1);
                 int size = random.Next(10, 50);
-                Entity food = Shared.Entities.Food.create("Textures/egg", new Vector2(x, y), size);
+                Entity food = Shared.Entities.Food.create(m_nextFoodId++, "Textures/egg", new Vector2(x, y), size);
                 m_foodList.Add(food);
                 addEntity(food);
             }

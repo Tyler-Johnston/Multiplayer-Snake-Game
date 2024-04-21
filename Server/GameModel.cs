@@ -131,6 +131,13 @@ namespace Server
          private void handleJoin(int clientId, TimeSpan elapsedTime, Shared.Messages.Message message)
         {
             Shared.Messages.Join messageJoin = (Shared.Messages.Join) message;
+
+            Entity player = Shared.Entities.Snake.createHead(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(100, 100), 50, 0.2f);
+            // Step 3: Send the new player entity to the newly joined client
+            MessageQueueServer.instance.sendMessage(clientId, new NewEntity(player));
+            addEntity(player);
+            m_clientToEntityId[clientId] = player.id;
+            
             // Step 1: Tell the newly connected player about all other entities
             reportAllEntities(clientId);
 
@@ -144,13 +151,7 @@ namespace Server
             int x = random.Next(minX, maxX + 1);
             int y = random.Next(minY, maxY + 1);
 
-            Entity player = Shared.Entities.Snake.createHead(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(100, 100), 50, 0.2f);
-            addEntity(player);
-            m_clientToEntityId[clientId] = player.id;
-
-            // Step 3: Send the new player entity to the newly joined client
-            MessageQueueServer.instance.sendMessage(clientId, new NewEntity(player));
-
+            
 
             // Step 4: Let all other clients know about this new player entity
 

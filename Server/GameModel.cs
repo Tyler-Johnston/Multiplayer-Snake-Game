@@ -33,7 +33,11 @@ namespace Server
         {
             m_systemNetwork.update(elapsedTime, MessageQueueServer.instance.getMessages());
             m_systemMovement.update(elapsedTime);
+            checkSnakeCollisionwithFood();
+        }
 
+        private void checkSnakeCollisionwithFood()
+        {
             foreach (Entity entity in m_entities.Values)
             {
                 if (entity.contains<Shared.Components.SnakeId>())
@@ -55,14 +59,14 @@ namespace Server
                         if (distance <= snakeRadius + foodRadius)
                         {
                             eatenFoods.Add(food);
-                            Console.WriteLine("we ate a food");
                         }
                     }
-
                     foreach (var food in eatenFoods)
                     {
                         m_foodList.Remove(food);
                         removeEntity(food.id);
+                        Message message = new Shared.Messages.RemoveEntity(food.id);
+                        MessageQueueServer.instance.broadcastMessage(message);
                     }
                 }
             }

@@ -73,7 +73,6 @@ namespace Client.Systems
                 Entity entity = m_entities[m_playerId.Value];
                 var position = entity.get<Shared.Components.Position>().position;
                 var orientation = entity.get<Shared.Components.Position>().orientation;
-                // var name = entity.get<Shared.Components.Name>().name;
                 var size = entity.get<Shared.Components.Size>().size;
                 var texture = entity.get<Components.Sprite>().texture;
                 var texCenter = entity.get<Components.Sprite>().center;

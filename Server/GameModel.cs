@@ -49,29 +49,29 @@ namespace Server
             }
         }
 
-        // private void removeSnakesAtBorders()
-        // {
-        //     List<uint> toRemove = new List<uint>();
-        //     foreach (Entity entity in new List<Entity>(m_entities.Values)) // Use a copy of the collection for safe iteration
-        //     {
-        //         if (entity.contains<Shared.Components.SnakeId>())
-        //         {
-        //             Vector2 pos = entity.get<Shared.Components.Position>().position;
-        //             if (pos.X <= minX || pos.X >= maxX || pos.Y <= minY || pos.Y >= maxY)
-        //             {
-        //                 toRemove.Add(entity.id);
-        //             }
-        //         }
-        //     }
+        private void removeSnakesAtBorders()
+        {
+            List<uint> toRemove = new List<uint>();
+            foreach (Entity entity in new List<Entity>(m_entities.Values))
+            {
+                if (entity.contains<Shared.Components.SnakeId>())
+                {
+                    Vector2 pos = entity.get<Shared.Components.Position>().position;
+                    if (pos.X <= minX || pos.X >= maxX || pos.Y <= minY || pos.Y >= maxY)
+                    {
+                        toRemove.Add(entity.id);
+                    }
+                }
+            }
 
-        //     foreach (uint id in toRemove)
-        //     {
-        //         removeEntity(id);
-        //         m_clientToEntityId.Remove(m_clientToEntityId.FirstOrDefault(x => x.Value == id).Key); // Safely remove from client-entity map
-        //         Message removeMessage = new Shared.Messages.RemoveEntity(id);
-        //         MessageQueueServer.instance.broadcastMessage(removeMessage);
-        //     }
-        // }
+            foreach (uint id in toRemove)
+            {
+                removeEntity(id);
+                m_clientToEntityId.Remove(m_clientToEntityId.FirstOrDefault(x => x.Value == id).Key); // Safely remove from client-entity map
+                Message removeMessage = new Shared.Messages.RemoveEntity(id);
+                MessageQueueServer.instance.broadcastMessage(removeMessage);
+            }
+        }
 
 
         private void checkSnakeCollisionwithFood(TimeSpan elapsedTime)

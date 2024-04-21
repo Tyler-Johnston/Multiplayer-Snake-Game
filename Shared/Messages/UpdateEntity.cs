@@ -18,6 +18,12 @@ namespace Shared.Messages
                 this.orientation = entity.get<Position>().orientation;
             }
 
+            if (entity.contains<Score>())
+            {
+                this.hasScore = true;
+                this.score = entity.get<Score>().score;
+            }
+
             this.updateWindow = updateWindow;
         }
 
@@ -31,6 +37,9 @@ namespace Shared.Messages
         public bool hasPosition { get; private set; } = false;
         public Vector2 position { get; private set; }
         public float orientation { get; private set; }
+
+        public bool hasScore { get; private set; } = false;
+        public int score { get; private set; }
 
         // Only the milliseconds are used/serialized
         public TimeSpan updateWindow { get; private set; } = TimeSpan.Zero;
@@ -48,6 +57,12 @@ namespace Shared.Messages
                 data.AddRange(BitConverter.GetBytes(position.X));
                 data.AddRange(BitConverter.GetBytes(position.Y));
                 data.AddRange(BitConverter.GetBytes(orientation));
+            }
+
+            data.AddRange(BitConverter.GetBytes(hasScore));
+            if (hasScore)
+            {
+                data.AddRange(BitConverter.GetBytes(score));
             }
 
             data.AddRange(BitConverter.GetBytes(updateWindow.Milliseconds));
@@ -73,6 +88,14 @@ namespace Shared.Messages
                 this.position = new Vector2(positionX, positionY);
                 this.orientation = BitConverter.ToSingle(data, offset);
                 offset += sizeof(Single);
+            }
+
+            this.hasScore = BitConverter.ToBoolean(data, offset);
+            offset += sizeof(bool);
+            if (hasScore)
+            {
+                this.score = BitConverter.ToInt32(data, offset);
+                offset += sizeof(int);
             }
 
             this.updateWindow = new TimeSpan(0, 0, 0, 0, BitConverter.ToInt32(data, offset));

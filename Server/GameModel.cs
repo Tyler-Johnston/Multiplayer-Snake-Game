@@ -39,7 +39,7 @@ namespace Server
         {
             m_systemNetwork.update(elapsedTime, MessageQueueServer.instance.getMessages());
             m_systemMovement.update(elapsedTime);
-            checkSnakeCollisionwithFood();
+            checkSnakeCollisionwithFood(elapsedTime);
 
             foodUpdateTime += (float)elapsedTime.TotalSeconds;
             if (foodUpdateTime >= foodUpdateInterval)
@@ -49,7 +49,7 @@ namespace Server
             }
         }
 
-        private void checkSnakeCollisionwithFood()
+        private void checkSnakeCollisionwithFood(TimeSpan elapsedTime)
         {
             foreach (Entity entity in m_entities.Values)
             {
@@ -81,13 +81,13 @@ namespace Server
                         Message message = new Shared.Messages.RemoveEntity(food.id);
                         MessageQueueServer.instance.broadcastMessage(message);
 
-
                         Entity snake = m_entities[entity.id];
                         if (snake.contains<Score>())
                         {
                             Score scoreComponent = snake.get<Score>();
                             scoreComponent.score += 1;
-                            Console.WriteLine($"Snake {snake.get<Name>().name} has a new score of {scoreComponent.score}");
+                            var myMessage = new Shared.Messages.UpdateEntity(snake, elapsedTime);
+                            MessageQueueServer.instance.broadcastMessage(myMessage);
                         }
                     }
                 }

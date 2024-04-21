@@ -174,6 +174,13 @@ namespace Client.Systems
 
                     m_updatedEntities.Add(entity.id);
                 }
+                if (m_entities.ContainsKey(message.id))
+                {
+                    if (message.hasScore && entity.contains<Score>())
+                    {
+                        entity.get<Score>().score = message.score;
+                    }
+                }
             }
         }
     }

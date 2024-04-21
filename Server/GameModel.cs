@@ -184,14 +184,14 @@ namespace Server
 
             int x = random.Next(minX, maxX + 1);
             int y = random.Next(minY, maxY + 1);
-            Entity player = Shared.Entities.Snake.createHead(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f);
+            Entity player = Shared.Entities.Snake.createHead(++m_nextSnakeId, "Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f);
             // Step 3: Send the new player entity to the newly joined client
             MessageQueueServer.instance.sendMessage(clientId, new NewEntity(player));
             addEntity(player);
             m_clientToEntityId[clientId] = player.id;
 
             // Create tail
-            Entity tail = Shared.Entities.Segment.createSegment(m_nextSnakeId, "Textures/head", new Vector2(x - 50, y), 50, 0.2f);
+            Entity tail = Shared.Entities.Segment.createSegment(m_nextSnakeId, "Textures/tail", new Vector2(x - 50, y), 50, 0.2f);
             addEntity(tail);
             
             // Step 1: Tell the newly connected player about all other entities
@@ -208,7 +208,7 @@ namespace Server
             player.remove<Appearance>();
             tail.remove<Appearance>();
             player.add(new Appearance("Textures/head_enemy"));
-            tail.add(new Appearance("Textures/head_enemy"));
+            tail.add(new Appearance("Textures/tail_enemy"));
 
             // Remove components not needed for "other" players
             player.remove<Shared.Components.Input>();

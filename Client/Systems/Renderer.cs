@@ -71,7 +71,6 @@ namespace Client.Systems
             if (m_playerId != null)
             {
                 Entity entity = m_entities[m_playerId.Value];
-                Console.WriteLine(m_playerId);
                 var position = entity.get<Shared.Components.Position>().position;
                 var orientation = entity.get<Shared.Components.Position>().orientation;
                 // var name = entity.get<Shared.Components.Name>().name;
@@ -109,7 +108,6 @@ namespace Client.Systems
             var size = entity.get<Shared.Components.Size>().size;
             var texture = entity.get<Components.Sprite>().texture;
             var texCenter = entity.get<Components.Sprite>().center;
-            // var name = entity.get<Shared.Components.Name>().name;
 
             Rectangle rectangle = new Rectangle(
                 entityX,
@@ -129,13 +127,18 @@ namespace Client.Systems
                 0
             );
 
-            // // Calculate the position for the name text to appear above the entity
-            // Vector2 textPosition = new Vector2(
-            //     entityX, 
-            //     entityY - 70);
+            if (entity.contains<Shared.Components.Name>())
+            {
+                var name = entity.get<Shared.Components.Name>().name;
+                // Calculate the position for the name text to appear above the entity
+                Vector2 textPosition = new Vector2(
+                    entityX, 
+                    entityY - 70);
 
-            // // Draw the name text above the entity
-            // spriteBatch.DrawString(m_font, name, textPosition, Color.White);
+                // Draw the name text above the entity
+                spriteBatch.DrawString(m_font, name, textPosition, Color.White);
+            }
+            
         }
     }
 }

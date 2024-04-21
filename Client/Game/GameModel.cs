@@ -212,35 +212,38 @@ namespace Client
         private void removeEntity(uint id)
         {
 
-            if (m_entities[id].contains<Shared.Components.Food>())
+            if (m_entities.ContainsKey(id))
             {
-                int num = random.Next(1,8);
-                switch (num)
+                if (m_entities[id].contains<Shared.Components.Food>())
                 {
-                    case 1: m_crunch1.Play();
-                    break;
-                    case 2: m_crunch2.Play();
-                    break;
-                    case 3: m_crunch3.Play();
-                    break;
-                    case 4: m_crunch4.Play();
-                    break;
-                    case 5: m_crunch5.Play();
-                    break;
-                    case 6: m_crunch6.Play();
-                    break;
-                    case 7: m_crunch7.Play();
-                    break;
+                    int num = random.Next(1,8);
+                    switch (num)
+                    {
+                        case 1: m_crunch1.Play();
+                        break;
+                        case 2: m_crunch2.Play();
+                        break;
+                        case 3: m_crunch3.Play();
+                        break;
+                        case 4: m_crunch4.Play();
+                        break;
+                        case 5: m_crunch5.Play();
+                        break;
+                        case 6: m_crunch6.Play();
+                        break;
+                        case 7: m_crunch7.Play();
+                        break;
+                    }
                 }
+
+                m_entities.Remove(id);
+
+                m_systemKeyboardInput.remove(id);
+                m_systemNetwork.remove(id);
+                m_systemRenderer.remove(id);
+                m_systemInterpolation.remove(id);
+                m_systemMovement.remove(id);
             }
-
-            m_entities.Remove(id);
-
-            m_systemKeyboardInput.remove(id);
-            m_systemNetwork.remove(id);
-            m_systemRenderer.remove(id);
-            m_systemInterpolation.remove(id);
-            m_systemMovement.remove(id);
         }
 
         private void handleNewEntity(Shared.Messages.NewEntity message)

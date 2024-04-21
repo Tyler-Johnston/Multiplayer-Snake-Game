@@ -21,6 +21,12 @@ namespace Server
         private int maxY = 2100;
         private Random random = new Random();
 
+        private int maxFoodThreshold = 100;
+        private const float foodUpdateInterval = 5f;
+        private float foodUpdateTime = 0f;
+        private int minFoodSize = 20;
+        private int maxFoodSize = 70;
+
         Systems.Network m_systemNetwork = new Server.Systems.Network();
         Shared.Systems.Movement m_systemMovement = new Shared.Systems.Movement();
 
@@ -34,6 +40,13 @@ namespace Server
             m_systemNetwork.update(elapsedTime, MessageQueueServer.instance.getMessages());
             m_systemMovement.update(elapsedTime);
             checkSnakeCollisionwithFood();
+
+            foodUpdateTime += (float)elapsedTime.TotalSeconds;
+            if (foodUpdateTime >= foodUpdateInterval)
+            {
+                updateFood();
+                foodUpdateTime = 0f;
+            }
         }
 
         private void checkSnakeCollisionwithFood()
@@ -72,6 +85,23 @@ namespace Server
             }
         }
 
+        private void updateFood()
+        {
+            if (m_foodList.Count < maxFoodThreshold)
+            {
+                int foodNeeded = maxFoodThreshold - m_foodList.Count;
+                for (int i = 0; i < foodNeeded; i++)
+                {
+                    int x = random.Next(minX, maxX + 1);
+                    int y = random.Next(minY, maxY + 1);
+                    int size = random.Next(minFoodSize, maxFoodSize);
+                    Entity food = Shared.Entities.Food.create(m_nextFoodId++, "Textures/egg", new Vector2(x, y), size);
+                    m_foodList.Add(food);
+                    addEntity(food);
+                    MessageQueueServer.instance.broadcastMessage(new Shared.Messages.NewEntity(food));
+                }
+            }
+        }
 
         /// <summary>
         /// Setup notifications for when new clients connect.
@@ -81,11 +111,11 @@ namespace Server
             m_systemNetwork.registerHandler(Shared.Messages.Type.Join, handleJoin);
             m_systemNetwork.registerDisconnectHandler(handleDisconnect);
 
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < maxFoodThreshold; i++)
             {
                 int x = random.Next(minX, maxX + 1);
                 int y = random.Next(minY, maxY + 1);
-                int size = random.Next(10, 50);
+                int size = random.Next(minFoodSize, maxFoodSize);
                 Entity food = Shared.Entities.Food.create(m_nextFoodId++, "Textures/egg", new Vector2(x, y), size);
                 m_foodList.Add(food);
                 addEntity(food);

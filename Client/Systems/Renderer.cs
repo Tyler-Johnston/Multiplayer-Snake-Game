@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Shared.Entities;
 using System;
 using Microsoft.Xna.Framework.Content;
+using Shared.Components; // This should be at the top of your Renderer.cs file
+
 
 namespace Client.Systems
 {
@@ -61,6 +63,16 @@ namespace Client.Systems
             foreach (Entity entity in m_entities.Values)
             {
                 RenderEntity(entity, spriteBatch);
+            }
+
+            if (m_playerId.HasValue && m_entities.ContainsKey(m_playerId.Value))
+            {
+                Entity player = m_entities[m_playerId.Value];
+                if (player.contains<Score>())
+                {
+                    Vector2 scorePosition = new Vector2(50, 50);
+                    spriteBatch.DrawString(m_font, $"Score: {player.get<Score>().score}", scorePosition, Color.White);
+                }
             }
 
             spriteBatch.End();

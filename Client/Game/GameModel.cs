@@ -135,6 +135,11 @@ namespace Client
                 entity.add(new Shared.Components.SnakeId(message.snakeId));
             }
 
+            if (message.hasScore)
+            {
+                entity.add(new Shared.Components.Score(message.score));
+            }
+
             if (message.hasFood)
             {
                 entity.add(new Shared.Components.Food());

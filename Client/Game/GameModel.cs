@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Input;
 using Shared.Entities;
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace Client
 {
@@ -18,6 +20,7 @@ namespace Client
         private Systems.Interpolation m_systemInterpolation = new Systems.Interpolation();
         private Systems.Renderer m_systemRenderer = new Systems.Renderer();
         private Shared.Systems.Movement m_systemMovement = new Shared.Systems.Movement();
+        private SoundEffect m_crunch;
 
         private bool isFirstEntityReceived = false;
 
@@ -48,7 +51,8 @@ namespace Client
         public bool initialize(ContentManager contentManager, int screenWidth, int screenHeight)
         {
             m_contentManager = contentManager;
-
+            
+            m_crunch = contentManager.Load<SoundEffect>("Sounds/Food/crunch.1");
 
             m_systemRenderer.ContentManager = m_contentManager;
             
@@ -193,6 +197,12 @@ namespace Client
         /// </summary>
         private void removeEntity(uint id)
         {
+
+            if (m_entities[id].contains<Shared.Components.Food>())
+            {
+                m_crunch.Play();
+            }
+
             m_entities.Remove(id);
 
             m_systemKeyboardInput.remove(id);

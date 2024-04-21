@@ -152,3 +152,9 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/egg.png
+
+#begin Sounds/Food/crunch.1.ogg
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Food/crunch.1.ogg

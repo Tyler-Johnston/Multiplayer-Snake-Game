@@ -1,5 +1,4 @@
-﻿
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Shared.Components;
 using Shared.Entities;
 using Shared.Messages;
@@ -15,10 +14,10 @@ namespace Server
         private Dictionary<uint, Entity> m_entities = new Dictionary<uint, Entity>();
         private Dictionary<int, uint> m_clientToEntityId = new Dictionary<int, uint>();
         private List<Entity> m_foodList = new List<Entity>();
-        private int minX = 100;
-        private int minY = 100;
-        private int maxX = 2100;
-        private int maxY = 2100;
+        private int minX = 0;
+        private int minY = 0;
+        private int maxX = 2200;
+        private int maxY = 2200;
         private Random random = new Random();
 
         private int maxFoodThreshold = 100;
@@ -40,6 +39,7 @@ namespace Server
             m_systemNetwork.update(elapsedTime, MessageQueueServer.instance.getMessages());
             m_systemMovement.update(elapsedTime);
             checkSnakeCollisionwithFood(elapsedTime);
+            // removeSnakesAtBorders();
 
             foodUpdateTime += (float)elapsedTime.TotalSeconds;
             if (foodUpdateTime >= foodUpdateInterval)
@@ -48,6 +48,31 @@ namespace Server
                 foodUpdateTime = 0f;
             }
         }
+
+        // private void removeSnakesAtBorders()
+        // {
+        //     List<uint> toRemove = new List<uint>();
+        //     foreach (Entity entity in new List<Entity>(m_entities.Values)) // Use a copy of the collection for safe iteration
+        //     {
+        //         if (entity.contains<Shared.Components.SnakeId>())
+        //         {
+        //             Vector2 pos = entity.get<Shared.Components.Position>().position;
+        //             if (pos.X <= minX || pos.X >= maxX || pos.Y <= minY || pos.Y >= maxY)
+        //             {
+        //                 toRemove.Add(entity.id);
+        //             }
+        //         }
+        //     }
+
+        //     foreach (uint id in toRemove)
+        //     {
+        //         removeEntity(id);
+        //         m_clientToEntityId.Remove(m_clientToEntityId.FirstOrDefault(x => x.Value == id).Key); // Safely remove from client-entity map
+        //         Message removeMessage = new Shared.Messages.RemoveEntity(id);
+        //         MessageQueueServer.instance.broadcastMessage(removeMessage);
+        //     }
+        // }
+
 
         private void checkSnakeCollisionwithFood(TimeSpan elapsedTime)
         {
@@ -76,11 +101,13 @@ namespace Server
                     }
                     foreach (var food in eatenFoods)
                     {
+                        // remove that food entity
                         m_foodList.Remove(food);
                         removeEntity(food.id);
                         Message message = new Shared.Messages.RemoveEntity(food.id);
                         MessageQueueServer.instance.broadcastMessage(message);
 
+                        // increment snake's score
                         Entity snake = m_entities[entity.id];
                         if (snake.contains<Score>())
                         {
@@ -101,8 +128,8 @@ namespace Server
                 int foodNeeded = maxFoodThreshold - m_foodList.Count;
                 for (int i = 0; i < foodNeeded; i++)
                 {
-                    int x = random.Next(minX, maxX + 1);
-                    int y = random.Next(minY, maxY + 1);
+                    int x = random.Next(minX + 100, maxX - 99);
+                    int y = random.Next(minY + 100, maxY - 99);
                     int size = random.Next(minFoodSize, maxFoodSize);
                     Entity food = Shared.Entities.Food.create(m_nextFoodId++, "Textures/egg", new Vector2(x, y), size);
                     m_foodList.Add(food);
@@ -122,8 +149,8 @@ namespace Server
 
             for (int i = 0; i < maxFoodThreshold; i++)
             {
-                int x = random.Next(minX, maxX + 1);
-                int y = random.Next(minY, maxY + 1);
+                int x = random.Next(minX + 100, maxX - 99);
+                int y = random.Next(minY + 100, maxY - 99);
                 int size = random.Next(minFoodSize, maxFoodSize);
                 Entity food = Shared.Entities.Food.create(m_nextFoodId++, "Textures/egg", new Vector2(x, y), size);
                 m_foodList.Add(food);
@@ -221,8 +248,8 @@ namespace Server
         {
             Shared.Messages.Join messageJoin = (Shared.Messages.Join) message;
 
-            int x = random.Next(minX, maxX + 1);
-            int y = random.Next(minY, maxY + 1);
+            int x = random.Next(minX + 100, maxX - 99);
+            int y = random.Next(minY + 100, maxY - 99);
             Entity player = Shared.Entities.Snake.createHead(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f, 0);
             // Step 3: Send the new player entity to the newly joined client
             MessageQueueServer.instance.sendMessage(clientId, new NewEntity(player));

@@ -169,7 +169,6 @@ namespace Client.Systems
                 // Draw the name text above the entity
                 spriteBatch.DrawString(m_font, name, textPosition, Color.White);
             }
-            
         }
     }
 }

@@ -80,6 +80,15 @@ namespace Server
                         removeEntity(food.id);
                         Message message = new Shared.Messages.RemoveEntity(food.id);
                         MessageQueueServer.instance.broadcastMessage(message);
+
+
+                        Entity snake = m_entities[entity.id];
+                        if (snake.contains<Score>())
+                        {
+                            Score scoreComponent = snake.get<Score>();
+                            scoreComponent.score += 1;
+                            Console.WriteLine($"Snake {snake.get<Name>().name} has a new score of {scoreComponent.score}");
+                        }
                     }
                 }
             }
@@ -214,7 +223,7 @@ namespace Server
 
             int x = random.Next(minX, maxX + 1);
             int y = random.Next(minY, maxY + 1);
-            Entity player = Shared.Entities.Snake.createHead(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f);
+            Entity player = Shared.Entities.Snake.createHead(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f, 0);
             // Step 3: Send the new player entity to the newly joined client
             MessageQueueServer.instance.sendMessage(clientId, new NewEntity(player));
             addEntity(player);

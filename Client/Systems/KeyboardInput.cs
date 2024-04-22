@@ -37,8 +37,14 @@ namespace Client.Systems
 
                 Shared.Entities.Entity? turnPoint = null;
 
+                if (!item.Value.contains<Shared.Components.Input>())
+                {
+                    continue;
+                }
+
                 if (m_keysPressed.Contains(ControlsManager.Controls["TurnUp"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnRight"]))
                 {
+                    Console.WriteLine(item.Value);
                     inputs.Add(Shared.Components.Input.Type.TurnUpRight);
                     turnPoint = Shared.Entities.Utility.turnUpRight(item.Value);
                 } 

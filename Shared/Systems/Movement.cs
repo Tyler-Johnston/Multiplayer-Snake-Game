@@ -25,11 +25,11 @@
                         var segOrientation = entity.get<Shared.Components.Position>().orientation;
 
                         
-                        if (tp.get<Shared.Components.Position>().position - entity.get<Shared.Components.Position>().position)
-                        {
+                        // if (tp.get<Shared.Components.Position>().position - entity.get<Shared.Components.Position>().position)
+                        // {
                             entity.get<Shared.Components.Position>().orientation = tpOrientation;
                             entity.get<Shared.Components.TurnPointQueue>().queue.Dequeue();
-                        }
+                        // }
                     }
                 }
                 Shared.Entities.Utility.thrust(entity, elapsedTime);

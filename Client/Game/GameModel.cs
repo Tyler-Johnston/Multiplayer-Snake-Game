@@ -267,7 +267,22 @@ namespace Client
 
                 if (m_entities[id].contains<Shared.Components.SnakeId>())
                 {
-<<<<<<< HEAD
+                    int rd = random.Next(1,7);
+                    switch (rd)
+                    {
+                        case 1: m_grunt1.Play();
+                        break;
+                        case 2: m_grunt2.Play();
+                        break;
+                        case 3: m_grunt3.Play();
+                        break;
+                        case 4: m_grunt4.Play();
+                        break;
+                        case 5: m_grunt5.Play();
+                        break;
+                        case 6: m_grunt6.Play();
+                        break;
+                    }
                     foreach (var entity in m_entities)
                     {
                         if (entity.Key == id)
@@ -287,25 +302,6 @@ namespace Client
                     }
                 }
 
-=======
-                    int rd = random.Next(1,7);
-                    switch (rd)
-                    {
-                        case 1: m_grunt1.Play();
-                        break;
-                        case 2: m_grunt2.Play();
-                        break;
-                        case 3: m_grunt3.Play();
-                        break;
-                        case 4: m_grunt4.Play();
-                        break;
-                        case 5: m_grunt5.Play();
-                        break;
-                        case 6: m_grunt6.Play();
-                        break;
-                    }
-                }
->>>>>>> 13f6fecad74928d14e72ff6d2ab79d48bbbb9744
                 m_entities.Remove(id);
 
                 m_systemKeyboardInput.remove(id);

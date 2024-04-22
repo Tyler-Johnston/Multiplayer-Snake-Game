@@ -30,17 +30,17 @@ namespace Shared.Entities
 
     public class Utility
     {
-        public const enum Directions: float
+        public static Dictionary<string, float> Directions = new Dictionary<string, float>
         {
-            DIR_UP = (float)(2 * Math.PI * 0.75),
-            DIR_DOWN = (float)(2 * Math.PI * 0.25),
-            DIR_LEFT = 0,
-            DIR_RIGHT = (float)(2 * Math.PI * 0.50)
-        }
-        private const float DIR_UP = (float)(2 * Math.PI * 0.75);
-        private const float DIR_DOWN = (float)(2 * Math.PI * 0.25);
-        private const float DIR_LEFT = 0;
-        private const float DIR_RIGHT = (float)(2 * Math.PI * 0.50);
+            { "UP", (float)(2 * Math.PI * 0.75) },
+            { "DOWN", (float)(2 * Math.PI * 0.25) },
+            { "LEFT", 0f },
+            { "RIGHT", (float)(2 * Math.PI * 0.50) },
+            { "UP_RIGHT", (float)(Math.PI * 7 / 4) },
+            { "UP_LEFT", (float)(Math.PI * 5 / 4) },
+            { "DOWN_RIGHT", (float)(Math.PI / 4) },
+            { "DOWN_LEFT", (float)(Math.PI * 3 / 4) }
+        };
         public static void thrust(Entity entity, TimeSpan elapsedTime)
         {
             var position = entity.get<Position>();
@@ -53,15 +53,15 @@ namespace Shared.Entities
                 (float)(position.position.X + vectorX * movement.moveRate * elapsedTime.Milliseconds),
                 (float)(position.position.Y + vectorY * movement.moveRate * elapsedTime.Milliseconds));
         }
-        
+
         public static Entity? turnUp(Entity entity)
         {
             var position = entity.get<Position>();
 
             // Can't turn if already moving up or moving down, because can't move backward over itself
-            if (position.orientation != DIR_UP && position.orientation != DIR_DOWN)
+            if (position.orientation != Directions["UP"] && position.orientation != Directions["DOWN"])
             {
-                position.orientation = DIR_UP;
+                position.orientation = Directions["UP"];
                 // Because we accepted a turn, this is a new turn point right here and in this direction
                 int snakeId = entity.get<SnakeId>().id;
                 return Shared.Entities.TurnPoint.create(snakeId, position.position, position.orientation);
@@ -75,9 +75,9 @@ namespace Shared.Entities
             var position = entity.get<Position>();
 
             // Can't turn if already moving down or moving up, because can't move backward over itself
-            if (position.orientation != DIR_DOWN && position.orientation != DIR_UP)
+            if (position.orientation != Directions["DOWN"] && position.orientation != Directions["UP"])
             {
-                position.orientation = DIR_DOWN;
+                position.orientation = Directions["DOWN"];
                 // Because we accepted a turn, this is a new turn point right here and in this direction
                 int snakeId = entity.get<SnakeId>().id;
                 return Shared.Entities.TurnPoint.create(snakeId, position.position, position.orientation);
@@ -91,9 +91,9 @@ namespace Shared.Entities
             var position = entity.get<Position>();
 
             // Can't turn if moving already moving left or right, because can't move backward over itself
-            if (position.orientation != DIR_LEFT && position.orientation != DIR_RIGHT)
+            if (position.orientation != Directions["LEFT"] && position.orientation != Directions["RIGHT"])
             {
-                position.orientation = DIR_LEFT;
+                position.orientation = Directions["LEFT"];
                 // Because we accepted a turn, this is a new turn point right here and in this direction
                 int snakeId = entity.get<SnakeId>().id;
                 return Shared.Entities.TurnPoint.create(snakeId, position.position, position.orientation);
@@ -107,9 +107,9 @@ namespace Shared.Entities
             var position = entity.get<Position>();
 
             // Can't turn if moving already moving right or left, because can't move backward over itself
-            if (position.orientation != DIR_RIGHT && position.orientation != DIR_LEFT)
+            if (position.orientation != Directions["RIGHT"] && position.orientation != Directions["LEFT"])
             {
-                position.orientation = DIR_RIGHT;
+                position.orientation = Directions["RIGHT"];
                 // Because we accepted a turn, this is a new turn point right here and in this direction
                 int snakeId = entity.get<SnakeId>().id;
                 return Shared.Entities.TurnPoint.create(snakeId, position.position, position.orientation);
@@ -124,9 +124,9 @@ namespace Shared.Entities
             var movement = entity.get<Movement>();
 
 
-            if (position.orientation != (float)(Math.PI * 7 / 4))
+            if (position.orientation != Directions["UP_RIGHT"] && position.orientation != Directions["UP_LEFT"] && position.orientation != Directions["DOWN_RIGHT"])
             {
-                position.orientation = (float)(Math.PI * 3 / 4);
+                position.orientation = Directions["DOWN_LEFT"];
                 int snakeId = entity.get<SnakeId>().id;
                 return Shared.Entities.TurnPoint.create(snakeId, position.position, position.orientation);
             }
@@ -138,9 +138,9 @@ namespace Shared.Entities
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
 
-            if (position.orientation != (float)(Math.PI * 5 / 4))
+            if (position.orientation != Directions["UP_LEFT"] && position.orientation != Directions["UP_RIGHT"] && position.orientation != Directions["DOWN_LEFT"])
             {
-                position.orientation = (float)(Math.PI / 4);
+                position.orientation = Directions["DOWN_RIGHT"];
                 int snakeId = entity.get<SnakeId>().id;
                 return Shared.Entities.TurnPoint.create(snakeId, position.position, position.orientation);
             }
@@ -153,23 +153,22 @@ namespace Shared.Entities
             var movement = entity.get<Movement>();
 
 
-            if (position.orientation != (float)(Math.PI * 3 / 4))
+            if (position.orientation != Directions["DOWN_LEFT"] && position.orientation != Directions["DOWN_RIGHT"] && position.orientation != Directions["UP_LEFT"])
             {
-                position.orientation = (float)(Math.PI * 7 / 4);
+                position.orientation = Directions["UP_RIGHT"];
                 int snakeId = entity.get<SnakeId>().id;
                 return Shared.Entities.TurnPoint.create(snakeId, position.position, position.orientation);
             }
             return null;
         }
-
         public static Entity? turnUpLeft(Entity entity)
         {
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
 
-            if (position.orientation != (float)(Math.PI / 4))
+            if (position.orientation != Directions["DOWN_RIGHT"] && position.orientation != Directions["DOWN_LEFT"] && position.orientation != Directions["UP_RIGHT"])
             {
-                position.orientation = (float)(Math.PI * 5 / 4);
+                position.orientation = Directions["UP_LEFT"];
                 int snakeId = entity.get<SnakeId>().id;
                 return Shared.Entities.TurnPoint.create(snakeId, position.position, position.orientation);
             }

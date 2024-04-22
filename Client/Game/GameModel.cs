@@ -251,6 +251,27 @@ namespace Client
                     }
                 }
 
+                if (m_entities[id].contains<Shared.Components.SnakeId>())
+                {
+                    foreach (var entity in m_entities)
+                    {
+                        if (entity.Key == id)
+                        {
+                            continue;
+                        }
+                        if (entity.Value.contains<Shared.Components.SnakeId>() && entity.Value.get<Shared.Components.SnakeId>().id == m_entities[id].get<Shared.Components.SnakeId>().id)
+                        {
+                            m_entities.Remove(entity.Key);
+
+                            m_systemKeyboardInput.remove(entity.Key);
+                            m_systemNetwork.remove(entity.Key);
+                            m_systemRenderer.remove(entity.Key);
+                            m_systemInterpolation.remove(entity.Key);
+                            m_systemMovement.remove(entity.Key);
+                        }
+                    }
+                }
+
                 m_entities.Remove(id);
 
                 m_systemKeyboardInput.remove(id);

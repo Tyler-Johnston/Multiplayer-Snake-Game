@@ -21,8 +21,12 @@
                     {
                         // TurnPoint at the front of the segments queue
                         Shared.Entities.Entity tp = entity.get<Shared.Components.TurnPointQueue>().queue.Peek();
+                        var tpOrientation = tp.get<Shared.Components.Position>().orientation;
+                        var segOrientation = entity.get<Shared.Components.Position>().orientation;
+
+                        
                         // If tp isn't the same direction as current segment direction, change segment dir
-                        if (tp.get<Shared.Components.Position>().orientation != entity.get<Shared.Components.Position>().orientation)
+                        if (tpOrientation != segOrientation)
                         {
                             entity.get<Shared.Components.TurnPointQueue>().queue.Dequeue();
 

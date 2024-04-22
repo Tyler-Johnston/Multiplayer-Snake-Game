@@ -44,7 +44,6 @@ namespace Client.Systems
 
                 if (m_keysPressed.Contains(ControlsManager.Controls["TurnUp"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnRight"]))
                 {
-                    Console.WriteLine(item.Value);
                     inputs.Add(Shared.Components.Input.Type.TurnUpRight);
                     turnPoint = Shared.Entities.Utility.turnUpRight(item.Value);
                 } 

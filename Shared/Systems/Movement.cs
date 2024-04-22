@@ -25,10 +25,14 @@
                         if (tp.get<Shared.Components.Position>().orientation != entity.get<Shared.Components.Position>().orientation)
                         {
                             entity.get<Shared.Components.TurnPointQueue>().queue.Dequeue();
-                            Console.WriteLine(entity.get<Shared.Components.Position>().orientation);
 
+                            Console.WriteLine("Before");
+                            Console.WriteLine(entity.get<Shared.Components.Position>().orientation);
                             entity.get<Shared.Components.Position>().orientation 
                                 = tp.get<Shared.Components.Position>().orientation;
+
+                            Console.WriteLine("After");
+                            Console.WriteLine(entity.get<Shared.Components.Position>().orientation);
                         }
                     }
                 }

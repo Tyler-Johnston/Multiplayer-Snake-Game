@@ -6,6 +6,7 @@ namespace Server.Systems
 {
     public class Network : Shared.Systems.System
     {
+        public int lastFullUpdate = 0;
         public delegate void Handler(int clientId, TimeSpan elapsedTime, Shared.Messages.Message message);
         public delegate void DisconnectHandler(int clientId);
         public delegate void InputHandler(Entity entity, Shared.Components.Input.Type type, TimeSpan elapsedTime);
@@ -51,6 +52,11 @@ namespace Server.Systems
         /// </summary>
         public void update(TimeSpan elapsedTime, Queue<Tuple<int, Message>> messages)
         {
+            lastFullUpdate += elapsedTime.Milliseconds;
+            if (lastFullUpdate >= 500)
+            {
+                updateAll(elapsedTime);
+            }
             if (messages != null)
             {
                 while (messages.Count > 0)
@@ -146,6 +152,15 @@ namespace Server.Systems
                 {
                     MessageQueueServer.instance.broadcastMessage(new NewEntity(turnPoint));
                 }
+            }
+        }
+
+        private void updateAll(TimeSpan elapsedTime)
+        {
+            foreach (var entity in m_entities.Values)
+            {
+                var message = new Shared.Messages.UpdateEntity(entity, elapsedTime);
+                MessageQueueServer.instance.broadcastMessage(message);
             }
         }
 

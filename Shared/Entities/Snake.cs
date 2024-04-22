@@ -30,6 +30,13 @@ namespace Shared.Entities
 
     public class Utility
     {
+        public const enum Directions: float
+        {
+            DIR_UP = (float)(2 * Math.PI * 0.75),
+            DIR_DOWN = (float)(2 * Math.PI * 0.25),
+            DIR_LEFT = 0,
+            DIR_RIGHT = (float)(2 * Math.PI * 0.50)
+        }
         private const float DIR_UP = (float)(2 * Math.PI * 0.75);
         private const float DIR_DOWN = (float)(2 * Math.PI * 0.25);
         private const float DIR_LEFT = 0;

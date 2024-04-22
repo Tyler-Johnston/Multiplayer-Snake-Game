@@ -84,7 +84,7 @@ namespace Client.Systems
             while (sent.Count > 0)
             {
                 var message = (Shared.Messages.Input)sent.Dequeue();
-                if (message.type == Shared.Messages.Type.Input)
+                if (message.type == Shared.Messages.Type.Input && m_entities.ContainsKey(message.entityId))
                 {
                     var entity = m_entities[message.entityId];
                     if (m_updatedEntities.Contains(entity.id))

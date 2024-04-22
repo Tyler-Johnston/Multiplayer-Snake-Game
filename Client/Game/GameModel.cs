@@ -28,6 +28,13 @@ namespace Client
         private SoundEffect m_crunch6;
         private SoundEffect m_crunch7;
 
+        private SoundEffect m_grunt1;
+        private SoundEffect m_grunt2;
+        private SoundEffect m_grunt3;
+        private SoundEffect m_grunt4;
+        private SoundEffect m_grunt5;
+        private SoundEffect m_grunt6;
+
         private Random random = new Random();
 
         private bool isFirstEntityReceived = false;
@@ -67,6 +74,13 @@ namespace Client
             m_crunch5 = contentManager.Load<SoundEffect>("Sounds/Food/crunch.5");
             m_crunch6 = contentManager.Load<SoundEffect>("Sounds/Food/crunch.6");
             m_crunch7 = contentManager.Load<SoundEffect>("Sounds/Food/crunch.7");
+
+            m_grunt1 = contentManager.Load<SoundEffect>("Sounds/Death/3grunt1");
+            m_grunt2 = contentManager.Load<SoundEffect>("Sounds/Death/3grunt2");
+            m_grunt3 = contentManager.Load<SoundEffect>("Sounds/Death/3grunt3");
+            m_grunt4 = contentManager.Load<SoundEffect>("Sounds/Death/3grunt4");
+            m_grunt5 = contentManager.Load<SoundEffect>("Sounds/Death/3grunt5");
+            m_grunt6 = contentManager.Load<SoundEffect>("Sounds/Death/3grunt6");
 
             m_systemRenderer.ContentManager = m_contentManager;
             
@@ -253,6 +267,7 @@ namespace Client
 
                 if (m_entities[id].contains<Shared.Components.SnakeId>())
                 {
+<<<<<<< HEAD
                     foreach (var entity in m_entities)
                     {
                         if (entity.Key == id)
@@ -272,6 +287,25 @@ namespace Client
                     }
                 }
 
+=======
+                    int rd = random.Next(1,7);
+                    switch (rd)
+                    {
+                        case 1: m_grunt1.Play();
+                        break;
+                        case 2: m_grunt2.Play();
+                        break;
+                        case 3: m_grunt3.Play();
+                        break;
+                        case 4: m_grunt4.Play();
+                        break;
+                        case 5: m_grunt5.Play();
+                        break;
+                        case 6: m_grunt6.Play();
+                        break;
+                    }
+                }
+>>>>>>> 13f6fecad74928d14e72ff6d2ab79d48bbbb9744
                 m_entities.Remove(id);
 
                 m_systemKeyboardInput.remove(id);

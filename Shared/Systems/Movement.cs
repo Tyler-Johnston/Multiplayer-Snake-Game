@@ -25,19 +25,11 @@
                         var segOrientation = entity.get<Shared.Components.Position>().orientation;
 
                         
-                        // If tp isn't the same direction as current segment direction, change segment dir
-                        // if (tpOrientation != segOrientation)
-                        // {
-
-                            Console.WriteLine("Before");
-                            Console.WriteLine(entity.get<Shared.Components.Position>().orientation);
+                        if (tp.get<Shared.Components.Position>().position - entity.get<Shared.Components.Position>().position)
+                        {
                             entity.get<Shared.Components.Position>().orientation = tpOrientation;
-
-                            Console.WriteLine("After");
-                            Console.WriteLine(entity.get<Shared.Components.Position>().orientation);
                             entity.get<Shared.Components.TurnPointQueue>().queue.Dequeue();
-
-                        // }
+                        }
                     }
                 }
                 Shared.Entities.Utility.thrust(entity, elapsedTime);

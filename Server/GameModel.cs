@@ -39,7 +39,7 @@ namespace Server
             m_systemNetwork.update(elapsedTime, MessageQueueServer.instance.getMessages());
             m_systemMovement.update(elapsedTime);
             checkSnakeCollisionwithFood(elapsedTime);
-            // removeSnakesAtBorders();
+            removeSnakesAtBorders();
 
             foodUpdateTime += (float)elapsedTime.TotalSeconds;
             if (foodUpdateTime >= foodUpdateInterval)
@@ -66,13 +66,18 @@ namespace Server
 
             foreach (uint id in toRemove)
             {
+                m_clients.Remove((int)id);
+                // removeEntity(id);
+                // m_clientToEntityId.Remove(id);
+                // Message removeMessage = new Shared.Messages.RemoveEntity(id);
+                // MessageQueueServer.instance.broadcastMessage(removeMessage);
+
                 removeEntity(id);
-                m_clientToEntityId.Remove(m_clientToEntityId.FirstOrDefault(x => x.Value == id).Key); // Safely remove from client-entity map
                 Message removeMessage = new Shared.Messages.RemoveEntity(id);
                 MessageQueueServer.instance.broadcastMessage(removeMessage);
+
             }
         }
-
 
         private void checkSnakeCollisionwithFood(TimeSpan elapsedTime)
         {
@@ -279,9 +284,6 @@ namespace Server
             
             // Step 1: Tell the newly connected player about all other entities
             reportAllEntities(clientId);
-
-
-            // Let all other clients know about this new player entity
 
             // We change the appearance for a player ship entity for all other clients to a different texture
             player.remove<Appearance>();

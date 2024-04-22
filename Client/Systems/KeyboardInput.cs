@@ -88,17 +88,16 @@ namespace Client.Systems
                 }
                 if (turnPoint != null)
                 {
+                    // TODO: Update this for the server side as well
                     var id = turnPoint.get<Shared.Components.SnakeId>().id;
                     foreach (Entity entity in m_entities.Values)
                     {
                         if (entity.contains<Shared.Components.SnakeId>())
                         {
-
                             if (entity.get<Shared.Components.SnakeId>().id == id)
                             {
                                 if (entity.contains<Shared.Components.TurnPointQueue>())
                                 {
-                                    Console.WriteLine("Something had a snake");
                                     entity.get<Shared.Components.TurnPointQueue>().queue.Enqueue(turnPoint);
                                 }
                             }

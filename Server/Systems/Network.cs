@@ -126,6 +126,24 @@ namespace Server.Systems
 
                 if (turnPoint != null)
                 {
+                    var id = turnPoint.get<Shared.Components.SnakeId>().id;
+                    foreach (Entity e in m_entities.Values)
+                    {
+                        if (e.contains<Shared.Components.SnakeId>())
+                        {
+                            if (e.get<Shared.Components.SnakeId>().id == id)
+                            {
+                                if (e.contains<Shared.Components.TurnPointQueue>())
+                                {
+                                    e.get<Shared.Components.TurnPointQueue>().queue.Enqueue(turnPoint);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (turnPoint != null)
+                {
                     MessageQueueServer.instance.broadcastMessage(new NewEntity(turnPoint));
                 }
             }

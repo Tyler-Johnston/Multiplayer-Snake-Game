@@ -152,3 +152,45 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/egg.png
+
+#begin Sounds/Food/crunch.1.ogg
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Food/crunch.1.ogg
+
+#begin Sounds/Food/crunch.2.ogg
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Food/crunch.2.ogg
+
+#begin Sounds/Food/crunch.3.ogg
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Food/crunch.3.ogg
+
+#begin Sounds/Food/crunch.4.ogg
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Food/crunch.4.ogg
+
+#begin Sounds/Food/crunch.5.ogg
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Food/crunch.5.ogg
+
+#begin Sounds/Food/crunch.6.ogg
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Food/crunch.6.ogg
+
+#begin Sounds/Food/crunch.7.ogg
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Food/crunch.7.ogg

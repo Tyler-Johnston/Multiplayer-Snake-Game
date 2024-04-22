@@ -22,6 +22,12 @@ namespace Shared.Messages
                 this.snakeId = entity.get<SnakeId>().id;
             }
 
+            if (entity.contains<Score>())
+            {
+                this.hasScore = true;
+                this.score = entity.get<Score>().score;
+            }
+
             if (entity.contains<Shared.Components.TurnPoint>())
             {
                 this.hasTurnPoint = true;
@@ -94,6 +100,11 @@ namespace Shared.Messages
         public bool hasSnakeId { get; private set; } = false;
         public int snakeId {  get; private set; }
 
+
+        // Score
+        public bool hasScore { get; private set; } = false;
+        public int score {  get; private set; }
+
         // Turn Point
         public bool hasTurnPoint { get; private set; } = false;
 
@@ -134,6 +145,12 @@ namespace Shared.Messages
             if (hasSnakeId)
             {
                 data.AddRange(BitConverter.GetBytes(snakeId));
+            }
+
+            data.AddRange(BitConverter.GetBytes(hasScore));
+            if (hasScore)
+            {
+                data.AddRange(BitConverter.GetBytes(score));
             }
 
             data.AddRange(BitConverter.GetBytes(hasTurnPoint));
@@ -203,6 +220,14 @@ namespace Shared.Messages
             if (hasSnakeId)
             {
                 this.snakeId = BitConverter.ToInt32(data, offset);
+                offset += sizeof(Int32);
+            }
+
+            this.hasScore = BitConverter.ToBoolean(data, offset);
+            offset += sizeof(bool);
+            if (hasScore)
+            {
+                this.score = BitConverter.ToInt32(data, offset);
                 offset += sizeof(Int32);
             }
 

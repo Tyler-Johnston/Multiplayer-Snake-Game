@@ -8,7 +8,7 @@ namespace CS5410
     public class CreditsView : GameStateView
     {
         private SpriteFont m_font;
-        private const string MESSAGE = "*I* wrote this amazing game!";
+        private const string MESSAGE = "Developed by Tyler Johnston & Liam McDonald";
 
         public override void loadContent(ContentManager contentManager)
         {

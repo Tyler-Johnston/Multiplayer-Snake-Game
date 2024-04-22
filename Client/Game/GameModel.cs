@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Input;
 using Shared.Entities;
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace Client
 {
@@ -18,6 +20,15 @@ namespace Client
         private Systems.Interpolation m_systemInterpolation = new Systems.Interpolation();
         private Systems.Renderer m_systemRenderer = new Systems.Renderer();
         private Shared.Systems.Movement m_systemMovement = new Shared.Systems.Movement();
+        private SoundEffect m_crunch1;
+        private SoundEffect m_crunch2;
+        private SoundEffect m_crunch3;
+        private SoundEffect m_crunch4;
+        private SoundEffect m_crunch5;
+        private SoundEffect m_crunch6;
+        private SoundEffect m_crunch7;
+
+        private Random random = new Random();
 
         private bool isFirstEntityReceived = false;
 
@@ -48,7 +59,14 @@ namespace Client
         public bool initialize(ContentManager contentManager, int screenWidth, int screenHeight)
         {
             m_contentManager = contentManager;
-
+            
+            m_crunch1 = contentManager.Load<SoundEffect>("Sounds/Food/crunch.1");
+            m_crunch2 = contentManager.Load<SoundEffect>("Sounds/Food/crunch.2");
+            m_crunch3 = contentManager.Load<SoundEffect>("Sounds/Food/crunch.3");
+            m_crunch4 = contentManager.Load<SoundEffect>("Sounds/Food/crunch.4");
+            m_crunch5 = contentManager.Load<SoundEffect>("Sounds/Food/crunch.5");
+            m_crunch6 = contentManager.Load<SoundEffect>("Sounds/Food/crunch.6");
+            m_crunch7 = contentManager.Load<SoundEffect>("Sounds/Food/crunch.7");
 
             m_systemRenderer.ContentManager = m_contentManager;
             
@@ -120,6 +138,11 @@ namespace Client
             if (message.hasSnakeId)
             {
                 entity.add(new Shared.Components.SnakeId(message.snakeId));
+            }
+
+            if (message.hasScore)
+            {
+                entity.add(new Shared.Components.Score(message.score));
             }
 
             if (message.hasFood)
@@ -198,13 +221,39 @@ namespace Client
         /// </summary>
         private void removeEntity(uint id)
         {
-            m_entities.Remove(id);
 
-            m_systemKeyboardInput.remove(id);
-            m_systemNetwork.remove(id);
-            m_systemRenderer.remove(id);
-            m_systemInterpolation.remove(id);
-            m_systemMovement.remove(id);
+            if (m_entities.ContainsKey(id))
+            {
+                if (m_entities[id].contains<Shared.Components.Food>())
+                {
+                    int num = random.Next(1,8);
+                    switch (num)
+                    {
+                        case 1: m_crunch1.Play();
+                        break;
+                        case 2: m_crunch2.Play();
+                        break;
+                        case 3: m_crunch3.Play();
+                        break;
+                        case 4: m_crunch4.Play();
+                        break;
+                        case 5: m_crunch5.Play();
+                        break;
+                        case 6: m_crunch6.Play();
+                        break;
+                        case 7: m_crunch7.Play();
+                        break;
+                    }
+                }
+
+                m_entities.Remove(id);
+
+                m_systemKeyboardInput.remove(id);
+                m_systemNetwork.remove(id);
+                m_systemRenderer.remove(id);
+                m_systemInterpolation.remove(id);
+                m_systemMovement.remove(id);
+            }
         }
 
         private void handleNewEntity(Shared.Messages.NewEntity message)

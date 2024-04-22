@@ -97,14 +97,11 @@ namespace Client.Systems
                     var id = turnPoint.get<Shared.Components.SnakeId>().id;
                     foreach (Entity entity in m_entities.Values)
                     {
-                        if (entity.contains<Shared.Components.SnakeId>())
+                        if (entity.contains<Shared.Components.SnakeId>() && entity.get<Shared.Components.SnakeId>().id == id)
                         {
-                            if (entity.get<Shared.Components.SnakeId>().id == id)
+                            if (entity.contains<Shared.Components.TurnPointQueue>())
                             {
-                                if (entity.contains<Shared.Components.TurnPointQueue>())
-                                {
-                                    entity.get<Shared.Components.TurnPointQueue>().queue.Enqueue(turnPoint);
-                                }
+                                entity.get<Shared.Components.TurnPointQueue>().queue.Enqueue(turnPoint);
                             }
                         }
                     }

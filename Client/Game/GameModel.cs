@@ -135,6 +135,11 @@ namespace Client
                 entity.add(new Shared.Components.Segment());
             }
 
+            if (message.hasQueue)
+            {
+                entity.add(new Shared.Components.TurnPointQueue());
+            }
+
             if (message.hasSnakeId)
             {
                 entity.add(new Shared.Components.SnakeId(message.snakeId));

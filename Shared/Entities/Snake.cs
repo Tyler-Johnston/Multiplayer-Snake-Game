@@ -5,14 +5,13 @@ namespace Shared.Entities
 {
     public class Snake
     {
-        public static Entity createHead(int snakeId, string texture, string name, Vector2 position, float size, float moveRate, int score)
+        public static Entity createHead(int snakeId, string texture, string name, Vector2 position, float size, float moveRate)
         {
             Entity entity = new Entity();
 
             entity.add(new Name(name));
             entity.add(new SnakeId(snakeId));
             entity.add(new Appearance(texture));
-            entity.add(new Score(score));
 
             entity.add(new Position(position));
             entity.add(new Size(new Vector2(size, size)));
@@ -35,10 +34,6 @@ namespace Shared.Entities
         private const float DIR_DOWN = (float)(2 * Math.PI * 0.25);
         private const float DIR_LEFT = 0;
         private const float DIR_RIGHT = (float)(2 * Math.PI * 0.50);
-        private const float DIR_UP_RIGHT = (float)(Math.PI * 7 / 4);
-        private const float DIR_UP_LEFT = (float)(Math.PI * 5 / 4);
-        private const float DIR_DOWN_RIGHT = (float)(Math.PI / 4);
-        private const float DIR_DOWN_LEFT = (float)(Math.PI * 3 / 4);
         public static void thrust(Entity entity, TimeSpan elapsedTime)
         {
             var position = entity.get<Position>();
@@ -122,9 +117,9 @@ namespace Shared.Entities
             var movement = entity.get<Movement>();
 
 
-            if (position.orientation != DIR_UP_RIGHT && position.orientation != DIR_UP_LEFT && position.orientation != DIR_DOWN_RIGHT)
+            if (position.orientation != (float)(Math.PI * 7 / 4))
             {
-                position.orientation = DIR_DOWN_LEFT;
+                position.orientation = (float)(Math.PI * 3 / 4);
                 int snakeId = entity.get<SnakeId>().id;
                 return Shared.Entities.TurnPoint.create(snakeId, position.position, position.orientation);
             }
@@ -136,9 +131,9 @@ namespace Shared.Entities
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
 
-            if (position.orientation != DIR_UP_LEFT && position.orientation != DIR_UP_RIGHT && position.orientation != DIR_DOWN_LEFT)
+            if (position.orientation != (float)(Math.PI * 5 / 4))
             {
-                position.orientation = DIR_DOWN_RIGHT;
+                position.orientation = (float)(Math.PI / 4);
                 int snakeId = entity.get<SnakeId>().id;
                 return Shared.Entities.TurnPoint.create(snakeId, position.position, position.orientation);
             }
@@ -151,9 +146,9 @@ namespace Shared.Entities
             var movement = entity.get<Movement>();
 
 
-            if (position.orientation != DIR_DOWN_LEFT && position.orientation != DIR_DOWN_RIGHT && position.orientation != DIR_UP_LEFT)
+            if (position.orientation != (float)(Math.PI * 3 / 4))
             {
-                position.orientation = DIR_UP_RIGHT;
+                position.orientation = (float)(Math.PI * 7 / 4);
                 int snakeId = entity.get<SnakeId>().id;
                 return Shared.Entities.TurnPoint.create(snakeId, position.position, position.orientation);
             }
@@ -165,9 +160,9 @@ namespace Shared.Entities
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
 
-            if (position.orientation != DIR_DOWN_RIGHT && position.orientation != DIR_DOWN_LEFT && position.orientation != DIR_UP_RIGHT)
+            if (position.orientation != (float)(Math.PI / 4))
             {
-                position.orientation = DIR_UP_LEFT;
+                position.orientation = (float)(Math.PI * 5 / 4);
                 int snakeId = entity.get<SnakeId>().id;
                 return Shared.Entities.TurnPoint.create(snakeId, position.position, position.orientation);
             }

@@ -11,6 +11,11 @@ namespace Shared.Messages
         {
             this.id = entity.id;
 
+            if (entity.contains<Components.Segment>())
+            {
+                this.hasSegment = true;
+            }
+
             if (entity.contains<SnakeId>())
             {
                 this.hasSnakeId = true;
@@ -89,6 +94,8 @@ namespace Shared.Messages
         // Food Component
         public bool hasFood { get; private set; } = false;
 
+        public bool hasSegment {get; private set; } = false;
+
         // SnakeId
         public bool hasSnakeId { get; private set; } = false;
         public int snakeId {  get; private set; }
@@ -131,6 +138,8 @@ namespace Shared.Messages
 
             data.AddRange(base.serialize());
             data.AddRange(BitConverter.GetBytes(id));
+
+            data.AddRange(BitConverter.GetBytes(hasSegment));
 
             data.AddRange(BitConverter.GetBytes(hasSnakeId));
             if (hasSnakeId)
@@ -202,6 +211,9 @@ namespace Shared.Messages
 
             this.id = BitConverter.ToUInt32(data, offset);
             offset += sizeof(uint);
+
+            this.hasSegment = BitConverter.ToBoolean(data, offset);
+            offset += sizeof(bool);
 
             this.hasSnakeId = BitConverter.ToBoolean(data, offset);
             offset += sizeof(bool);

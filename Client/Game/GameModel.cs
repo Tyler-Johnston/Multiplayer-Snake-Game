@@ -144,6 +144,11 @@ namespace Client
         {
             Entity entity = new Entity(message.id);
 
+            if (message.hasSegment)
+            {
+                entity.add(new Shared.Components.Segment());
+            }
+
             if (message.hasSnakeId)
             {
                 entity.add(new Shared.Components.SnakeId(message.snakeId));

@@ -260,21 +260,31 @@ namespace Server
             MessageQueueServer.instance.sendMessage(clientId, new NewEntity(player));
             addEntity(player);
             m_clientToEntityId[clientId] = player.id;
+
+            // Create tail
+            Entity tail = Shared.Entities.Segment.createSegment(m_nextSnakeId, "Textures/head", new Vector2(x - 50, y), 50, 0.2f);
+            addEntity(tail);
+            
+            // Step 1: Tell the newly connected player about all other entities
             reportAllEntities(clientId);
 
             // We change the appearance for a player ship entity for all other clients to a different texture
             player.remove<Appearance>();
+            tail.remove<Appearance>();
             player.add(new Appearance("Textures/head_enemy"));
+            tail.add(new Appearance("Textures/head_enemy"));
 
             // Remove components not needed for "other" players
             player.remove<Shared.Components.Input>();
 
-            Message messageNewEntity = new NewEntity(player);
+            Message messageNewPlayer = new NewEntity(player);
+            Message messageNewTail = new NewEntity(tail);
             foreach (int otherId in m_clients)
             {
                 if (otherId != clientId)
                 {
-                    MessageQueueServer.instance.sendMessage(otherId, messageNewEntity);
+                    MessageQueueServer.instance.sendMessage(otherId, messageNewPlayer);
+                    MessageQueueServer.instance.sendMessage(otherId, messageNewTail);
                 }
             }
         }

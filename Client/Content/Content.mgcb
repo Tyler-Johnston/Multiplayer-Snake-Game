@@ -194,3 +194,45 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sounds/Food/crunch.7.ogg
+
+#begin Sounds/Death/3grunt1.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Death/3grunt1.mp3
+
+#begin Sounds/Death/3grunt1.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Death/3grunt1.mp3
+
+#begin Sounds/Death/3grunt2.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Death/3grunt2.mp3
+
+#begin Sounds/Death/3grunt3.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Death/3grunt3.mp3
+
+#begin Sounds/Death/3grunt4.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Death/3grunt4.mp3
+
+#begin Sounds/Death/3grunt5.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Death/3grunt5.mp3
+
+#begin Sounds/Death/3grunt6.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Death/3grunt6.mp3

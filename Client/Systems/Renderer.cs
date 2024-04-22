@@ -100,7 +100,7 @@ namespace Client.Systems
 
         public void updateViewport()
         {
-            if (m_playerId != null)
+            if (m_playerId != null && m_entities.ContainsKey(m_playerId.Value))
             {
                 Entity entity = m_entities[m_playerId.Value];
                 var position = entity.get<Shared.Components.Position>().position;

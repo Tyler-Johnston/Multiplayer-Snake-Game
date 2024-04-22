@@ -39,7 +39,7 @@ namespace Server
             m_systemNetwork.update(elapsedTime, MessageQueueServer.instance.getMessages());
             m_systemMovement.update(elapsedTime);
             checkSnakeCollisionwithFood(elapsedTime);
-            // removeSnakesAtBorders();
+            removeSnakesAtBorders();
 
             foodUpdateTime += (float)elapsedTime.TotalSeconds;
             if (foodUpdateTime >= foodUpdateInterval)
@@ -66,13 +66,18 @@ namespace Server
 
             foreach (uint id in toRemove)
             {
+                m_clients.Remove((int)id);
+                // removeEntity(id);
+                // m_clientToEntityId.Remove(id);
+                // Message removeMessage = new Shared.Messages.RemoveEntity(id);
+                // MessageQueueServer.instance.broadcastMessage(removeMessage);
+
                 removeEntity(id);
-                m_clientToEntityId.Remove(m_clientToEntityId.FirstOrDefault(x => x.Value == id).Key); // Safely remove from client-entity map
                 Message removeMessage = new Shared.Messages.RemoveEntity(id);
                 MessageQueueServer.instance.broadcastMessage(removeMessage);
+
             }
         }
-
 
         private void checkSnakeCollisionwithFood(TimeSpan elapsedTime)
         {
@@ -251,20 +256,11 @@ namespace Server
             int x = random.Next(minX + 100, maxX - 99);
             int y = random.Next(minY + 100, maxY - 99);
             Entity player = Shared.Entities.Snake.createHead(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f, 0);
-            // Step 3: Send the new player entity to the newly joined client
+
             MessageQueueServer.instance.sendMessage(clientId, new NewEntity(player));
             addEntity(player);
             m_clientToEntityId[clientId] = player.id;
-            
-            // Step 1: Tell the newly connected player about all other entities
             reportAllEntities(clientId);
-
-            // Step 2: Create an entity for the newly joined player and sent it
-            //         to the newly joined client
-
-            
-
-            // Step 4: Let all other clients know about this new player entity
 
             // We change the appearance for a player ship entity for all other clients to a different texture
             player.remove<Appearance>();

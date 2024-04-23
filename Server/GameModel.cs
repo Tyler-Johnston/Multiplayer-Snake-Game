@@ -39,7 +39,7 @@ namespace Server
             m_systemNetwork.update(elapsedTime, MessageQueueServer.instance.getMessages());
             m_systemMovement.update(elapsedTime);
             checkSnakeCollisionwithFood(elapsedTime);
-            removeSnakesAtBorders();
+            removeSnakesAtBorders(elapsedTime);
 
             foodUpdateTime += (float)elapsedTime.TotalSeconds;
             if (foodUpdateTime >= foodUpdateInterval)
@@ -49,7 +49,7 @@ namespace Server
             }
         }
 
-        private void removeSnakesAtBorders()
+        private void removeSnakesAtBorders(TimeSpan elapsedTime)
         {
             List<uint> toRemove = new List<uint>();
             foreach (Entity entity in new List<Entity>(m_entities.Values))
@@ -66,7 +66,7 @@ namespace Server
 
             foreach (uint id in toRemove)
             {
-                m_clients.Remove((int)id);
+                // m_clients.Remove((int)id);
                 // removeEntity(id);
                 // m_clientToEntityId.Remove(id);
                 // Message removeMessage = new Shared.Messages.RemoveEntity(id);
@@ -227,23 +227,6 @@ namespace Server
         /// </summary>
         private void removeEntity(uint id)
         {
-            if (m_entities[id].contains<Shared.Components.SnakeId>())
-            {
-                foreach (var entity in m_entities)
-                {
-                    if (entity.Key == id)
-                    {
-                        continue;
-                    }
-                    if (entity.Value.contains<Shared.Components.SnakeId>() && entity.Value.get<Shared.Components.SnakeId>().id == m_entities[id].get<Shared.Components.SnakeId>().id)
-                    {
-                        m_entities.Remove(entity.Key);
-
-                        m_systemNetwork.remove(entity.Key);
-                        m_systemMovement.remove(entity.Key);
-                    }
-                }
-            }
             m_entities.Remove(id);
             m_systemNetwork.remove(id);
             m_systemMovement.remove(id);
@@ -272,14 +255,14 @@ namespace Server
 
             int x = random.Next(minX + 100, maxX - 99);
             int y = random.Next(minY + 100, maxY - 99);
-            Entity player = Shared.Entities.Snake.createHead(++m_nextSnakeId, "Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f);
-            // Step 3: Send the new player entity to the newly joined client
+            Entity player = Shared.Entities.Snake.createHead(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f, 0);
+
             MessageQueueServer.instance.sendMessage(clientId, new NewEntity(player));
             addEntity(player);
             m_clientToEntityId[clientId] = player.id;
 
             // Create tail
-            Entity tail = Shared.Entities.Segment.createSegment(m_nextSnakeId, "Textures/tail", new Vector2(x - 50, y), 50, 0.2f);
+            Entity tail = Shared.Entities.Segment.createSegment(m_nextSnakeId, "Textures/head", new Vector2(x - 50, y), 50, 0.2f);
             addEntity(tail);
             
             // Step 1: Tell the newly connected player about all other entities
@@ -289,7 +272,7 @@ namespace Server
             player.remove<Appearance>();
             tail.remove<Appearance>();
             player.add(new Appearance("Textures/head_enemy"));
-            tail.add(new Appearance("Textures/tail_enemy"));
+            tail.add(new Appearance("Textures/head_enemy"));
 
             // Remove components not needed for "other" players
             player.remove<Shared.Components.Input>();

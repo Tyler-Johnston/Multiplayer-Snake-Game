@@ -1,6 +1,4 @@
-﻿using Shared.Entities;
-
-namespace Shared.Systems
+﻿namespace Shared.Systems
 {
     public class Movement : System
     {

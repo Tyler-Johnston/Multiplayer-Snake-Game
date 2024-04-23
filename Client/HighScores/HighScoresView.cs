@@ -8,7 +8,7 @@ namespace CS5410.HighScores
     public class HighScoresView : GameStateView
     {
         private SpriteFont m_font;
-        private const string MESSAGE = "These are the high scores";
+        private const string MESSAGE = "High Scores:";
 
         public override void loadContent(ContentManager contentManager)
         {
@@ -28,16 +28,25 @@ namespace CS5410.HighScores
         public override void render(GameTime gameTime)
         {
             m_spriteBatch.Begin();
-
             Vector2 stringSize = m_font.MeasureString(MESSAGE);
-            m_spriteBatch.DrawString(m_font, MESSAGE,
-                new Vector2(m_graphics.PreferredBackBufferWidth / 2 - stringSize.X / 2, m_graphics.PreferredBackBufferHeight / 2 - stringSize.Y), Color.Yellow);
+            Vector2 position = new Vector2(m_graphics.PreferredBackBufferWidth / 3 - stringSize.X / 2, 100);
+            m_spriteBatch.DrawString(m_font, MESSAGE, position, Color.Yellow);
+            position.Y += 40;
+
+            foreach (var score in HighScoreManager.HighScores)
+            {
+                string scoreText = $"Name: {score.PlayerName}, Score: {score.Score}, Date: {score.TimeStamp.ToShortDateString()}";
+                m_spriteBatch.DrawString(m_font, scoreText, position, Color.White);
+                position.Y += 50;
+            }
 
             m_spriteBatch.End();
         }
 
+
         public override void update(GameTime gameTime)
         {
+
         }
     }
 }

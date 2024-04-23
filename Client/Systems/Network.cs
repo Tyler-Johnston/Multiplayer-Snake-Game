@@ -93,18 +93,9 @@ namespace Client.Systems
                         {
                             switch (input)
                             {
-                                case Shared.Components.Input.Type.TurnDownLeft:
-                                    Shared.Entities.Utility.turnDownLeft(entity);
-                                    break;
-                                case Shared.Components.Input.Type.TurnDownRight:
-                                    Shared.Entities.Utility.turnDownRight(entity);
-                                    break;
-                                case Shared.Components.Input.Type.TurnUpRight:
-                                    Shared.Entities.Utility.turnUpRight(entity);
-                                    break;
-                                case Shared.Components.Input.Type.TurnUpLeft:
-                                    Shared.Entities.Utility.turnUpLeft(entity);
-                                    break;
+                                // case Shared.Components.Input.Type.Thrust:
+                                //     Shared.Entities.Utility.thrust(entity, message.elapsedTime);
+                                //     break;
                                 case Shared.Components.Input.Type.TurnLeft:
                                     Shared.Entities.Utility.turnLeft(entity);
                                     break;
@@ -163,6 +154,16 @@ namespace Client.Systems
             if (m_entities.ContainsKey(message.id))
             {
                 var entity = m_entities[message.id];
+
+                if (m_entities.ContainsKey(message.id))
+                {
+                    if (message.hasScore && entity.contains<Score>())
+                    {
+                        entity.get<Score>().score = message.score;
+                        Console.WriteLine("up score: " + entity.get<Score>().score);
+                        m_updatedEntities.Add(entity.id);
+                    }
+                }
                 if (entity.contains<Components.Goal>() && message.hasPosition)
                 {
                     var position = entity.get<Position>();
@@ -182,13 +183,6 @@ namespace Client.Systems
                     entity.get<Position>().orientation = message.orientation;
 
                     m_updatedEntities.Add(entity.id);
-                }
-                if (m_entities.ContainsKey(message.id))
-                {
-                    if (message.hasScore && entity.contains<Score>())
-                    {
-                        entity.get<Score>().score = message.score;
-                    }
                 }
             }
         }

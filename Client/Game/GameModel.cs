@@ -1,5 +1,6 @@
 ﻿using CS5410;
 using CS5410.Controls;
+using CS5410.HighScores;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -149,11 +150,6 @@ namespace Client
                 entity.add(new Shared.Components.Segment());
             }
 
-            if (message.hasQueue)
-            {
-                entity.add(new Shared.Components.TurnPointQueue());
-            }
-
             if (message.hasSnakeId)
             {
                 entity.add(new Shared.Components.SnakeId(message.snakeId));
@@ -206,6 +202,22 @@ namespace Client
             }
 
             return entity;
+        }
+        
+        private void RecordHighScore(Entity entity)
+        {
+            if (entity.contains<Shared.Components.Score>() && entity.contains<Shared.Components.Name>())
+            {
+                int score = entity.get<Shared.Components.Score>().score;
+                string name = entity.get<Shared.Components.Name>().name;
+                HighScore newHighScore = new HighScore()
+                {
+                    Score = (uint)score,
+                    PlayerName = name,
+                    TimeStamp = DateTime.Now
+                };
+                HighScoreManager.AddHighScore(newHighScore);
+            }
         }
 
         /// <summary>
@@ -267,8 +279,8 @@ namespace Client
 
                 if (m_entities[id].contains<Shared.Components.SnakeId>())
                 {
-                    int rd = random.Next(1,7);
-                    switch (rd)
+                    int num = random.Next(1,7);
+                    switch (num)
                     {
                         case 1: m_grunt1.Play();
                         break;
@@ -283,25 +295,8 @@ namespace Client
                         case 6: m_grunt6.Play();
                         break;
                     }
-                    foreach (var entity in m_entities)
-                    {
-                        if (entity.Key == id)
-                        {
-                            continue;
-                        }
-                        if (entity.Value.contains<Shared.Components.SnakeId>() && entity.Value.get<Shared.Components.SnakeId>().id == m_entities[id].get<Shared.Components.SnakeId>().id)
-                        {
-                            m_entities.Remove(entity.Key);
-
-                            m_systemKeyboardInput.remove(entity.Key);
-                            m_systemNetwork.remove(entity.Key);
-                            m_systemRenderer.remove(entity.Key);
-                            m_systemInterpolation.remove(entity.Key);
-                            m_systemMovement.remove(entity.Key);
-                        }
-                    }
+                    RecordHighScore(m_entities[id]);
                 }
-
                 m_entities.Remove(id);
 
                 m_systemKeyboardInput.remove(id);

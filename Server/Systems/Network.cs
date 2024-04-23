@@ -6,7 +6,6 @@ namespace Server.Systems
 {
     public class Network : Shared.Systems.System
     {
-        public int lastFullUpdate = 0;
         public delegate void Handler(int clientId, TimeSpan elapsedTime, Shared.Messages.Message message);
         public delegate void DisconnectHandler(int clientId);
         public delegate void InputHandler(Entity entity, Shared.Components.Input.Type type, TimeSpan elapsedTime);
@@ -132,35 +131,8 @@ namespace Server.Systems
 
                 if (turnPoint != null)
                 {
-                    var id = turnPoint.get<Shared.Components.SnakeId>().id;
-                    foreach (Entity e in m_entities.Values)
-                    {
-                        if (e.contains<Shared.Components.SnakeId>())
-                        {
-                            if (e.get<Shared.Components.SnakeId>().id == id)
-                            {
-                                if (e.contains<Shared.Components.TurnPointQueue>())
-                                {
-                                    e.get<Shared.Components.TurnPointQueue>().queue.Enqueue(turnPoint);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (turnPoint != null)
-                {
                     MessageQueueServer.instance.broadcastMessage(new NewEntity(turnPoint));
                 }
-            }
-        }
-
-        private void updateAll(TimeSpan elapsedTime)
-        {
-            foreach (var entity in m_entities.Values)
-            {
-                var message = new Shared.Messages.UpdateEntity(entity, elapsedTime);
-                MessageQueueServer.instance.broadcastMessage(message);
             }
         }
 

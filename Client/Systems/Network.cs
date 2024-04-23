@@ -115,6 +115,18 @@ namespace Client.Systems
             }
         }
 
+        public int GetScore(uint entityId)
+        {
+            if (m_entities.TryGetValue(entityId, out var entity))
+            {
+                if (entity.contains<Score>())
+                {
+                    return entity.get<Score>().score;
+                }
+            }
+            return 0;
+        }
+
         private void registerHandler(Shared.Messages.Type type, Handler handler)
         {
             m_commandMap[type] = handler;

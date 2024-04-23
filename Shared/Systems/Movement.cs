@@ -1,4 +1,6 @@
-﻿namespace Shared.Systems
+﻿using Shared.Entities;
+
+namespace Shared.Systems
 {
     public class Movement : System
     {
@@ -24,12 +26,73 @@
                         var tpOrientation = tp.get<Shared.Components.Position>().orientation;
                         var segOrientation = entity.get<Shared.Components.Position>().orientation;
 
-                        
-                        // if (tp.get<Shared.Components.Position>().position - entity.get<Shared.Components.Position>().position)
-                        // {
-                            entity.get<Shared.Components.Position>().orientation = tpOrientation;
-                            entity.get<Shared.Components.TurnPointQueue>().queue.Dequeue();
-                        // }
+                        var tpPos = tp.get<Shared.Components.Position>().position;
+                        var segPos = entity.get<Shared.Components.Position>().position;
+
+                        if (segOrientation == Utility.Directions["UP"])
+                        {
+                            if (segPos.Y - tpPos.Y <= 0)
+                            {
+                                entity.get<Shared.Components.Position>().orientation = tpOrientation;
+                                entity.get<Shared.Components.TurnPointQueue>().queue.Dequeue();
+                            }
+                        }
+                        else if (segOrientation == Utility.Directions["DOWN"])
+                        {
+                            if (segPos.Y - tpPos.Y >= 0)
+                            {
+                                entity.get<Shared.Components.Position>().orientation = tpOrientation;
+                                entity.get<Shared.Components.TurnPointQueue>().queue.Dequeue();
+                            }
+                        }
+                        else if (segOrientation == Utility.Directions["RIGHT"])
+                        {
+                            if (segPos.X - tpPos.X <= 0)
+                            {
+                                entity.get<Shared.Components.Position>().orientation = tpOrientation;
+                                entity.get<Shared.Components.TurnPointQueue>().queue.Dequeue();
+                            }
+                        }
+                        else if (segOrientation == Utility.Directions["LEFT"])
+                        {
+                            if (segPos.X - tpPos.X >= 0)
+                            {
+                                entity.get<Shared.Components.Position>().orientation = tpOrientation;
+                                entity.get<Shared.Components.TurnPointQueue>().queue.Dequeue();
+                            }
+                        }
+                        else if (segOrientation == Utility.Directions["DOWN_LEFT"])
+                        {
+                            if (segPos.Y - tpPos.Y >= 0 && segPos.X - tpPos.X <= 0)
+                            {
+                                entity.get<Shared.Components.Position>().orientation = tpOrientation;
+                                entity.get<Shared.Components.TurnPointQueue>().queue.Dequeue();
+                            }
+                        }
+                        else if (segOrientation == Utility.Directions["DOWN_RIGHT"])
+                        {
+                            if (segPos.Y - tpPos.Y >= 0 && segPos.X - tpPos.X >= 0)
+                            {
+                                entity.get<Shared.Components.Position>().orientation = tpOrientation;
+                                entity.get<Shared.Components.TurnPointQueue>().queue.Dequeue();
+                            }
+                        }
+                        else if (segOrientation == Utility.Directions["UP_LEFT"])
+                        {
+                            if (segPos.Y - tpPos.Y <= 0 && segPos.X - tpPos.X <= 0)
+                            {
+                                entity.get<Shared.Components.Position>().orientation = tpOrientation;
+                                entity.get<Shared.Components.TurnPointQueue>().queue.Dequeue();
+                            }
+                        }
+                        else if (segOrientation == Utility.Directions["UP_RIGHT"])
+                        {
+                            if (segPos.Y - tpPos.Y <= 0 && segPos.X - tpPos.X >= 0)
+                            {
+                                entity.get<Shared.Components.Position>().orientation = tpOrientation;
+                                entity.get<Shared.Components.TurnPointQueue>().queue.Dequeue();
+                            }
+                        }
                     }
                 }
                 Shared.Entities.Utility.thrust(entity, elapsedTime);

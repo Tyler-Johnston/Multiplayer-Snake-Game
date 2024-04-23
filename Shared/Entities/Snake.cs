@@ -124,7 +124,7 @@ namespace Shared.Entities
             var movement = entity.get<Movement>();
 
 
-            if (position.orientation != Directions["UP_RIGHT"] && position.orientation != Directions["UP_LEFT"] && position.orientation != Directions["DOWN_RIGHT"])
+            if (position.orientation != Directions["UP_RIGHT"] && position.orientation != Directions["DOWN_LEFT"])
             {
                 position.orientation = Directions["DOWN_LEFT"];
                 int snakeId = entity.get<SnakeId>().id;
@@ -138,7 +138,7 @@ namespace Shared.Entities
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
 
-            if (position.orientation != Directions["UP_LEFT"] && position.orientation != Directions["UP_RIGHT"] && position.orientation != Directions["DOWN_LEFT"])
+            if (position.orientation != Directions["DOWN_RIGHT"] && position.orientation != Directions["UP_LEFT"])
             {
                 position.orientation = Directions["DOWN_RIGHT"];
                 int snakeId = entity.get<SnakeId>().id;
@@ -153,7 +153,7 @@ namespace Shared.Entities
             var movement = entity.get<Movement>();
 
 
-            if (position.orientation != Directions["DOWN_LEFT"] && position.orientation != Directions["DOWN_RIGHT"] && position.orientation != Directions["UP_LEFT"])
+            if (position.orientation != Directions["UP_RIGHT"] && position.orientation != Directions["DOWN_LEFT"])
             {
                 position.orientation = Directions["UP_RIGHT"];
                 int snakeId = entity.get<SnakeId>().id;
@@ -166,7 +166,7 @@ namespace Shared.Entities
             var position = entity.get<Position>();
             var movement = entity.get<Movement>();
 
-            if (position.orientation != Directions["DOWN_RIGHT"] && position.orientation != Directions["DOWN_LEFT"] && position.orientation != Directions["UP_RIGHT"])
+            if (position.orientation != Directions["UP_LEFT"] && position.orientation != Directions["DOWN_RIGHT"])
             {
                 position.orientation = Directions["UP_LEFT"];
                 int snakeId = entity.get<SnakeId>().id;

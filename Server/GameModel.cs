@@ -39,7 +39,7 @@ namespace Server
             m_systemNetwork.update(elapsedTime, MessageQueueServer.instance.getMessages());
             m_systemMovement.update(elapsedTime);
             checkSnakeCollisionwithFood(elapsedTime);
-            removeSnakesAtBorders();
+            removeSnakesAtBorders(elapsedTime);
 
             foodUpdateTime += (float)elapsedTime.TotalSeconds;
             if (foodUpdateTime >= foodUpdateInterval)
@@ -49,7 +49,7 @@ namespace Server
             }
         }
 
-        private void removeSnakesAtBorders()
+        private void removeSnakesAtBorders(TimeSpan elapsedTime)
         {
             List<uint> toRemove = new List<uint>();
             foreach (Entity entity in new List<Entity>(m_entities.Values))
@@ -66,7 +66,7 @@ namespace Server
 
             foreach (uint id in toRemove)
             {
-                m_clients.Remove((int)id);
+                // m_clients.Remove((int)id);
                 // removeEntity(id);
                 // m_clientToEntityId.Remove(id);
                 // Message removeMessage = new Shared.Messages.RemoveEntity(id);

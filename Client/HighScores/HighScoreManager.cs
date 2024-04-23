@@ -19,9 +19,9 @@ namespace CS5410.HighScores
         {
             using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                if (storage.FileExists("HighScores.json"))
+                if (storage.FileExists("HighScores2.json"))
                 {
-                    using (IsolatedStorageFileStream fs = storage.OpenFile("HighScores.json", FileMode.Open))
+                    using (IsolatedStorageFileStream fs = storage.OpenFile("HighScores2.json", FileMode.Open))
                     {
                         if (fs.Length > 0)
                         {
@@ -37,7 +37,7 @@ namespace CS5410.HighScores
         {
             using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                using (IsolatedStorageFileStream fs = storage.CreateFile("HighScores.json"))
+                using (IsolatedStorageFileStream fs = storage.CreateFile("HighScores2.json"))
                 {
                     DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<HighScore>));
                     serializer.WriteObject(fs, HighScores);

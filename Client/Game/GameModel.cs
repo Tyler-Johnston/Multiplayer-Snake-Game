@@ -1,5 +1,6 @@
 ﻿using CS5410;
 using CS5410.Controls;
+using CS5410.HighScores;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -202,6 +203,22 @@ namespace Client
 
             return entity;
         }
+        
+        private void RecordHighScore(Entity entity)
+        {
+            if (entity.contains<Shared.Components.Score>() && entity.contains<Shared.Components.Name>())
+            {
+                int score = entity.get<Shared.Components.Score>().score;
+                string name = entity.get<Shared.Components.Name>().name;
+                HighScore newHighScore = new HighScore()
+                {
+                    Score = (uint)score,
+                    PlayerName = name,
+                    TimeStamp = DateTime.Now
+                };
+                HighScoreManager.AddHighScore(newHighScore);
+            }
+        }
 
         /// <summary>
         /// As entities are added to the game model, they are run by the systems
@@ -262,8 +279,8 @@ namespace Client
 
                 if (m_entities[id].contains<Shared.Components.SnakeId>())
                 {
-                    int rd = random.Next(1,7);
-                    switch (rd)
+                    int num = random.Next(1,7);
+                    switch (num)
                     {
                         case 1: m_grunt1.Play();
                         break;
@@ -278,6 +295,7 @@ namespace Client
                         case 6: m_grunt6.Play();
                         break;
                     }
+                    RecordHighScore(m_entities[id]);
                 }
                 m_entities.Remove(id);
 

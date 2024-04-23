@@ -23,14 +23,17 @@ namespace CS5410.HighScores
         /// </summary>
         /// <param name="score"></param>
         /// <param name="level"></param>
-        public HighScore(uint score)
+        public HighScore(uint score, string playerName)
         {
             this.Score = score;
+            this.PlayerName = playerName;
             this.TimeStamp = DateTime.Now;
         }
         [DataMember()]
         public uint Score { get; set; }
         [DataMember()]
         public DateTime TimeStamp { get; set; }
+        [DataMember()]
+        public string PlayerName { get; set; }
     }
 }

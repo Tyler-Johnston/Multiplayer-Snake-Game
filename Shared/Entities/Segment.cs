@@ -9,7 +9,6 @@ namespace Shared.Entities
         {
             Entity entity = new Entity();
             entity.add(new Shared.Components.Segment());
-            entity.add(new Shared.Components.TurnPointQueue());
 
             entity.add(new Appearance(texture));
             entity.add(new SnakeId(snakeId));

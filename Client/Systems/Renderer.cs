@@ -169,20 +169,6 @@ namespace Client.Systems
                 // Draw the name text above the entity
                 spriteBatch.DrawString(m_font, name, textPosition, Color.White);
             }
-            
-
-            // Debugging
-            if (entity.contains<Shared.Components.Segment>())
-            {
-                var name = entity.get<Shared.Components.Position>().orientation.ToString();
-                // Calculate the position for the name text to appear above the entity
-                Vector2 textPosition = new Vector2(
-                    entityX, 
-                    entityY - 70);
-
-                // Draw the name text above the entity
-                spriteBatch.DrawString(m_font, name, textPosition, Color.White);
-            }
         }
     }
 }

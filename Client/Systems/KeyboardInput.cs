@@ -20,7 +20,7 @@ namespace Client.Systems
         private HashSet<Keys> m_keysPressed = new HashSet<Keys>();
         private List<Shared.Components.Input.Type> m_inputEvents = new List<Shared.Components.Input.Type>();
 
-        public KeyboardInput(List<Tuple<Shared.Components.Input.Type, Keys>> mapping) : base(typeof(Shared.Components.Input))
+        public KeyboardInput(List<Tuple<Shared.Components.Input.Type, Keys>> mapping) : base() //typeof(Shared.Components.Input)
         {
             foreach (var input in mapping)
             {
@@ -35,25 +35,32 @@ namespace Client.Systems
                 List<Shared.Components.Input.Type> inputs = new List<Shared.Components.Input.Type>();
                 var keyMap = m_keyToFunction[item.Key].m_keyToType;
 
+                Shared.Entities.Entity? turnPoint = null;
+
+                if (!item.Value.contains<Shared.Components.Input>())
+                {
+                    continue;
+                }
+
                 if (m_keysPressed.Contains(ControlsManager.Controls["TurnUp"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnRight"]))
                 {
                     inputs.Add(Shared.Components.Input.Type.TurnUpRight);
-                    Shared.Entities.Utility.turnUpRight(item.Value);
+                    turnPoint = Shared.Entities.Utility.turnUpRight(item.Value);
                 } 
                 else if (m_keysPressed.Contains(ControlsManager.Controls["TurnDown"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnRight"]))
                 {
                     inputs.Add(Shared.Components.Input.Type.TurnDownRight);
-                    Shared.Entities.Utility.turnDownRight(item.Value);
+                    turnPoint = Shared.Entities.Utility.turnDownRight(item.Value);
                 }
                 else if (m_keysPressed.Contains(ControlsManager.Controls["TurnUp"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnLeft"]))
                 {
                     inputs.Add(Shared.Components.Input.Type.TurnUpLeft);
-                    Shared.Entities.Utility.turnUpLeft(item.Value);
+                    turnPoint = Shared.Entities.Utility.turnUpLeft(item.Value);
                 }
                 else if (m_keysPressed.Contains(ControlsManager.Controls["TurnDown"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnLeft"]))
                 {
                     inputs.Add(Shared.Components.Input.Type.TurnDownLeft);
-                    Shared.Entities.Utility.turnDownLeft(item.Value);
+                    turnPoint = Shared.Entities.Utility.turnDownLeft(item.Value);
                 }
                 else
                 {
@@ -69,21 +76,37 @@ namespace Client.Systems
                             switch (type)
                             {
                                 case Shared.Components.Input.Type.TurnUp:
-                                    Shared.Entities.Utility.turnUp(item.Value);
+                                    turnPoint = Shared.Entities.Utility.turnUp(item.Value);
                                     break;
                                 case Shared.Components.Input.Type.TurnDown:
-                                    Shared.Entities.Utility.turnDown(item.Value);
+                                    turnPoint = Shared.Entities.Utility.turnDown(item.Value);
                                     break;
                                 case Shared.Components.Input.Type.TurnLeft:
-                                    Shared.Entities.Utility.turnLeft(item.Value);
+                                    turnPoint = Shared.Entities.Utility.turnLeft(item.Value);
                                     break;
                                 case Shared.Components.Input.Type.TurnRight:
-                                    Shared.Entities.Utility.turnRight(item.Value);
+                                    turnPoint = Shared.Entities.Utility.turnRight(item.Value);
                                     break;
                             }
                         }
                     }
                 }
+                if (turnPoint != null)
+                {
+                    // TODO: Update this for the server side as well
+                    var id = turnPoint.get<Shared.Components.SnakeId>().id;
+                    foreach (Entity entity in m_entities.Values)
+                    {
+                        if (entity.contains<Shared.Components.SnakeId>() && entity.get<Shared.Components.SnakeId>().id == id)
+                        {
+                            if (entity.contains<Shared.Components.TurnPointQueue>())
+                            {
+                                entity.get<Shared.Components.TurnPointQueue>().queue.Enqueue(turnPoint);
+                            }
+                        }
+                    }
+                }
+                
 
                 if (inputs.Count > 0)
                 {
@@ -127,10 +150,14 @@ namespace Client.Systems
             }
 
             KeyToType map = new KeyToType();
-            foreach (var input in entity.get<Shared.Components.Input>().inputs)
+            if (entity.contains<Shared.Components.Input>())
             {
-                map.m_keyToType[m_typeToKey[input]] = input;
+                foreach (var input in entity.get<Shared.Components.Input>().inputs)
+                {
+                    map.m_keyToType[m_typeToKey[input]] = input;
+                }
             }
+            
             m_keyToFunction[entity.id] = map;
 
             return true;

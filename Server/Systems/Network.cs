@@ -52,11 +52,11 @@ namespace Server.Systems
         /// </summary>
         public void update(TimeSpan elapsedTime, Queue<Tuple<int, Message>> messages)
         {
-            // lastFullUpdate += elapsedTime.Milliseconds;
-            // if (lastFullUpdate >= 500)
-            // {
-            //     updateAll(elapsedTime);
-            // }
+            lastFullUpdate += elapsedTime.Milliseconds;
+            if (lastFullUpdate >= 200)
+            {
+                updateAll(elapsedTime);
+            }
             if (messages != null)
             {
                 while (messages.Count > 0)

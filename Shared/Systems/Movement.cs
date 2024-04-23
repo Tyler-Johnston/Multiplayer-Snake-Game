@@ -63,7 +63,7 @@ namespace Shared.Systems
                         }
                         else if (segOrientation == Utility.Directions["DOWN_LEFT"])
                         {
-                            if (segPos.Y - tpPos.Y >= 0)
+                            if (segPos.Y - tpPos.Y >= 0 || segPos.X - tpPos.X >= 0)
                             {
                                 entity.get<Shared.Components.Position>().orientation = tpOrientation;
                                 entity.get<Shared.Components.TurnPointQueue>().queue.Dequeue();
@@ -71,7 +71,7 @@ namespace Shared.Systems
                         }
                         else if (segOrientation == Utility.Directions["DOWN_RIGHT"])
                         {
-                            if (segPos.Y - tpPos.Y >= 0)
+                            if (segPos.Y - tpPos.Y <= 0 || segPos.X - tpPos.X >= 0)
                             {
                                 entity.get<Shared.Components.Position>().orientation = tpOrientation;
                                 entity.get<Shared.Components.TurnPointQueue>().queue.Dequeue();
@@ -79,7 +79,7 @@ namespace Shared.Systems
                         }
                         else if (segOrientation == Utility.Directions["UP_LEFT"])
                         {
-                            if (segPos.Y - tpPos.Y <= 0)
+                            if (segPos.Y - tpPos.Y <= 0 || segPos.X - tpPos.X >= 0)
                             {
                                 entity.get<Shared.Components.Position>().orientation = tpOrientation;
                                 entity.get<Shared.Components.TurnPointQueue>().queue.Dequeue();
@@ -87,7 +87,7 @@ namespace Shared.Systems
                         }
                         else if (segOrientation == Utility.Directions["UP_RIGHT"])
                         {
-                            if (segPos.Y - tpPos.Y <= 0)
+                            if (segPos.Y - tpPos.Y <= 0 || segPos.X - tpPos.X >= 0)
                             {
                                 entity.get<Shared.Components.Position>().orientation = tpOrientation;
                                 entity.get<Shared.Components.TurnPointQueue>().queue.Dequeue();

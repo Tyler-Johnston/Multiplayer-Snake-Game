@@ -172,7 +172,6 @@ namespace Client.Systems
                     if (message.hasScore && entity.contains<Score>())
                     {
                         entity.get<Score>().score = message.score;
-                        Console.WriteLine("up score: " + entity.get<Score>().score);
                         m_updatedEntities.Add(entity.id);
                     }
                 }

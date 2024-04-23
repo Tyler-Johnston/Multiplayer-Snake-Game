@@ -188,17 +188,29 @@ namespace Client
                         {
                             Array.Reverse(type);
                         }
-                        m_socketServer.Send(type);
+                        try
+                        {
+                            m_socketServer.Send(type);
+                        }
+                        catch (Exception)
+                        {
+                        }
 
                         // Size
                         if (BitConverter.IsLittleEndian)
                         {
                             Array.Reverse(size);
                         }
-                        m_socketServer.Send(size);
+                        try 
+                        {
+                            m_socketServer.Send(size);
 
-                        // Message body
-                        m_socketServer.Send(body);
+                            // Message body
+                            m_socketServer.Send(body);
+                        }
+                        catch (Exception)
+                        {
+                        }
                     }
                     else
                     {

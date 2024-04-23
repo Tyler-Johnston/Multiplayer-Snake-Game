@@ -89,7 +89,7 @@ namespace Client.Systems
                 .Take(5);
 
             int rank = 1;
-            Vector2 scorePosition = new Vector2(1050, 50);
+            Vector2 scorePosition = new Vector2(1025, 50);
             foreach (var entity in topEntities)
             {
                 string scoreText = $"{rank++}) {entity.get<Name>()?.name ?? "Unknown"}: {entity.get<Score>().score}";

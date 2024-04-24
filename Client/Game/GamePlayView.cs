@@ -85,7 +85,6 @@ namespace CS5410
                 m_spriteBatch.Begin();
                 m_spriteBatch.End();
                 m_gameModel.render(gameTime.ElapsedGameTime, m_spriteBatch);
-                
             }
         }
         private HashSet<Keys> m_previouslyDown = new HashSet<Keys>();

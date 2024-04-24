@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Shared.Entities;
 using System;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
@@ -285,9 +286,10 @@ namespace Client
                         case 7: m_crunch7.Play();
                         break;
                     }
+                    Vector2 foodPosition = m_entities[id].get<Shared.Components.Position>().position;
+                    m_systemRenderer.triggerOnEatParticles(foodPosition);
                 }
-
-                if (m_entities[id].contains<Shared.Components.SnakeId>())
+                if (m_entities[id].contains<Shared.Components.PlayerType>())
                 {
                     int num = random.Next(1,7);
                     switch (num)
@@ -305,10 +307,12 @@ namespace Client
                         case 6: m_grunt6.Play();
                         break;
                     }
+                    Vector2 playerPosition = m_entities[id].get<Shared.Components.Position>().position;
+                    m_systemRenderer.triggerOnDeathParticles(playerPosition);
                     RecordHighScore(m_entities[id]);
                 }
-                m_entities.Remove(id);
 
+                m_entities.Remove(id);
                 m_systemKeyboardInput.remove(id);
                 m_systemNetwork.remove(id);
                 m_systemRenderer.remove(id);

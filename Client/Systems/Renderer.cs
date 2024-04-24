@@ -72,54 +72,6 @@ namespace Client.Systems
 
         public override void update(TimeSpan elapsedTime) { }
 
-        public void PrintEntityInfo(Entity entity)
-{
-    if (entity == null)
-    {
-        Console.WriteLine("Entity is null.");
-        return;
-    }
-
-    Console.WriteLine("Entity Information:");
-    Console.WriteLine($"ID: {entity.id}");
-
-    if (entity.contains<Shared.Components.Name>())
-    {
-        var name = entity.get<Shared.Components.Name>().name;
-        Console.WriteLine($"Name: {name}");
-    }
-
-    // Print Position Information
-    if (entity.contains<Shared.Components.Position>())
-    {
-        var position = entity.get<Shared.Components.Position>();
-        Console.WriteLine($"Position: X={position.position.X}, Y={position.position.Y}");
-    }
-
-    // Print Score Information
-    if (entity.contains<Shared.Components.Score>())
-    {
-        var score = entity.get<Shared.Components.Score>();
-        Console.WriteLine($"Score: {score.score}");
-    }
-
-    // Print PlayerType
-    if (entity.contains<Shared.Components.PlayerType>())
-    {
-        var pt = entity.get<Shared.Components.PlayerType>();
-        Console.WriteLine($"Player Type: {pt.playerType}");
-    }
-
-    // Print Sprite Information
-    if (entity.contains<Client.Components.Sprite>())
-    {
-        var sprite = entity.get<Client.Components.Sprite>();
-        Console.WriteLine($"Sprite Texture: {sprite.texture}"); // Adjust depending on how texture is stored
-    }
-
-    // Additional components can be added here in a similar fashion
-}
-
 
         public void update(TimeSpan elapsedTime, SpriteBatch spriteBatch)
         {
@@ -135,7 +87,6 @@ namespace Client.Systems
             if (m_playerId.HasValue && m_entities.ContainsKey(m_playerId.Value))
             {
                 Entity player = m_entities[m_playerId.Value];
-                PrintEntityInfo(player);
                 if (player.contains<Score>() && player.contains<KillCount>())
                 {
                     playerScore = (uint)player.get<Score>().score;
@@ -178,7 +129,7 @@ namespace Client.Systems
                 .Take(5);
 
             int rank = 1;
-            Vector2 scorePosition = new Vector2(1025, 50);
+            Vector2 scorePosition = new Vector2(1000, 50);
             foreach (var entity in topEntities)
             {
                 string scoreText = $"{rank++}) {entity.get<Name>()?.name ?? "Unknown"}: {entity.get<Score>().score}";
@@ -258,7 +209,6 @@ namespace Client.Systems
                 // Draw the name text above the entity
                 spriteBatch.DrawString(m_font, name, textPosition, Color.White);
             }
-
             // m_renderCatch.draw(m_spriteBatch, m_particleSystemCatch);
         }
     }

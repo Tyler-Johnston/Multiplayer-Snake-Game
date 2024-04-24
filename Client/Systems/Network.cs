@@ -175,6 +175,12 @@ namespace Client.Systems
                         m_updatedEntities.Add(entity.id);
                     }
                 }
+                // if (message.hasAppearance && entity.contains<Appearance>())
+                // {
+                //     Console.WriteLine("its getting here all right");
+                //     entity.get<Appearance>().texture = message.texture;
+                //     m_updatedEntities.Add(entity.id);
+                // }
                 if (entity.contains<Components.Goal>() && message.hasPosition)
                 {
                     var position = entity.get<Position>();

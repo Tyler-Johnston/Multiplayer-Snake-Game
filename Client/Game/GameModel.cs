@@ -185,6 +185,12 @@ namespace Client
                 entity.add(new Shared.Components.PlayerType(message.playerType));
             }
 
+            if (message.hasFoodSpriteType)
+            {
+                entity.add(new Shared.Components.FoodSpriteType(message.foodSpriteType));
+            }
+
+
             if (message.hasAppearance)
             {
                 Texture2D texture = m_contentManager.Load<Texture2D>(message.texture);
@@ -244,12 +250,6 @@ namespace Client
             }
 
             m_entities[entity.id] = entity;
-            // if (!isFirstEntityReceived)
-            // {
-            //     isFirstEntityReceived = true;
-            //     m_systemRenderer.m_playerId = entity.id;
-            // }
-
             m_systemKeyboardInput.add(entity);
             m_systemRenderer.add(entity);
             m_systemNetwork.add(entity);

@@ -8,6 +8,6 @@ namespace Shared.Components
             this.texture = texture;
         }
 
-        public string texture { get; private set; }
+        public string texture { get; set; }
     }
 }

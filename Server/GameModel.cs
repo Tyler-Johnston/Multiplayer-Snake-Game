@@ -23,6 +23,8 @@ namespace Server
         private int maxFoodThreshold = 100;
         private const float foodUpdateInterval = 5f;
         private float foodUpdateTime = 0f;
+        private const float foodAnimateInterval = 1f;
+        private float foodAnimateTime = 0f;
         private int minFoodSize = 20;
         private int maxFoodSize = 70;
 
@@ -47,6 +49,13 @@ namespace Server
                 updateFood();
                 foodUpdateTime = 0f;
             }
+
+            // foodAnimateTime+= (float)elapsedTime.TotalSeconds;
+            // if (foodAnimateTime >= foodAnimateInterval)
+            // {
+            //     animateFood(elapsedTime);
+            //     foodAnimateTime = 0f;
+            // }
         }
 
         private void removeSnakesAtBorders(TimeSpan elapsedTime)
@@ -66,16 +75,9 @@ namespace Server
 
             foreach (uint id in toRemove)
             {
-                // m_clients.Remove((int)id);
-                // removeEntity(id);
-                // m_clientToEntityId.Remove(id);
-                // Message removeMessage = new Shared.Messages.RemoveEntity(id);
-                // MessageQueueServer.instance.broadcastMessage(removeMessage);
-
                 removeEntity(id);
                 Message removeMessage = new Shared.Messages.RemoveEntity(id);
                 MessageQueueServer.instance.broadcastMessage(removeMessage);
-
             }
         }
 
@@ -143,6 +145,31 @@ namespace Server
                 }
             }
         }
+        private void animateFood(TimeSpan elapsedTime)
+        {
+            foreach (Entity food in m_foodList)
+            {
+                if (food.contains<FoodSpriteType>())
+                {
+                    var foodSpriteType = food.get<FoodSpriteType>().foodSpriteType;
+                    
+                    string newTexture = (foodSpriteType == "Frame1") ? "Textures/egg2" : "Textures/egg";
+                    string newFoodSpriteType = (foodSpriteType == "Frame1") ? "Frame2" : "Frame1";
+
+                    // Remove the current Appearance and FoodSpriteType components
+                    food.remove<Appearance>();
+                    food.remove<FoodSpriteType>();
+
+                    // Add new Appearance and FoodSpriteType components with updated values
+                    food.add(new Appearance(newTexture));
+                    food.add(new FoodSpriteType(newFoodSpriteType));
+
+                    var updateMessage = new Shared.Messages.UpdateEntity(food, elapsedTime);
+                    MessageQueueServer.instance.broadcastMessage(updateMessage);
+                }
+            }
+        }
+
 
         /// <summary>
         /// Setup notifications for when new clients connect.

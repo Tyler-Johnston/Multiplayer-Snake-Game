@@ -56,6 +56,12 @@ namespace Shared.Messages
                 this.playerType = entity.get<PlayerType>().playerType;
             }
 
+            if (entity.contains<FoodSpriteType>())
+            {
+                this.hasFoodSpriteType = true;
+                this.foodSpriteType = entity.get<FoodSpriteType>().foodSpriteType;
+            }
+
             if (entity.contains<Appearance>())
             {
                 this.hasAppearance = true;
@@ -132,6 +138,10 @@ namespace Shared.Messages
         public bool hasPlayerType { get; private set; } = false;
         public string playerType { get; private set; }
 
+        // FoodSpriteType
+        public bool hasFoodSpriteType { get; private set; } = false;
+        public string foodSpriteType { get; private set; }
+
         // Appearance
         public bool hasAppearance { get; private set; } = false;
         public string texture { get; private set; }
@@ -196,6 +206,13 @@ namespace Shared.Messages
             {
                 data.AddRange(BitConverter.GetBytes(playerType.Length));
                 data.AddRange(Encoding.UTF8.GetBytes(playerType));
+            }
+
+            data.AddRange(BitConverter.GetBytes(hasFoodSpriteType));
+            if (hasFoodSpriteType)
+            {
+                data.AddRange(BitConverter.GetBytes(foodSpriteType.Length));
+                data.AddRange(Encoding.UTF8.GetBytes(foodSpriteType));
             }
 
 
@@ -300,6 +317,18 @@ namespace Shared.Messages
                 offset += playerTypeSize;
             }
 
+            this.hasFoodSpriteType = BitConverter.ToBoolean(data, offset);
+            offset += sizeof(bool);
+            if (hasFoodSpriteType)
+            {
+                int foodSpriteTypeSize = BitConverter.ToInt32(data, offset);
+                offset += sizeof(Int32);
+                this.playerType = Encoding.UTF8.GetString(data, offset, foodSpriteTypeSize);
+                offset += foodSpriteTypeSize;
+            }
+
+
+
             this.hasAppearance = BitConverter.ToBoolean(data, offset);
             offset += sizeof(bool);
             if (hasAppearance)
@@ -322,7 +351,6 @@ namespace Shared.Messages
                 this.orientation = BitConverter.ToSingle(data, offset);
                 offset += sizeof(Single);
             }
-
 
             this.hasSize = BitConverter.ToBoolean(data, offset);
             offset += sizeof(bool);

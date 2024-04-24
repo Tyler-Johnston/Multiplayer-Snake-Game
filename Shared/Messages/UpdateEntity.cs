@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Shared.Components;
 using Shared.Entities;
+using System.Text;
 
 namespace Shared.Messages
 {
@@ -24,6 +25,12 @@ namespace Shared.Messages
                 this.score = entity.get<Score>().score;
             }
 
+            // if (entity.contains<Appearance>())
+            // {
+            //     this.hasAppearance = true;
+            //     this.texture = entity.get<Appearance>().texture;
+            // }
+
             this.updateWindow = updateWindow;
         }
 
@@ -38,8 +45,13 @@ namespace Shared.Messages
         public Vector2 position { get; private set; }
         public float orientation { get; private set; }
 
+        // Score
         public bool hasScore { get; private set; } = false;
         public int score { get; private set; }
+
+        // // Appearance
+        // public bool hasAppearance { get; private set; } = false;
+        // public string texture { get; private set; }
 
         // Only the milliseconds are used/serialized
         public TimeSpan updateWindow { get; private set; } = TimeSpan.Zero;
@@ -64,6 +76,13 @@ namespace Shared.Messages
             {
                 data.AddRange(BitConverter.GetBytes(score));
             }
+
+            // data.AddRange(BitConverter.GetBytes(hasAppearance));
+            // if (hasAppearance)
+            // {
+            //     data.AddRange(BitConverter.GetBytes(texture.Length));
+            //     data.AddRange(Encoding.UTF8.GetBytes(texture));
+            // }
 
             data.AddRange(BitConverter.GetBytes(updateWindow.Milliseconds));
 
@@ -97,6 +116,16 @@ namespace Shared.Messages
                 this.score = BitConverter.ToInt32(data, offset);
                 offset += sizeof(int);
             }
+
+            // this.hasAppearance = BitConverter.ToBoolean(data, offset);
+            // offset += sizeof(bool);
+            // if (hasAppearance)
+            // {
+            //     int textureSize = BitConverter.ToInt32(data, offset);
+            //     offset += sizeof(Int32);
+            //     this.texture = Encoding.UTF8.GetString(data, offset, textureSize);
+            //     offset += textureSize;
+            // }
 
             this.updateWindow = new TimeSpan(0, 0, 0, 0, BitConverter.ToInt32(data, offset));
             offset += sizeof(Int32);

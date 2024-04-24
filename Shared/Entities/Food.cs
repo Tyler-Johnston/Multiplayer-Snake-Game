@@ -14,6 +14,7 @@ namespace Shared.Entities
             entity.add(new Appearance(texture));
             entity.add(new Position(position));
             entity.add(new Size(new Vector2(size, size)));
+            entity.add(new FoodSpriteType("Frame1"));
 
             return entity;
         }

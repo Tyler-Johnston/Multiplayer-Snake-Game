@@ -249,34 +249,28 @@ namespace Server
         /// added to the server game model, and notifies the requesting client
         /// of the player.
         /// </summary>
-         private void handleJoin(int clientId, TimeSpan elapsedTime, Shared.Messages.Message message)
+        /// 
+        private void handleJoin(int clientId, TimeSpan elapsedTime, Shared.Messages.Message message)
         {
             Shared.Messages.Join messageJoin = (Shared.Messages.Join) message;
 
             int x = random.Next(minX + 100, maxX - 99);
             int y = random.Next(minY + 100, maxY - 99);
             Entity player = Shared.Entities.Snake.createHead(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f, 0, 0);
-
-            MessageQueueServer.instance.sendMessage(clientId, new NewEntity(player));
-            addEntity(player);
-            m_clientToEntityId[clientId] = player.id;
-
-            // Create tail
             Entity tail = Shared.Entities.Segment.createSegment(m_nextSnakeId, "Textures/head", new Vector2(x - 50, y), 50, 0.2f);
-            addEntity(tail);
-            
-            // Step 1: Tell the newly connected player about all other entities
-            reportAllEntities(clientId);
 
-            // We change the appearance for a player ship entity for all other clients to a different texture
+            // Send the initial entities to the joining client
+            MessageQueueServer.instance.sendMessage(clientId, new NewEntity(player));
+            MessageQueueServer.instance.sendMessage(clientId, new NewEntity(tail));
+
+            // Change appearance for other clients
             player.remove<Appearance>();
             tail.remove<Appearance>();
             player.add(new Appearance("Textures/head_enemy"));
             tail.add(new Appearance("Textures/head_enemy"));
-
-            // Remove components not needed for "other" players
             player.remove<Shared.Components.Input>();
 
+            // Inform all other clients about the new entities
             Message messageNewPlayer = new NewEntity(player);
             Message messageNewTail = new NewEntity(tail);
             foreach (int otherId in m_clients)
@@ -287,6 +281,14 @@ namespace Server
                     MessageQueueServer.instance.sendMessage(otherId, messageNewTail);
                 }
             }
+
+            // Add new entities to the server's game model
+            addEntity(player);
+            addEntity(tail);
+            m_clientToEntityId[clientId] = player.id;
+
+            // Send all other known entities to the newly joined client
+            reportAllEntities(clientId);
         }
     }
 }

@@ -27,6 +27,8 @@ namespace Client.Systems
         private uint? playerScore = null;
         private uint? killCount = null;
         private uint? highestPosition = null;
+        private float foodAnimateTime = 0f;
+        private const float foodAnimateInterval = .5f;
         // private ParticleSystem m_particleSystemFood;
         // private ParticleSystemRenderer m_renderCatch;
 
@@ -82,6 +84,12 @@ namespace Client.Systems
             foreach (Entity entity in m_entities.Values)
             {
                 RenderEntity(entity, spriteBatch);
+                foodAnimateTime += (float)elapsedTime.TotalSeconds;
+                if (foodAnimateTime >= foodAnimateInterval)
+                {
+                    animateFood(entity);
+                    foodAnimateTime = 0f;
+                }
             }
 
             if (m_playerId.HasValue && m_entities.ContainsKey(m_playerId.Value))
@@ -169,6 +177,24 @@ namespace Client.Systems
                 }
             }
         }
+
+        private void animateFood(Entity entity)
+        {
+            if (entity.contains<FoodSpriteType>())
+            {
+                var foodSpriteType = entity.get<FoodSpriteType>().foodSpriteType;
+                string newTexture = (foodSpriteType == "Frame1") ? "Textures/egg2" : "Textures/egg";
+                string newFoodSpriteType = (foodSpriteType == "Frame1") ? "Frame2" : "Frame1";
+
+                // Remove the current Appearance and FoodSpriteType components
+                entity.remove<Components.Sprite>();
+                entity.remove<FoodSpriteType>();
+                Texture2D myTexture = m_contentManager.Load<Texture2D>(newTexture);
+                entity.add(new Components.Sprite(myTexture));
+                entity.add(new FoodSpriteType(newFoodSpriteType));
+            }
+        }
+        
 
         public void RenderEntity(Entity entity, SpriteBatch spriteBatch)
         {

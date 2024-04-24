@@ -28,6 +28,12 @@ namespace Shared.Messages
                 this.score = entity.get<Score>().score;
             }
 
+            if (entity.contains<KillCount>())
+            {
+                this.hasKillCount = true;
+                this.killCount = entity.get<KillCount>().killCount;
+            }
+
             if (entity.contains<Shared.Components.TurnPoint>())
             {
                 this.hasTurnPoint = true;
@@ -105,6 +111,10 @@ namespace Shared.Messages
         public bool hasScore { get; private set; } = false;
         public int score {  get; private set; }
 
+        // Kill Count
+        public bool hasKillCount { get; private set; } = false;
+        public int killCount {  get; private set; }
+
         // Turn Point
         public bool hasTurnPoint { get; private set; } = false;
 
@@ -151,6 +161,12 @@ namespace Shared.Messages
             if (hasScore)
             {
                 data.AddRange(BitConverter.GetBytes(score));
+            }
+
+            data.AddRange(BitConverter.GetBytes(hasKillCount));
+            if (hasKillCount)
+            {
+                data.AddRange(BitConverter.GetBytes(killCount));
             }
 
             data.AddRange(BitConverter.GetBytes(hasTurnPoint));
@@ -228,6 +244,14 @@ namespace Shared.Messages
             if (hasScore)
             {
                 this.score = BitConverter.ToInt32(data, offset);
+                offset += sizeof(Int32);
+            }
+
+            this.hasKillCount = BitConverter.ToBoolean(data, offset);
+            offset += sizeof(bool);
+            if (hasKillCount)
+            {
+                this.killCount = BitConverter.ToInt32(data, offset);
                 offset += sizeof(Int32);
             }
 

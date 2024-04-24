@@ -24,13 +24,18 @@ namespace Client.Systems
         private int WorldHeight = 750 * 3;
         private int WorldWidth = 750 * 3;     
         public uint? m_playerId = null;
+        private uint? playerScore = null;
+        private uint? killCount = null;
+        private uint? highestPosition = null;
+        // private ParticleSystem m_particleSystemFood;
+        // private ParticleSystemRenderer m_renderCatch;
 
         public ContentManager ContentManager
         {
             set 
             { 
                 m_contentManager = value;
-                InitializeFont();
+                InitializeContent();
             }
         }
 
@@ -44,12 +49,24 @@ namespace Client.Systems
         {
         }
 
-        private void InitializeFont()
+        private void InitializeContent()
         {
             if (m_contentManager != null)
             {
                 m_background = m_contentManager.Load<Texture2D>("background");
                 m_font = m_contentManager.Load<SpriteFont>("Fonts/menu");
+                
+                // m_particleSystemFood = new ParticleSystem(
+                //     new Vector2(300, 300), // Assuming starting position
+                //     10, // Max particles
+                //     5, // Initial particles
+                //     0.1f, // Birth rate
+                //     0.05f, // Death rate
+                //     500, // Max life of a particle
+                //     100); // Min life of a particle
+
+                // m_renderCatch = new ParticleSystemRenderer("Textures/particle");
+                // m_renderCatch.LoadContent(contentManager);
             }
         }
 
@@ -69,16 +86,38 @@ namespace Client.Systems
             if (m_playerId.HasValue && m_entities.ContainsKey(m_playerId.Value))
             {
                 Entity player = m_entities[m_playerId.Value];
-                if (player.contains<Score>())
+                if (player.contains<Score>() && player.contains<KillCount>())
                 {
+                    playerScore = (uint)player.get<Score>().score;
+                    killCount = (uint)player.get<KillCount>().killCount;
+                    UpdateHighestPosition(player);
                     Vector2 scorePosition = new Vector2(50, 50);
-                    spriteBatch.DrawString(m_font, $"Score: {player.get<Score>().score}", scorePosition, Color.White);
+                    spriteBatch.DrawString(m_font, $"Score: {playerScore}", scorePosition, Color.White);
                 }
+            }
+            else if (playerScore != null && killCount != null)
+            {
+                spriteBatch.DrawString(m_font, $"Final Score: {playerScore.Value}", new Vector2(550,250), Color.White);
+                spriteBatch.DrawString(m_font, $"Kill Count: {killCount.Value}", new Vector2(550,315), Color.White);
+                spriteBatch.DrawString(m_font, $"Highest Position: {highestPosition.Value}", new Vector2(550,380), Color.White);
             }
 
             RenderScoreBoard(spriteBatch);
-
+            // m_particleSystemCatch.update(gameTime);
             spriteBatch.End();
+        }
+
+        private void UpdateHighestPosition(Entity player)
+        {
+            var currentRank = m_entities.Values
+                .Where(e => e.contains<Score>())
+                .OrderByDescending(e => e.get<Score>().score)
+                .ToList().FindIndex(e => e == player) + 1;
+
+            if (!highestPosition.HasValue || currentRank < highestPosition.Value)
+            {
+                highestPosition = (uint?)currentRank;
+            }
         }
 
         private void RenderScoreBoard(SpriteBatch spriteBatch)
@@ -169,6 +208,8 @@ namespace Client.Systems
                 // Draw the name text above the entity
                 spriteBatch.DrawString(m_font, name, textPosition, Color.White);
             }
+
+            // m_renderCatch.draw(m_spriteBatch, m_particleSystemCatch);
         }
     }
 }

@@ -255,7 +255,7 @@ namespace Server
 
             int x = random.Next(minX + 100, maxX - 99);
             int y = random.Next(minY + 100, maxY - 99);
-            Entity player = Shared.Entities.Snake.createHead(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f, 0);
+            Entity player = Shared.Entities.Snake.createHead(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f, 0, 0);
 
             MessageQueueServer.instance.sendMessage(clientId, new NewEntity(player));
             addEntity(player);

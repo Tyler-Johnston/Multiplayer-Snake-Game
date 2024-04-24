@@ -160,6 +160,11 @@ namespace Client
                 entity.add(new Shared.Components.Score(message.score));
             }
 
+            if (message.hasKillCount)
+            {
+                entity.add(new Shared.Components.KillCount(message.killCount));
+            }
+
             if (message.hasFood)
             {
                 entity.add(new Shared.Components.Food());

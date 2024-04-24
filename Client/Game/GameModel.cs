@@ -239,11 +239,11 @@ namespace Client
             }
 
             m_entities[entity.id] = entity;
-            if (!isFirstEntityReceived)
-            {
-                isFirstEntityReceived = true;
-                m_systemRenderer.m_playerId = entity.id;
-            }
+            // if (!isFirstEntityReceived)
+            // {
+            //     isFirstEntityReceived = true;
+            //     m_systemRenderer.m_playerId = entity.id;
+            // }
 
             m_systemKeyboardInput.add(entity);
             m_systemRenderer.add(entity);
@@ -317,7 +317,13 @@ namespace Client
         {
             Entity entity = createEntity(message);
             addEntity(entity);
+            if (!isFirstEntityReceived && message.hasSnakeId)
+            {
+                isFirstEntityReceived = true;
+                m_systemRenderer.m_playerId = entity.id;
+            }
         }
+
 
         /// <summary>
         /// Handler for the RemoveEntity message.  It removes the entity from

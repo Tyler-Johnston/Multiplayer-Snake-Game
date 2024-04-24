@@ -20,7 +20,7 @@ namespace Client.Systems
         private HashSet<Keys> m_keysPressed = new HashSet<Keys>();
         private List<Shared.Components.Input.Type> m_inputEvents = new List<Shared.Components.Input.Type>();
 
-        public KeyboardInput(List<Tuple<Shared.Components.Input.Type, Keys>> mapping) : base()
+        public KeyboardInput(List<Tuple<Shared.Components.Input.Type, Keys>> mapping) : base() //typeof(Shared.Components.Input)
         {
             foreach (var input in mapping)
             {
@@ -91,6 +91,7 @@ namespace Client.Systems
                         }
                     }
                 }
+
                 if (turnPoint != null)
                 {
                     // TODO: Update this for the server side as well
@@ -106,6 +107,7 @@ namespace Client.Systems
                         }
                     }
                 }
+                
 
                 if (inputs.Count > 0)
                 {
@@ -156,6 +158,7 @@ namespace Client.Systems
                     map.m_keyToType[m_typeToKey[input]] = input;
                 }
             }
+            
             m_keyToFunction[entity.id] = map;
 
             return true;

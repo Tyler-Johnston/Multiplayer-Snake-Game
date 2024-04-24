@@ -28,7 +28,7 @@ namespace Client.Systems
         private uint? killCount = null;
         private uint? highestPosition = null;
         private float foodAnimateTime = 0f;
-        private const float foodAnimateInterval = .5f;
+        private const float foodAnimateInterval = 1.5f;
         // private ParticleSystem m_particleSystemFood;
         // private ParticleSystemRenderer m_renderCatch;
 

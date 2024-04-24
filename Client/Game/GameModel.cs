@@ -224,7 +224,6 @@ namespace Client
         {
             if (entity.contains<Shared.Components.Score>() && entity.contains<Shared.Components.Name>())
             {
-                // int score = entity.get<Shared.Components.Score>().score;
                 var score = m_systemNetwork.GetScore(entity.id);
                 string name = entity.get<Shared.Components.Name>().name;
                 HighScore newHighScore = new HighScore()

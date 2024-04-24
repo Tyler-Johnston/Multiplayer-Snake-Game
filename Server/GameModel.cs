@@ -49,13 +49,6 @@ namespace Server
                 updateFood();
                 foodUpdateTime = 0f;
             }
-
-            // foodAnimateTime+= (float)elapsedTime.TotalSeconds;
-            // if (foodAnimateTime >= foodAnimateInterval)
-            // {
-            //     animateFood(elapsedTime);
-            //     foodAnimateTime = 0f;
-            // }
         }
 
         private void removeSnakesAtBorders(TimeSpan elapsedTime)
@@ -75,9 +68,37 @@ namespace Server
 
             foreach (uint id in toRemove)
             {
+                snakeDeath(id);
+            }
+        }
+
+        private void snakeDeath(uint id)
+        {
+            if (m_entities[id].contains<Score>() && m_entities[id].contains<Position>())
+            {
+                // drop 1 food per 5 points the player had (can change this amount to whatever)
+                var score = m_entities[id].get<Score>().score;
+                var position = m_entities[id].get<Position>().position;
+                int numFoodtoDrop = score / 5;
+                for (int i = 0; i < numFoodtoDrop; i++)
+                {
+                    int x = random.Next((int)position.X-30, (int)position.X+30);
+                    int y = random.Next((int)position.Y-30, (int)position.Y+30);
+                    x = Math.Max(minX + 30, Math.Min(maxX - 30, x));
+                    y = Math.Max(minY + 30, Math.Min(maxY - 30, y));
+                    int size = random.Next(minFoodSize, maxFoodSize);
+                    Entity food = Shared.Entities.Food.create(m_nextFoodId++, "Textures/egg", new Vector2(x, y), size);
+                    m_foodList.Add(food);
+                    addEntity(food);
+                    MessageQueueServer.instance.broadcastMessage(new Shared.Messages.NewEntity(food));
+                }
+
                 removeEntity(id);
                 Message removeMessage = new Shared.Messages.RemoveEntity(id);
                 MessageQueueServer.instance.broadcastMessage(removeMessage);
+
+                // to-do: remove any segments associated with that snake on death
+
             }
         }
 
@@ -145,31 +166,6 @@ namespace Server
                 }
             }
         }
-        private void animateFood(TimeSpan elapsedTime)
-        {
-            foreach (Entity food in m_foodList)
-            {
-                if (food.contains<FoodSpriteType>())
-                {
-                    var foodSpriteType = food.get<FoodSpriteType>().foodSpriteType;
-                    
-                    string newTexture = (foodSpriteType == "Frame1") ? "Textures/egg2" : "Textures/egg";
-                    string newFoodSpriteType = (foodSpriteType == "Frame1") ? "Frame2" : "Frame1";
-
-                    // Remove the current Appearance and FoodSpriteType components
-                    food.remove<Appearance>();
-                    food.remove<FoodSpriteType>();
-
-                    // Add new Appearance and FoodSpriteType components with updated values
-                    food.add(new Appearance(newTexture));
-                    food.add(new FoodSpriteType(newFoodSpriteType));
-
-                    var updateMessage = new Shared.Messages.UpdateEntity(food, elapsedTime);
-                    MessageQueueServer.instance.broadcastMessage(updateMessage);
-                }
-            }
-        }
-
 
         /// <summary>
         /// Setup notifications for when new clients connect.

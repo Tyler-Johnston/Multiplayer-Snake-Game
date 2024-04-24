@@ -50,6 +50,12 @@ namespace Shared.Messages
                 this.name = entity.get<Name>().name;
             }
 
+            if (entity.contains<PlayerType>())
+            {
+                this.hasPlayerType = true;
+                this.playerType = entity.get<PlayerType>().playerType;
+            }
+
             if (entity.contains<Appearance>())
             {
                 this.hasAppearance = true;
@@ -118,8 +124,13 @@ namespace Shared.Messages
         // Turn Point
         public bool hasTurnPoint { get; private set; } = false;
 
+        // Name
         public bool hasName { get; private set; } = false;
         public string name { get; private set; }
+
+        // PlayerType
+        public bool hasPlayerType { get; private set; } = false;
+        public string playerType { get; private set; }
 
         // Appearance
         public bool hasAppearance { get; private set; } = false;
@@ -179,6 +190,14 @@ namespace Shared.Messages
                 data.AddRange(BitConverter.GetBytes(name.Length));
                 data.AddRange(Encoding.UTF8.GetBytes(name));
             }
+
+            data.AddRange(BitConverter.GetBytes(hasPlayerType));
+            if (hasPlayerType)
+            {
+                data.AddRange(BitConverter.GetBytes(playerType.Length));
+                data.AddRange(Encoding.UTF8.GetBytes(playerType));
+            }
+
 
             data.AddRange(BitConverter.GetBytes(hasAppearance));
             if (hasAppearance)
@@ -269,6 +288,16 @@ namespace Shared.Messages
                 offset += sizeof(Int32);
                 this.name = Encoding.UTF8.GetString(data, offset, nameSize);
                 offset += nameSize;
+            }
+
+            this.hasPlayerType = BitConverter.ToBoolean(data, offset);
+            offset += sizeof(bool);
+            if (hasPlayerType)
+            {
+                int playerTypeSize = BitConverter.ToInt32(data, offset);
+                offset += sizeof(Int32);
+                this.playerType = Encoding.UTF8.GetString(data, offset, playerTypeSize);
+                offset += playerTypeSize;
             }
 
             this.hasAppearance = BitConverter.ToBoolean(data, offset);

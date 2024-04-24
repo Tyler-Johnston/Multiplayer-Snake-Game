@@ -180,6 +180,11 @@ namespace Client
                 entity.add(new Shared.Components.Name(message.name));
             }
 
+            if (message.hasPlayerType)
+            {
+                entity.add(new Shared.Components.PlayerType(message.playerType));
+            }
+
             if (message.hasAppearance)
             {
                 Texture2D texture = m_contentManager.Load<Texture2D>(message.texture);
@@ -317,10 +322,14 @@ namespace Client
         {
             Entity entity = createEntity(message);
             addEntity(entity);
-            if (!isFirstEntityReceived && message.hasSnakeId)
+            if (entity.contains<Shared.Components.PlayerType>())
             {
-                isFirstEntityReceived = true;
-                m_systemRenderer.m_playerId = entity.id;
+                var pt = entity.get<Shared.Components.PlayerType>();
+                if (!isFirstEntityReceived && pt.playerType == "Player")
+                {
+                    isFirstEntityReceived = true;
+                    m_systemRenderer.m_playerId = entity.id;
+                }
             }
         }
 

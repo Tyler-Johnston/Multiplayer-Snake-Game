@@ -103,6 +103,13 @@ namespace Client.Systems
         Console.WriteLine($"Score: {score.score}");
     }
 
+    // Print PlayerType
+    if (entity.contains<Shared.Components.PlayerType>())
+    {
+        var pt = entity.get<Shared.Components.PlayerType>();
+        Console.WriteLine($"Player Type: {pt.playerType}");
+    }
+
     // Print Sprite Information
     if (entity.contains<Client.Components.Sprite>())
     {

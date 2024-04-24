@@ -257,6 +257,7 @@ namespace Server
             int x = random.Next(minX + 100, maxX - 99);
             int y = random.Next(minY + 100, maxY - 99);
             Entity player = Shared.Entities.Snake.createHead(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f, 0, 0);
+            // player.add(new PlayerType("Player"));
             Entity tail = Shared.Entities.Segment.createSegment(m_nextSnakeId, "Textures/head", new Vector2(x - 50, y), 50, 0.2f);
 
             // Send the initial entities to the joining client
@@ -267,6 +268,8 @@ namespace Server
             player.remove<Appearance>();
             tail.remove<Appearance>();
             player.add(new Appearance("Textures/head_enemy"));
+            player.remove<PlayerType>();
+            player.add(new PlayerType("Enemy"));
             tail.add(new Appearance("Textures/head_enemy"));
             player.remove<Shared.Components.Input>();
 

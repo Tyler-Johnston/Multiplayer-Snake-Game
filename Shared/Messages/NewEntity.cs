@@ -15,6 +15,11 @@ namespace Shared.Messages
             {
                 this.hasSegment = true;
             }
+            
+            if (entity.contains<Components.TurnPointQueue>())
+            {
+                this.hasQueue = true;
+            }
 
             if (entity.contains<SnakeId>())
             {
@@ -122,6 +127,8 @@ namespace Shared.Messages
         // Score
         public bool hasScore { get; private set; } = false;
         public int score {  get; private set; }
+        public bool hasQueue { get; private set; } = false;
+
 
         // Kill Count
         public bool hasKillCount { get; private set; } = false;
@@ -169,6 +176,7 @@ namespace Shared.Messages
 
             data.AddRange(base.serialize());
             data.AddRange(BitConverter.GetBytes(id));
+            data.AddRange(BitConverter.GetBytes(hasQueue));
 
             data.AddRange(BitConverter.GetBytes(hasSegment));
 
@@ -263,6 +271,9 @@ namespace Shared.Messages
 
             this.id = BitConverter.ToUInt32(data, offset);
             offset += sizeof(uint);
+
+            this.hasQueue = BitConverter.ToBoolean(data, offset);
+            offset += sizeof(bool);
 
             this.hasSegment = BitConverter.ToBoolean(data, offset);
             offset += sizeof(bool);

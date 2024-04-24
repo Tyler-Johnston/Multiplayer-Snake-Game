@@ -13,8 +13,6 @@ namespace Shared.Entities
             entity.add(new Shared.Components.TurnPoint());
             entity.add(new SnakeId(snakeId));
             entity.add(new Position(position, direction));
-            entity.add(new Shared.Components.Size(new Vector2(50, 50)));
-            entity.add(new Appearance("Textures/turn-point"));
 
             return entity;
         }

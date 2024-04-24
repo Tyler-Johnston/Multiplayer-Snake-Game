@@ -93,9 +93,18 @@ namespace Client.Systems
                         {
                             switch (input)
                             {
-                                // case Shared.Components.Input.Type.Thrust:
-                                //     Shared.Entities.Utility.thrust(entity, message.elapsedTime);
-                                //     break;
+                                case Shared.Components.Input.Type.TurnDownLeft:
+                                    Shared.Entities.Utility.turnDownLeft(entity);
+                                    break;
+                                case Shared.Components.Input.Type.TurnDownRight:
+                                    Shared.Entities.Utility.turnDownRight(entity);
+                                    break;
+                                case Shared.Components.Input.Type.TurnUpRight:
+                                    Shared.Entities.Utility.turnUpRight(entity);
+                                    break;
+                                case Shared.Components.Input.Type.TurnUpLeft:
+                                    Shared.Entities.Utility.turnUpLeft(entity);
+                                    break;
                                 case Shared.Components.Input.Type.TurnLeft:
                                     Shared.Entities.Utility.turnLeft(entity);
                                     break;

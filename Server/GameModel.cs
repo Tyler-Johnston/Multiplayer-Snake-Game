@@ -55,6 +55,7 @@ namespace Server
         private void checkSnakeCollision(TimeSpan elapsedTime)
         {
             List<uint> toRemove = new List<uint>();
+            List<uint> updateKills = new List<uint>();
             foreach (var snakeEntity in m_entities.Values)
             {
                 if (snakeEntity.contains<Shared.Components.SnakeId>() && snakeEntity.contains<Shared.Components.PlayerType>())
@@ -80,6 +81,7 @@ namespace Server
                                 {
                                     // the snake that head hit the segment will get removed.
                                     toRemove.Add(snakeEntity.id);
+                                    updateKills.Add(otherEntity.id);
                                 }
                             }
                         }
@@ -90,6 +92,18 @@ namespace Server
             foreach (uint id in toRemove)
             {
                 snakeDeath(id);
+            }
+
+            foreach (uint id in updateKills)
+            {
+                Entity snake = m_entities[id];
+                if (snake.contains<KillCount>())
+                {
+                    KillCount killCountComponent = snake.get<KillCount>();
+                    killCountComponent.killCount += 1;
+                    var myMessage = new Shared.Messages.UpdateEntity(snake, elapsedTime);
+                    MessageQueueServer.instance.broadcastMessage(myMessage);
+                }
             }
         }
 

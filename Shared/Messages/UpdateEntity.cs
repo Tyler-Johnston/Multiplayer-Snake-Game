@@ -43,6 +43,10 @@ namespace Shared.Messages
         public bool hasScore { get; private set; } = false;
         public int score { get; private set; }
 
+        // Kill Count
+        public bool hasKillCount { get; private set; } = false;
+        public int killCount { get; private set; }
+
         // Only the milliseconds are used/serialized
         public TimeSpan updateWindow { get; private set; } = TimeSpan.Zero;
 
@@ -65,6 +69,12 @@ namespace Shared.Messages
             if (hasScore)
             {
                 data.AddRange(BitConverter.GetBytes(score));
+            }
+
+            data.AddRange(BitConverter.GetBytes(hasKillCount));
+            if (hasKillCount)
+            {
+                data.AddRange(BitConverter.GetBytes(hasKillCount));
             }
 
             data.AddRange(BitConverter.GetBytes(updateWindow.Milliseconds));
@@ -97,6 +107,14 @@ namespace Shared.Messages
             if (hasScore)
             {
                 this.score = BitConverter.ToInt32(data, offset);
+                offset += sizeof(int);
+            }
+
+            this.hasKillCount = BitConverter.ToBoolean(data, offset);
+            offset += sizeof(bool);
+            if (hasKillCount)
+            {
+                this.killCount = BitConverter.ToInt32(data, offset);
                 offset += sizeof(int);
             }
 

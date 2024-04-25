@@ -6,6 +6,7 @@ using System;
 using Microsoft.Xna.Framework.Content;
 using Shared.Components;
 using System.Linq;
+using CS5410.Particles;
 
 
 namespace Client.Systems
@@ -29,8 +30,10 @@ namespace Client.Systems
         private uint? highestPosition = null;
         private float foodAnimateTime = 0f;
         private const float foodAnimateInterval = 1.5f;
-        // private ParticleSystem m_particleSystemFood;
-        // private ParticleSystemRenderer m_renderCatch;
+        private ParticleSystem m_particleSystemFood;
+        private ParticleSystemRenderer m_renderFood;
+        private ParticleSystem m_particleSystemDeath;
+        private ParticleSystemRenderer m_renderDeath;
 
         public ContentManager ContentManager
         {
@@ -58,17 +61,27 @@ namespace Client.Systems
                 m_background = m_contentManager.Load<Texture2D>("background");
                 m_font = m_contentManager.Load<SpriteFont>("Fonts/menu");
                 
-                // m_particleSystemFood = new ParticleSystem(
-                //     new Vector2(300, 300), // Assuming starting position
-                //     10, // Max particles
-                //     5, // Initial particles
-                //     0.1f, // Birth rate
-                //     0.05f, // Death rate
-                //     500, // Max life of a particle
-                //     100); // Min life of a particle
+                m_particleSystemFood = new ParticleSystem(
+                    new Vector2(WorldWidth+300, WorldHeight+300), // Assuming starting position
+                    10, // Max particles
+                    5, // Initial particles
+                    0.1f, // Birth rate
+                    0.05f, // Death rate
+                    500, // Max life of a particle
+                    100); // Min life of a particle
+                m_renderFood = new ParticleSystemRenderer("Textures/particle");
+                m_renderFood.LoadContent(m_contentManager);
 
-                // m_renderCatch = new ParticleSystemRenderer("Textures/particle");
-                // m_renderCatch.LoadContent(contentManager);
+                m_particleSystemDeath = new ParticleSystem(
+                    new Vector2(WorldWidth+300, WorldHeight+300), // Assuming starting position
+                    18, // Max particles
+                    5, // Initial particles
+                    0.4f, // Birth rate
+                    0.03f, // Death rate
+                    500, // Max life of a particle
+                    100); // Min life of a particle
+                m_renderDeath = new ParticleSystemRenderer("Textures/fire");
+                m_renderDeath.LoadContent(m_contentManager);
             }
         }
 
@@ -77,6 +90,8 @@ namespace Client.Systems
 
         public void update(TimeSpan elapsedTime, SpriteBatch spriteBatch)
         {
+            m_particleSystemFood.update(elapsedTime);
+            m_particleSystemDeath.update(elapsedTime);
             spriteBatch.Begin();
             updateViewport();
 
@@ -112,8 +127,24 @@ namespace Client.Systems
             }
 
             RenderScoreBoard(spriteBatch);
-            // m_particleSystemCatch.update(gameTime);
             spriteBatch.End();
+        }
+
+        public void triggerOnEatParticles(Vector2 position)
+        {
+            int entityX = (int)(position.X - m_viewportOffsetX);
+            int entityY = (int)(position.Y - m_viewportOffsetY);
+            Vector2 updatedPos = new Vector2(entityX, entityY);
+            Console.WriteLine($"On Food eat pos: {position}");
+            m_particleSystemFood.Emit(updatedPos, 10);
+        }
+
+        public void triggerOnDeathParticles(Vector2 position)
+        {
+            int entityX = (int)(position.X - m_viewportOffsetX);
+            int entityY = (int)(position.Y - m_viewportOffsetY);
+            Vector2 updatedPos = new Vector2(entityX, entityY);
+            m_particleSystemDeath.Emit(updatedPos, 20);
         }
 
         private void UpdateHighestPosition(Entity player)
@@ -152,6 +183,7 @@ namespace Client.Systems
             {
                 Entity entity = m_entities[m_playerId.Value];
                 var position = entity.get<Shared.Components.Position>().position;
+                Console.WriteLine($"UV player Pos {position}");
                 var orientation = entity.get<Shared.Components.Position>().orientation;
                 var size = entity.get<Shared.Components.Size>().size;
                 var texture = entity.get<Components.Sprite>().texture;
@@ -194,7 +226,6 @@ namespace Client.Systems
                 entity.add(new FoodSpriteType(newFoodSpriteType));
             }
         }
-        
 
         public void RenderEntity(Entity entity, SpriteBatch spriteBatch)
         {
@@ -227,15 +258,14 @@ namespace Client.Systems
             if (entity.contains<Shared.Components.Name>())
             {
                 var name = entity.get<Shared.Components.Name>().name;
-                // Calculate the position for the name text to appear above the entity
                 Vector2 textPosition = new Vector2(
                     entityX, 
                     entityY - 70);
 
-                // Draw the name text above the entity
                 spriteBatch.DrawString(m_font, name, textPosition, Color.White);
             }
-            // m_renderCatch.draw(m_spriteBatch, m_particleSystemCatch);
+            m_renderFood.draw(spriteBatch, m_particleSystemFood);
+            m_renderDeath.draw(spriteBatch, m_particleSystemDeath);
         }
     }
 }

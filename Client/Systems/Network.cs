@@ -183,6 +183,11 @@ namespace Client.Systems
                         entity.get<Score>().score = message.score;
                         m_updatedEntities.Add(entity.id);
                     }
+                    if (message.hasKillCount && entity.contains<KillCount>())
+                    {
+                        entity.get<KillCount>().killCount = message.killCount;
+                        m_updatedEntities.Add(entity.id);
+                    }
                 }
                 if (entity.contains<Components.Goal>() && message.hasPosition)
                 {

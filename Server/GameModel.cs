@@ -43,12 +43,68 @@ namespace Server
             m_systemMovement.update(elapsedTime);
             checkSnakeCollisionwithFood(elapsedTime);
             removeSnakesAtBorders(elapsedTime);
+            checkSnakeCollision(elapsedTime);
 
             foodUpdateTime += (float)elapsedTime.TotalSeconds;
             if (foodUpdateTime >= foodUpdateInterval)
             {
                 updateFood();
                 foodUpdateTime = 0f;
+            }
+        }
+
+        private void checkSnakeCollision(TimeSpan elapsedTime)
+        {
+            List<uint> toRemove = new List<uint>();
+            List<uint> updateKills = new List<uint>();
+            foreach (var snakeEntity in m_entities.Values)
+            {
+                if (snakeEntity.contains<Shared.Components.SnakeId>() && snakeEntity.contains<Shared.Components.PlayerType>())
+                {
+                    var headPos = snakeEntity.get<Shared.Components.Position>().position;
+                    var headRadius = snakeEntity.get<Shared.Components.Size>().size.X / 2;
+
+                    foreach (var otherEntity in m_entities.Values)
+                    {
+                        if (otherEntity.contains<Shared.Components.SnakeId>() && otherEntity.contains<Shared.Components.Segment>())
+                        {
+                            // Ensure we are not checking the snake against its own segments
+                            if (snakeEntity.get<Shared.Components.SnakeId>().id != otherEntity.get<Shared.Components.SnakeId>().id)
+                            {
+                                var segmentPos = otherEntity.get<Shared.Components.Position>().position;
+                                var segmentRadius = otherEntity.get<Shared.Components.Size>().size.X / 2;
+
+                                float dx = headPos.X - segmentPos.X;
+                                float dy = headPos.Y - segmentPos.Y;
+                                float distance = (float)Math.Sqrt(dx * dx + dy * dy);
+
+                                if (distance <= headRadius + segmentRadius)
+                                {
+                                    // the snake that head hit the segment will get removed.
+                                    toRemove.Add(snakeEntity.id);
+                                    updateKills.Add(otherEntity.id);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (uint id in toRemove)
+            {
+                snakeDeath(id);
+            }
+
+            foreach (uint id in updateKills)
+            {
+                Entity snake = m_entities[id];
+                if (snake.contains<KillCount>())
+                {
+                    KillCount killCountComponent = snake.get<KillCount>();
+                    killCountComponent.killCount += 1;
+                    var myMessage = new Shared.Messages.UpdateEntity(snake, elapsedTime);
+                    MessageQueueServer.instance.broadcastMessage(myMessage);
+                }
             }
         }
 
@@ -275,26 +331,29 @@ namespace Server
         /// </summary>
         private void removeEntity(uint id)
         {
-            if (m_entities[id].contains<Shared.Components.SnakeId>())
+            if (m_entities.ContainsKey(id))
             {
-                foreach (var entity in m_entities)
+                if (m_entities[id].contains<Shared.Components.SnakeId>())
                 {
-                    if (entity.Key == id)
+                    foreach (var entity in m_entities)
                     {
-                        continue;
-                    }
-                    if (entity.Value.contains<Shared.Components.SnakeId>() && entity.Value.get<Shared.Components.SnakeId>().id == m_entities[id].get<Shared.Components.SnakeId>().id)
-                    {
-                        m_entities.Remove(entity.Key);
+                        if (entity.Key == id)
+                        {
+                            continue;
+                        }
+                        if (entity.Value.contains<Shared.Components.SnakeId>() && entity.Value.get<Shared.Components.SnakeId>().id == m_entities[id].get<Shared.Components.SnakeId>().id)
+                        {
+                            m_entities.Remove(entity.Key);
 
-                        m_systemNetwork.remove(entity.Key);
-                        m_systemMovement.remove(entity.Key);
+                            m_systemNetwork.remove(entity.Key);
+                            m_systemMovement.remove(entity.Key);
+                        }
                     }
                 }
+                m_entities.Remove(id);
+                m_systemNetwork.remove(id);
+                m_systemMovement.remove(id);
             }
-            m_entities.Remove(id);
-            m_systemNetwork.remove(id);
-            m_systemMovement.remove(id);
         }
 
         /// <summary>

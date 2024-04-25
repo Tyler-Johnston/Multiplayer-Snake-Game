@@ -15,6 +15,7 @@ namespace Shared.Entities
             entity.add(new Score(score));
             entity.add(new KillCount(killCount));
             entity.add(new PlayerType("Player"));
+            entity.add(new Shared.Components.Collision());
 
             entity.add(new Position(position));
             entity.add(new Size(new Vector2(size, size)));

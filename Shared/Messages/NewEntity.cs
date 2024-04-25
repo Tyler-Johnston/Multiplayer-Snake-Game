@@ -54,6 +54,11 @@ namespace Shared.Messages
                 this.hasFood = true;
             }
 
+            if (entity.contains<Shared.Components.Collision>())
+            {
+                this.hasCollision = true;
+            }
+
             if (entity.contains<Name>())
             {
                 this.hasName = true;
@@ -121,6 +126,9 @@ namespace Shared.Messages
 
         // Food Component
         public bool hasFood { get; private set; } = false;
+
+        // Collision Component
+        public bool hasCollision { get; private set; } = false;
 
         public bool hasSegment {get; private set; } = false;
 
@@ -209,6 +217,8 @@ namespace Shared.Messages
             data.AddRange(BitConverter.GetBytes(hasTurnPoint));
 
             data.AddRange(BitConverter.GetBytes(hasFood));
+
+            data.AddRange(BitConverter.GetBytes(hasCollision));
 
             data.AddRange(BitConverter.GetBytes(hasName));
             if (hasName)
@@ -317,6 +327,9 @@ namespace Shared.Messages
             offset+= sizeof(bool);
 
             this.hasFood = BitConverter.ToBoolean(data, offset);
+            offset+= sizeof(bool);
+
+            this.hasCollision = BitConverter.ToBoolean(data, offset);
             offset+= sizeof(bool);
 
             this.hasName = BitConverter.ToBoolean(data, offset);

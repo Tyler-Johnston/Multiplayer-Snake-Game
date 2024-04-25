@@ -21,6 +21,11 @@ namespace Shared.Messages
                 this.hasQueue = true;
             }
 
+            if (entity.contains<Components.Tail>())
+            {
+                this.hasTail = true;
+            }
+
             if (entity.contains<SnakeId>())
             {
                 this.hasSnakeId = true;
@@ -126,6 +131,8 @@ namespace Shared.Messages
 
         // Score
         public bool hasScore { get; private set; } = false;
+        public bool hasTail { get; private set; } = false;
+
         public int score {  get; private set; }
         public bool hasQueue { get; private set; } = false;
 
@@ -179,6 +186,7 @@ namespace Shared.Messages
             data.AddRange(BitConverter.GetBytes(hasQueue));
 
             data.AddRange(BitConverter.GetBytes(hasSegment));
+            data.AddRange(BitConverter.GetBytes(hasTail));
 
             data.AddRange(BitConverter.GetBytes(hasSnakeId));
             if (hasSnakeId)
@@ -276,6 +284,9 @@ namespace Shared.Messages
             offset += sizeof(bool);
 
             this.hasSegment = BitConverter.ToBoolean(data, offset);
+            offset += sizeof(bool);
+
+            this.hasTail = BitConverter.ToBoolean(data, offset);
             offset += sizeof(bool);
 
             this.hasSnakeId = BitConverter.ToBoolean(data, offset);

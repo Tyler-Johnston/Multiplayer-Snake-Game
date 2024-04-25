@@ -20,7 +20,7 @@ namespace Client.Systems
         private HashSet<Keys> m_keysPressed = new HashSet<Keys>();
         private List<Shared.Components.Input.Type> m_inputEvents = new List<Shared.Components.Input.Type>();
 
-        public KeyboardInput(List<Tuple<Shared.Components.Input.Type, Keys>> mapping) : base() //typeof(Shared.Components.Input)
+        public KeyboardInput(List<Tuple<Shared.Components.Input.Type, Keys>> mapping) : base(typeof(Shared.Components.Input))
         {
             foreach (var input in mapping)
             {
@@ -151,12 +151,9 @@ namespace Client.Systems
             }
 
             KeyToType map = new KeyToType();
-            if (entity.contains<Shared.Components.Input>())
+            foreach (var input in entity.get<Shared.Components.Input>().inputs)
             {
-                foreach (var input in entity.get<Shared.Components.Input>().inputs)
-                {
-                    map.m_keyToType[m_typeToKey[input]] = input;
-                }
+                map.m_keyToType[m_typeToKey[input]] = input;
             }
             
             m_keyToFunction[entity.id] = map;

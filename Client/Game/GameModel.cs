@@ -176,6 +176,11 @@ namespace Client
                 entity.add(new Shared.Components.Food());
             }
 
+            if (message.hasCollision)
+            {
+                entity.add(new Shared.Components.Collision());
+            }
+
             if (message.hasTurnPoint)
             {
                 entity.add(new Shared.Components.TurnPoint());

@@ -42,12 +42,54 @@ namespace Server
             m_systemMovement.update(elapsedTime);
             checkSnakeCollisionwithFood(elapsedTime);
             removeSnakesAtBorders(elapsedTime);
+            checkSnakeCollision(elapsedTime);
 
             foodUpdateTime += (float)elapsedTime.TotalSeconds;
             if (foodUpdateTime >= foodUpdateInterval)
             {
                 updateFood();
                 foodUpdateTime = 0f;
+            }
+        }
+
+        private void checkSnakeCollision(TimeSpan elapsedTime)
+        {
+            List<uint> toRemove = new List<uint>();
+            foreach (var snakeEntity in m_entities.Values)
+            {
+                if (snakeEntity.contains<Shared.Components.SnakeId>() && snakeEntity.contains<Shared.Components.PlayerType>())
+                {
+                    var headPos = snakeEntity.get<Shared.Components.Position>().position;
+                    var headRadius = snakeEntity.get<Shared.Components.Size>().size.X / 2;
+
+                    foreach (var otherEntity in m_entities.Values)
+                    {
+                        if (otherEntity.contains<Shared.Components.SnakeId>() && otherEntity.contains<Shared.Components.Segment>())
+                        {
+                            // Ensure we are not checking the snake against its own segments
+                            if (snakeEntity.get<Shared.Components.SnakeId>().id != otherEntity.get<Shared.Components.SnakeId>().id)
+                            {
+                                var segmentPos = otherEntity.get<Shared.Components.Position>().position;
+                                var segmentRadius = otherEntity.get<Shared.Components.Size>().size.X / 2;
+
+                                float dx = headPos.X - segmentPos.X;
+                                float dy = headPos.Y - segmentPos.Y;
+                                float distance = (float)Math.Sqrt(dx * dx + dy * dy);
+
+                                if (distance <= headRadius + segmentRadius)
+                                {
+                                    // the snake that head hit the segment will get removed.
+                                    toRemove.Add(snakeEntity.id);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (uint id in toRemove)
+            {
+                snakeDeath(id);
             }
         }
 

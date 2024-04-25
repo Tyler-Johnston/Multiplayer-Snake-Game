@@ -155,6 +155,11 @@ namespace Client
                 entity.add(new Shared.Components.TurnPointQueue());
             }
 
+            if (message.hasTail)
+            {
+                entity.add(new Shared.Components.Tail());
+            }
+
             if (message.hasSnakeId)
             {
                 entity.add(new Shared.Components.SnakeId(message.snakeId));

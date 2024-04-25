@@ -33,6 +33,23 @@ namespace Shared.Entities
 
     public class Utility
     {
+        public static Entity addSegment(Entity tail)
+        {
+            var id = tail.get<SnakeId>().id;
+            var position = tail.get<Position>().position;
+            var orientation = tail.get<Position>().orientation;
+            var size = tail.get<Size>().size;
+            var movement = tail.get<Movement>().moveRate;
+            var newPos = new Vector2(position.X - size.X * (float)Math.Cos(orientation), position.Y - size.Y * (float)Math.Sin(orientation));
+            var tpq = new Queue<Entity>(tail.get<TurnPointQueue>().queue);
+            
+            var newSeg = Segment.createSegment(id, "Textures/body", position, size.X, movement);
+            newSeg.get<Position>().orientation = orientation;
+            newSeg.get<TurnPointQueue>().queue = tpq;
+            tail.get<Position>().position = newPos;
+
+            return newSeg;
+        }
         public static Dictionary<string, float> Directions = new Dictionary<string, float>
         {
             { "UP", (float)(2 * Math.PI * 0.75) },

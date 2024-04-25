@@ -2,6 +2,7 @@
 using Shared.Components;
 using Shared.Entities;
 using Shared.Messages;
+using System.Collections.Generic;
 using System;
 
 namespace Server
@@ -104,9 +105,11 @@ namespace Server
 
         private void checkSnakeCollisionwithFood(TimeSpan elapsedTime)
         {
+            List<Shared.Entities.Entity> grow = new List<Shared.Entities.Entity>();
+
             foreach (Entity entity in m_entities.Values)
             {
-                if (entity.contains<Shared.Components.SnakeId>())
+                if (entity.contains<Shared.Components.PlayerType>())
                 {
                     var snakePos = entity.get<Shared.Components.Position>().position;
                     float snakeRadius = entity.get<Shared.Components.Size>().size.X / 2;
@@ -137,6 +140,7 @@ namespace Server
 
                         // increment snake's score
                         Entity snake = m_entities[entity.id];
+                        grow.Add(snake);
                         if (snake.contains<Score>())
                         {
                             Score scoreComponent = snake.get<Score>();
@@ -147,6 +151,27 @@ namespace Server
                     }
                 }
             }
+            List<Shared.Entities.Entity> newSegs = new List<Shared.Entities.Entity>();
+
+            foreach(var snake in grow)
+            {
+                foreach(var e in m_entities.Values)
+                {
+                    if (e.contains<Shared.Components.Tail>() && e.get<Shared.Components.SnakeId>().id == snake.get<Shared.Components.SnakeId>().id)
+                    {
+                        var newSeg = Shared.Entities.Utility.addSegment(e);
+                        newSegs.Add(newSeg);
+                    }
+                }
+            }
+            foreach(var e in newSegs)
+            {
+                addEntity(e);
+                var myMessage = new Shared.Messages.NewEntity(e);
+                MessageQueueServer.instance.broadcastMessage(myMessage);
+            }
+            newSegs.Clear();
+            grow.Clear();
         }
 
         private void updateFood()
@@ -298,7 +323,7 @@ namespace Server
             int y = random.Next(minY + 100, maxY - 99);
             Entity player = Shared.Entities.Snake.createHead(++m_nextSnakeId, "Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f, 0, 0);
             // player.add(new PlayerType("Player"));
-            Entity tail = Shared.Entities.Segment.createSegment(m_nextSnakeId, "Textures/tail", new Vector2(x - 50, y), 50, 0.2f);
+            Entity tail = Shared.Entities.Tail.createTail(m_nextSnakeId, "Textures/tail", new Vector2(x - 50, y), 50, 0.2f, 0f);
 
             // Send the initial entities to the joining client
             MessageQueueServer.instance.sendMessage(clientId, new NewEntity(player));

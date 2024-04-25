@@ -250,26 +250,29 @@ namespace Server
         /// </summary>
         private void removeEntity(uint id)
         {
-            if (m_entities[id].contains<Shared.Components.SnakeId>())
+            if (m_entities.ContainsKey(id))
             {
-                foreach (var entity in m_entities)
+                if (m_entities[id].contains<Shared.Components.SnakeId>())
                 {
-                    if (entity.Key == id)
+                    foreach (var entity in m_entities)
                     {
-                        continue;
-                    }
-                    if (entity.Value.contains<Shared.Components.SnakeId>() && entity.Value.get<Shared.Components.SnakeId>().id == m_entities[id].get<Shared.Components.SnakeId>().id)
-                    {
-                        m_entities.Remove(entity.Key);
+                        if (entity.Key == id)
+                        {
+                            continue;
+                        }
+                        if (entity.Value.contains<Shared.Components.SnakeId>() && entity.Value.get<Shared.Components.SnakeId>().id == m_entities[id].get<Shared.Components.SnakeId>().id)
+                        {
+                            m_entities.Remove(entity.Key);
 
-                        m_systemNetwork.remove(entity.Key);
-                        m_systemMovement.remove(entity.Key);
+                            m_systemNetwork.remove(entity.Key);
+                            m_systemMovement.remove(entity.Key);
+                        }
                     }
                 }
+                m_entities.Remove(id);
+                m_systemNetwork.remove(id);
+                m_systemMovement.remove(id);
             }
-            m_entities.Remove(id);
-            m_systemNetwork.remove(id);
-            m_systemMovement.remove(id);
         }
 
         /// <summary>

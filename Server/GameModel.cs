@@ -250,6 +250,23 @@ namespace Server
         /// </summary>
         private void removeEntity(uint id)
         {
+            if (m_entities[id].contains<Shared.Components.SnakeId>())
+            {
+                foreach (var entity in m_entities)
+                {
+                    if (entity.Key == id)
+                    {
+                        continue;
+                    }
+                    if (entity.Value.contains<Shared.Components.SnakeId>() && entity.Value.get<Shared.Components.SnakeId>().id == m_entities[id].get<Shared.Components.SnakeId>().id)
+                    {
+                        m_entities.Remove(entity.Key);
+
+                        m_systemNetwork.remove(entity.Key);
+                        m_systemMovement.remove(entity.Key);
+                    }
+                }
+            }
             m_entities.Remove(id);
             m_systemNetwork.remove(id);
             m_systemMovement.remove(id);
@@ -279,9 +296,9 @@ namespace Server
 
             int x = random.Next(minX + 100, maxX - 99);
             int y = random.Next(minY + 100, maxY - 99);
-            Entity player = Shared.Entities.Snake.createHead(m_nextSnakeId++, "Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f, 0, 0);
+            Entity player = Shared.Entities.Snake.createHead(++m_nextSnakeId, "Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f, 0, 0);
             // player.add(new PlayerType("Player"));
-            Entity tail = Shared.Entities.Segment.createSegment(m_nextSnakeId, "Textures/head", new Vector2(x - 50, y), 50, 0.2f);
+            Entity tail = Shared.Entities.Segment.createSegment(m_nextSnakeId, "Textures/tail", new Vector2(x - 50, y), 50, 0.2f);
 
             // Send the initial entities to the joining client
             MessageQueueServer.instance.sendMessage(clientId, new NewEntity(player));
@@ -293,7 +310,7 @@ namespace Server
             player.add(new Appearance("Textures/head_enemy"));
             player.remove<PlayerType>();
             player.add(new PlayerType("Enemy"));
-            tail.add(new Appearance("Textures/head_enemy"));
+            tail.add(new Appearance("Textures/tail_enemy"));
             player.remove<Shared.Components.Input>();
 
             // Inform all other clients about the new entities

@@ -6,7 +6,6 @@ namespace Shared.Components
         public enum Type : UInt16
         {
             TurnLeft,
-            RotateRight,
             TurnRight,
             TurnUp,
             TurnDown,

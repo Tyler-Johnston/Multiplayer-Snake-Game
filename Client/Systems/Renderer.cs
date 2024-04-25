@@ -62,7 +62,7 @@ namespace Client.Systems
                 m_font = m_contentManager.Load<SpriteFont>("Fonts/menu");
                 
                 m_particleSystemFood = new ParticleSystem(
-                    new Vector2(300, 300), // Assuming starting position
+                    new Vector2(WorldWidth+300, WorldHeight+300), // Assuming starting position
                     10, // Max particles
                     5, // Initial particles
                     0.1f, // Birth rate
@@ -73,13 +73,13 @@ namespace Client.Systems
                 m_renderFood.LoadContent(m_contentManager);
 
                 m_particleSystemDeath = new ParticleSystem(
-                    new Vector2(300, 300),
-                    10,
-                    4,
-                    0.12f,
-                    0.05f,
-                    500,
-                    100);
+                    new Vector2(WorldWidth+300, WorldHeight+300), // Assuming starting position
+                    18, // Max particles
+                    5, // Initial particles
+                    0.4f, // Birth rate
+                    0.03f, // Death rate
+                    500, // Max life of a particle
+                    100); // Min life of a particle
                 m_renderDeath = new ParticleSystemRenderer("Textures/fire");
                 m_renderDeath.LoadContent(m_contentManager);
             }
@@ -91,6 +91,7 @@ namespace Client.Systems
         public void update(TimeSpan elapsedTime, SpriteBatch spriteBatch)
         {
             m_particleSystemFood.update(elapsedTime);
+            m_particleSystemDeath.update(elapsedTime);
             spriteBatch.Begin();
             updateViewport();
 
@@ -140,29 +141,10 @@ namespace Client.Systems
 
         public void triggerOnDeathParticles(Vector2 position)
         {
-            var m_viewportOffsetX2 = (int)Math.Min(Math.Max(position.X - VPW / 2, 0), WorldWidth - VPW);
-            var m_viewportOffsetY2 = (int)Math.Min(Math.Max(position.Y - VPH / 2, 0), WorldWidth - VPH);
-
-            // Build a rectangle centered at position, with width/height of size
-            int playerX = (m_viewportOffsetX == 0 || m_viewportOffsetX == WorldWidth - VPW) ? (int)position.X : (int)(VPW / 2);
-            int playerY = (m_viewportOffsetY == 0 || m_viewportOffsetY == WorldWidth - VPH) ? (int)position.Y : (int)(VPH / 2);
-            int viewportMaxXThreshold = WorldWidth - VPW / 2;
-            int playerXOffset = WorldWidth - VPW;
-            if (playerX > viewportMaxXThreshold)
-            {
-                playerX = playerX - playerXOffset;
-            }
-            int viewportMaxYThreshold = WorldWidth - VPH / 2;
-            int playerYOffset = WorldWidth - VPH;
-            if (playerY > viewportMaxYThreshold)
-            {
-                playerY = playerY - playerYOffset;
-            }
-            // int entityX = (int)(position.X - m_viewportOffsetX2);
-            // int entityY = (int)(position.Y - m_viewportOffsetY2);
-            Vector2 updatedPos = new Vector2(playerX, playerY);
-            Console.WriteLine($"On death pos: {position}");
-            m_particleSystemFood.Emit(updatedPos, 20);
+            int entityX = (int)(position.X - m_viewportOffsetX);
+            int entityY = (int)(position.Y - m_viewportOffsetY);
+            Vector2 updatedPos = new Vector2(entityX, entityY);
+            m_particleSystemDeath.Emit(updatedPos, 20);
         }
 
         private void UpdateHighestPosition(Entity player)
@@ -283,6 +265,7 @@ namespace Client.Systems
                 spriteBatch.DrawString(m_font, name, textPosition, Color.White);
             }
             m_renderFood.draw(spriteBatch, m_particleSystemFood);
+            m_renderDeath.draw(spriteBatch, m_particleSystemDeath);
         }
     }
 }

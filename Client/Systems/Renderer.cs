@@ -138,8 +138,9 @@ namespace Client.Systems
             m_particleSystemFood.Emit(updatedPos, 10);
         }
 
-        public void triggerOnDeathParticles(Vector2 position)
+        public void triggerOnDeathParticles(uint id)
         {
+            var position = m_entities[id].get<Position>().position;
             int entityX = (int)(position.X - m_viewportOffsetX);
             int entityY = (int)(position.Y - m_viewportOffsetY);
             Vector2 updatedPos = new Vector2(entityX, entityY);

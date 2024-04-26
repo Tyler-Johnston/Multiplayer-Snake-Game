@@ -332,6 +332,11 @@ namespace Client
                         }
                         if (entity.Value.contains<Shared.Components.SnakeId>() && entity.Value.get<Shared.Components.SnakeId>().id == m_entities[id].get<Shared.Components.SnakeId>().id)
                         {
+                            if (!entity.Value.contains<Shared.Components.TurnPoint>())
+                            {
+                                Vector2 playerPosition = entity.Value.get<Shared.Components.Position>().position;
+                                m_systemRenderer.triggerOnDeathParticles(playerPosition);
+                            }
                             m_entities.Remove(entity.Key);
 
                             m_systemKeyboardInput.remove(entity.Key);
@@ -339,11 +344,7 @@ namespace Client
                             m_systemRenderer.remove(entity.Key);
                             m_systemInterpolation.remove(entity.Key);
                             m_systemMovement.remove(entity.Key);
-                            if (!entity.Value.contains<Shared.Components.TurnPoint>())
-                            {
-                                Vector2 playerPosition = entity.Value.get<Shared.Components.Position>().position;
-                                m_systemRenderer.triggerOnDeathParticles(playerPosition);
-                            }
+                            
                         }
                     }
                     RecordHighScore(m_entities[id]);

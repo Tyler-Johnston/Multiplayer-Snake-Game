@@ -4,6 +4,7 @@ using Shared.Entities;
 using System;
 using System.Collections.Generic;
 using CS5410.Controls;
+using System.Numerics;
 
 namespace Client.Systems
 {
@@ -20,6 +21,9 @@ namespace Client.Systems
         private HashSet<Keys> m_keysPressed = new HashSet<Keys>();
         private List<Shared.Components.Input.Type> m_inputEvents = new List<Shared.Components.Input.Type>();
 
+        private MouseState mouseState;
+        private Vector2 mousePos;
+
         public KeyboardInput(List<Tuple<Shared.Components.Input.Type, Keys>> mapping) : base(typeof(Shared.Components.Input))
         {
             foreach (var input in mapping)
@@ -30,6 +34,17 @@ namespace Client.Systems
 
         public override void update(TimeSpan elapsedTime)
         {
+            mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
+            bool mouseFlag = false;
+            // only update mousePos if mouse is moved
+            if (mouseState.X != mousePos.X || mouseState.Y != mousePos.Y) {
+                // only update mousePos if mouse is within window
+                if (mouseState.X >= 0 && mouseState.Y >= 0 && mouseState.X <= 1300 && mouseState.Y <= 750) {
+                    mousePos = new Vector2(mouseState.X, mouseState.Y);
+                    //System.Diagnostics.Debug.WriteLine(mousePos);
+                }
+            }
+            
             foreach (var item in m_entities)
             {
                 List<Shared.Components.Input.Type> inputs = new List<Shared.Components.Input.Type>();
@@ -42,51 +57,100 @@ namespace Client.Systems
                     continue;
                 }
 
-                if (m_keysPressed.Contains(ControlsManager.Controls["TurnUp"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnRight"]))
-                {
-                    inputs.Add(Shared.Components.Input.Type.TurnUpRight);
-                    turnPoint = Shared.Entities.Utility.turnUpRight(item.Value);
-                } 
-                else if (m_keysPressed.Contains(ControlsManager.Controls["TurnDown"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnRight"]))
-                {
-                    inputs.Add(Shared.Components.Input.Type.TurnDownRight);
-                    turnPoint = Shared.Entities.Utility.turnDownRight(item.Value);
-                }
-                else if (m_keysPressed.Contains(ControlsManager.Controls["TurnUp"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnLeft"]))
-                {
-                    inputs.Add(Shared.Components.Input.Type.TurnUpLeft);
-                    turnPoint = Shared.Entities.Utility.turnUpLeft(item.Value);
-                }
-                else if (m_keysPressed.Contains(ControlsManager.Controls["TurnDown"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnLeft"]))
-                {
-                    inputs.Add(Shared.Components.Input.Type.TurnDownLeft);
-                    turnPoint = Shared.Entities.Utility.turnDownLeft(item.Value);
-                }
-                else
-                {
-                    foreach (var key in m_keysPressed)
-                    {
-                        if (m_keyToFunction[item.Key].m_keyToType.ContainsKey(key))
-                        {
-                            // var type = keyMap[key];
-                            var type = m_keyToFunction[item.Key].m_keyToType[key];
-                            inputs.Add(type);
+                // MOUSE MOVEMENT
+                if (mouseFlag) {
+                    // DEADZONED @ X: 600 to 700 / Y: 325 to 425
+                    // UP
+                    if (mousePos.X >= 600 && mousePos.X <= 700 && mousePos.Y >= 0 && mousePos.Y <= 325) {
+                        inputs.Add(Shared.Components.Input.Type.TurnUp);
+                        turnPoint = Shared.Entities.Utility.turnUp(item.Value);
+                    }
+                    // DOWN
+                    if (mousePos.X >= 600 && mousePos.X <= 700 && mousePos.Y >= 425 && mousePos.Y <= 750) {
+                        inputs.Add(Shared.Components.Input.Type.TurnDown);
+                        turnPoint = Shared.Entities.Utility.turnDown(item.Value);
+                    }
+                    // LEFT
+                    if (mousePos.X >= 0 && mousePos.X <= 600 && mousePos.Y >= 325 && mousePos.Y <= 425) {
+                        inputs.Add(Shared.Components.Input.Type.TurnLeft);
+                        turnPoint = Shared.Entities.Utility.turnLeft(item.Value);
+                    }
+                    // RIGHT
+                    if (mousePos.X >= 700 && mousePos.X <= 1300 && mousePos.Y >= 325 && mousePos.Y <= 425) {
+                        inputs.Add(Shared.Components.Input.Type.TurnRight);
+                        turnPoint = Shared.Entities.Utility.turnRight(item.Value);
+                    }
 
-                            // Client-side prediction of the input
-                            switch (type)
+                    // UP-RIGHT
+                    if (mousePos.X >= 700 && mousePos.X <= 1300 && mousePos.Y >= 0 && mousePos.Y <= 325) {
+                        inputs.Add(Shared.Components.Input.Type.TurnUpRight);
+                        turnPoint = Shared.Entities.Utility.turnUpRight(item.Value);
+                    }
+                    // DOWN-RIGHT
+                    if (mousePos.X >= 700 && mousePos.X <= 1300 && mousePos.Y >= 425 && mousePos.Y <= 750) {
+                        inputs.Add(Shared.Components.Input.Type.TurnDownRight);
+                        turnPoint = Shared.Entities.Utility.turnDownRight(item.Value);
+                    }
+                    // UP-LEFT
+                    if (mousePos.X >= 0 && mousePos.X <= 600 && mousePos.Y >= 0 && mousePos.Y <= 325) {
+                        inputs.Add(Shared.Components.Input.Type.TurnUpLeft);
+                        turnPoint = Shared.Entities.Utility.turnUpLeft(item.Value);
+                    }
+                    // DOWN-LEFT
+                    if (mousePos.X >= 0 && mousePos.X <= 600 && mousePos.Y >= 425 && mousePos.Y <= 750) {
+                        inputs.Add(Shared.Components.Input.Type.TurnDownLeft);
+                        turnPoint = Shared.Entities.Utility.turnDownLeft(item.Value);
+                    }
+
+                }
+                // KEYBOARD MOVEMENT
+                else {
+                    if (m_keysPressed.Contains(ControlsManager.Controls["TurnUp"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnRight"]))
+                    {
+                        inputs.Add(Shared.Components.Input.Type.TurnUpRight);
+                        turnPoint = Shared.Entities.Utility.turnUpRight(item.Value);
+                    } 
+                    else if (m_keysPressed.Contains(ControlsManager.Controls["TurnDown"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnRight"]))
+                    {
+                        inputs.Add(Shared.Components.Input.Type.TurnDownRight);
+                        turnPoint = Shared.Entities.Utility.turnDownRight(item.Value);
+                    }
+                    else if (m_keysPressed.Contains(ControlsManager.Controls["TurnUp"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnLeft"]))
+                    {
+                        inputs.Add(Shared.Components.Input.Type.TurnUpLeft);
+                        turnPoint = Shared.Entities.Utility.turnUpLeft(item.Value);
+                    }
+                    else if (m_keysPressed.Contains(ControlsManager.Controls["TurnDown"]) && m_keysPressed.Contains(ControlsManager.Controls["TurnLeft"]))
+                    {
+                        inputs.Add(Shared.Components.Input.Type.TurnDownLeft);
+                        turnPoint = Shared.Entities.Utility.turnDownLeft(item.Value);
+                    }
+                    else
+                    {
+                        foreach (var key in m_keysPressed)
+                        {
+                            if (m_keyToFunction[item.Key].m_keyToType.ContainsKey(key))
                             {
-                                case Shared.Components.Input.Type.TurnUp:
-                                    turnPoint = Shared.Entities.Utility.turnUp(item.Value);
-                                    break;
-                                case Shared.Components.Input.Type.TurnDown:
-                                    turnPoint = Shared.Entities.Utility.turnDown(item.Value);
-                                    break;
-                                case Shared.Components.Input.Type.TurnLeft:
-                                    turnPoint = Shared.Entities.Utility.turnLeft(item.Value);
-                                    break;
-                                case Shared.Components.Input.Type.TurnRight:
-                                    turnPoint = Shared.Entities.Utility.turnRight(item.Value);
-                                    break;
+                                // var type = keyMap[key];
+                                var type = m_keyToFunction[item.Key].m_keyToType[key];
+                                inputs.Add(type);
+
+                                // Client-side prediction of the input
+                                switch (type)
+                                {
+                                    case Shared.Components.Input.Type.TurnUp:
+                                        turnPoint = Shared.Entities.Utility.turnUp(item.Value);
+                                        break;
+                                    case Shared.Components.Input.Type.TurnDown:
+                                        turnPoint = Shared.Entities.Utility.turnDown(item.Value);
+                                        break;
+                                    case Shared.Components.Input.Type.TurnLeft:
+                                        turnPoint = Shared.Entities.Utility.turnLeft(item.Value);
+                                        break;
+                                    case Shared.Components.Input.Type.TurnRight:
+                                        turnPoint = Shared.Entities.Utility.turnRight(item.Value);
+                                        break;
+                                }
                             }
                         }
                     }

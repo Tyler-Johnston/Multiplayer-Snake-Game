@@ -25,6 +25,12 @@ namespace Shared.Messages
                 this.score = entity.get<Score>().score;
             }
 
+            if (entity.contains<KillCount>())
+            {
+                this.hasKillCount = true;
+                this.killCount = entity.get<KillCount>().killCount;
+            }
+
             this.updateWindow = updateWindow;
         }
 
@@ -74,7 +80,7 @@ namespace Shared.Messages
             data.AddRange(BitConverter.GetBytes(hasKillCount));
             if (hasKillCount)
             {
-                data.AddRange(BitConverter.GetBytes(hasKillCount));
+                data.AddRange(BitConverter.GetBytes(killCount));
             }
 
             data.AddRange(BitConverter.GetBytes(updateWindow.Milliseconds));

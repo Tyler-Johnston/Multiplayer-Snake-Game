@@ -13,7 +13,7 @@ namespace CS5410
         private bool m_finished = false;
         private bool m_waitForKeyRelease = false;
         public string playerName = "";
-        public string controlScheme = "";
+        public string controlScheme = "Keyboard";
         public bool IsSetupFinished
         {
             get { return m_finished; }

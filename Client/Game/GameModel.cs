@@ -304,7 +304,7 @@ namespace Client
                     Vector2 foodPosition = m_entities[id].get<Shared.Components.Position>().position;
                     m_systemRenderer.triggerOnEatParticles(foodPosition);
                 }
-                if (m_entities[id].contains<Shared.Components.PlayerType>())
+                if (m_entities[id].contains<Shared.Components.SnakeId>())
                 {
                     int num = random.Next(1,7);
                     switch (num)
@@ -322,8 +322,8 @@ namespace Client
                         case 6: m_grunt6.Play();
                         break;
                     }
-                    Vector2 playerPosition = m_entities[id].get<Shared.Components.Position>().position;
-                    m_systemRenderer.triggerOnDeathParticles(playerPosition);
+                    // Vector2 playerPosition = m_entities[id].get<Shared.Components.Position>().position;
+                    // m_systemRenderer.triggerOnDeathParticles(playerPosition);
                     foreach (var entity in m_entities)
                     {
                         if (entity.Key == id)
@@ -332,6 +332,11 @@ namespace Client
                         }
                         if (entity.Value.contains<Shared.Components.SnakeId>() && entity.Value.get<Shared.Components.SnakeId>().id == m_entities[id].get<Shared.Components.SnakeId>().id)
                         {
+                            if (!entity.Value.contains<Shared.Components.TurnPoint>())
+                            {
+                                Vector2 playerPosition = entity.Value.get<Shared.Components.Position>().position;
+                                m_systemRenderer.triggerOnDeathParticles(playerPosition);
+                            }
                             m_entities.Remove(entity.Key);
 
                             m_systemKeyboardInput.remove(entity.Key);
@@ -339,6 +344,7 @@ namespace Client
                             m_systemRenderer.remove(entity.Key);
                             m_systemInterpolation.remove(entity.Key);
                             m_systemMovement.remove(entity.Key);
+                            
                         }
                     }
                     RecordHighScore(m_entities[id]);

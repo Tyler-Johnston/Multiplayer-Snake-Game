@@ -135,7 +135,6 @@ namespace Client.Systems
             int entityX = (int)(position.X - m_viewportOffsetX);
             int entityY = (int)(position.Y - m_viewportOffsetY);
             Vector2 updatedPos = new Vector2(entityX, entityY);
-            Console.WriteLine($"On Food eat pos: {position}");
             m_particleSystemFood.Emit(updatedPos, 10);
         }
 
@@ -183,7 +182,6 @@ namespace Client.Systems
             {
                 Entity entity = m_entities[m_playerId.Value];
                 var position = entity.get<Shared.Components.Position>().position;
-                Console.WriteLine($"UV player Pos {position}");
                 var orientation = entity.get<Shared.Components.Position>().orientation;
                 var size = entity.get<Shared.Components.Size>().size;
                 var texture = entity.get<Components.Sprite>().texture;

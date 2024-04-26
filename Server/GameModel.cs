@@ -9,6 +9,7 @@ namespace Server
 {
     public class GameModel
     {
+        private Dictionary<int, float> m_invincible = new Dictionary<int, float>(); // SnakeIds of invincible snakes
         private int m_nextSnakeId = 0;
         private int m_nextFoodId = 0;
         private HashSet<int> m_clients = new HashSet<int>();
@@ -39,6 +40,14 @@ namespace Server
         /// </summary>
         public void update(TimeSpan elapsedTime)
         {
+            foreach (var item in m_invincible)
+            {
+                m_invincible[item.Key] = item.Value + elapsedTime.Milliseconds;
+                if (item.Value >= 3000f) 
+                {
+                    m_invincible.Remove(item.Key);
+                }
+            }
             m_systemNetwork.update(elapsedTime, MessageQueueServer.instance.getMessages());
             m_systemMovement.update(elapsedTime);
             checkSnakeCollisionwithFood(elapsedTime);
@@ -59,7 +68,7 @@ namespace Server
             List<uint> updateKills = new List<uint>();
             foreach (var snakeEntity in m_entities.Values)
             {
-                if (snakeEntity.contains<Shared.Components.SnakeId>() && snakeEntity.contains<Shared.Components.PlayerType>())
+                if (snakeEntity.contains<Shared.Components.SnakeId>() && snakeEntity.contains<Shared.Components.PlayerType>() && !m_invincible.Keys.Contains(snakeEntity.get<Shared.Components.SnakeId>().id))
                 {
                     var headPos = snakeEntity.get<Shared.Components.Position>().position;
                     var headRadius = snakeEntity.get<Shared.Components.Size>().size.X / 2;
@@ -405,6 +414,7 @@ namespace Server
             Entity player = Shared.Entities.Snake.createHead(++m_nextSnakeId, "Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f, 0, 0);
             // player.add(new PlayerType("Player"));
             Entity tail = Shared.Entities.Tail.createTail(m_nextSnakeId, "Textures/tail", new Vector2(x - 50, y), 50, 0.2f, 0f);
+            m_invincible[m_nextSnakeId] = 0f;
 
             // Send the initial entities to the joining client
             MessageQueueServer.instance.sendMessage(clientId, new NewEntity(player));

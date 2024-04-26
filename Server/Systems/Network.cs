@@ -53,7 +53,8 @@ namespace Server.Systems
         public void update(TimeSpan elapsedTime, Queue<Tuple<int, Message>> messages)
         {
             lastFullUpdate += elapsedTime.Milliseconds;
-            if (lastFullUpdate >= 100)
+            // Updates 10 times a second
+            if (lastFullUpdate >= 100) // Change this interval for less/more updates
             {
                 updateAll(elapsedTime);
                 lastFullUpdate = 0;

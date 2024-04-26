@@ -162,6 +162,7 @@ namespace Server
         private void checkSnakeCollisionwithFood(TimeSpan elapsedTime)
         {
             List<Shared.Entities.Entity> grow = new List<Shared.Entities.Entity>();
+            List<int> growClientIds = new List<int>();
 
             foreach (Entity entity in m_entities.Values)
             {
@@ -215,6 +216,8 @@ namespace Server
                 {
                     if (e.contains<Shared.Components.Tail>() && e.get<Shared.Components.SnakeId>().id == snake.get<Shared.Components.SnakeId>().id)
                     {
+                        Console.WriteLine(entityToClientId(snake.id));
+                        growClientIds.Add((int)entityToClientId(snake.id));
                         var newSeg = Shared.Entities.Utility.addSegment(e);
                         newSegs.Add(newSeg);
                     }
@@ -222,12 +225,29 @@ namespace Server
             }
             foreach(var e in newSegs)
             {
+                var clientId = growClientIds[0];
+                growClientIds.Remove(clientId);
+                MessageQueueServer.instance.sendMessage(clientId, new NewEntity(e));
+
+                e.remove<Appearance>();
+                e.add(new Appearance("Textures/body_enemy"));
+                // Inform all other clients about the new entities
+                Message messageNewSegment = new NewEntity(e);
+                foreach (int otherId in m_clients)
+                {
+                    if (otherId != clientId)
+                    {
+                        MessageQueueServer.instance.sendMessage(otherId, messageNewSegment);
+                    }
+                }
+
                 addEntity(e);
-                var myMessage = new Shared.Messages.NewEntity(e);
-                MessageQueueServer.instance.broadcastMessage(myMessage);
+                // var myMessage = new Shared.Messages.NewEntity(e);
+                // MessageQueueServer.instance.broadcastMessage(myMessage);
             }
             newSegs.Clear();
-            grow.Clear();
+            grow.Clear();               
+            growClientIds.Clear();
         }
 
         private void updateFood()
@@ -335,6 +355,8 @@ namespace Server
             {
                 if (m_entities[id].contains<Shared.Components.SnakeId>())
                 {
+                    // Remove each segment of the snake
+                    // Added benefit of deleting all associated turn points as those also have the snake id
                     foreach (var entity in m_entities)
                     {
                         if (entity.Key == id)
@@ -416,6 +438,18 @@ namespace Server
 
             // Send all other known entities to the newly joined client
             reportAllEntities(clientId);
+        }
+
+        private int? entityToClientId(uint entityId)
+        {
+            foreach (var id in m_clientToEntityId)
+            {
+                if (entityId == id.Value)
+                {
+                    return id.Key;
+                }
+            }
+            return null;
         }
     }
 }

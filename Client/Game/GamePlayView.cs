@@ -13,6 +13,7 @@ namespace CS5410
     {
         private bool m_loaded = false;
         public string m_name = "None";
+        public string m_controlScheme = "None";
         private Texture2D m_background;
         private bool initialSetupCompleted = false;
         private SpriteFont m_font;
@@ -95,6 +96,7 @@ namespace CS5410
             {
                 m_gameModel.join(m_name);
                 m_joined = true;
+                m_gameModel.controlScheme = m_controlScheme;
             }
         }
     }

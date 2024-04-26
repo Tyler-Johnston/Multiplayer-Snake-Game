@@ -74,6 +74,8 @@ namespace CS5410
                 InitialSetupView view = (InitialSetupView)m_states[GameStateEnum.InitialSetup];
 
                 play.m_name = view.playerName;
+
+                play.m_controlScheme = view.controlScheme;
                 
                 ((GamePlayView)m_states[GameStateEnum.GamePlay]).InitialSetUpCompleted = true;
             }

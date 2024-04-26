@@ -13,11 +13,12 @@ namespace CS5410
         private bool m_finished = false;
         private bool m_waitForKeyRelease = false;
         public string playerName = "";
+        public string controlScheme = "";
         public bool IsSetupFinished
         {
             get { return m_finished; }
         }
-        
+
         public override void loadContent(ContentManager contentManager)
         {
             font = contentManager.Load<SpriteFont>("Fonts/menu");
@@ -47,11 +48,26 @@ namespace CS5410
                         }
                     }
                 }
+                else if (currentStep == 1)
+                {
+                    if (keyboardState.IsKeyDown(Keys.M))
+                    {
+                        controlScheme = "Mouse";
+                        currentStep++;
+                        m_waitForKeyRelease = true;
+                    }
+                    else if (keyboardState.IsKeyDown(Keys.K))
+                    {
+                        controlScheme = "Keyboard";
+                        currentStep++;
+                        m_waitForKeyRelease = true;
+                    }
+                }
 
-                if (keyboardState.IsKeyDown(Keys.Enter) && (currentStep > 0 || playerName.Length > 0))
+                if (keyboardState.IsKeyDown(Keys.Enter) && (currentStep > 1 || playerName.Length > 0))
                 {
                     currentStep++;
-                    if (currentStep > 1)
+                    if (currentStep > 2)
                     {
                         m_finished = true;
                         return GameStateEnum.GamePlay;
@@ -84,7 +100,10 @@ namespace CS5410
                     message = "Enter Name:";
                     break;
                 case 1:
-                    message = "Snake changes direction with keyboard controls.\nArrow keys are used for this by default.";
+                    message = "Press M for mouse controls. Press K for keyboard controls";
+                    break;
+                case 2:
+                    message = $"Snake changes direction with {controlScheme} controls.\nArrow keys are used for this by default.";
                     break;
             }
             stringSize = font.MeasureString(message);

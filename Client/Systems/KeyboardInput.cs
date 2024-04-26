@@ -23,6 +23,8 @@ namespace Client.Systems
 
         private MouseState mouseState;
         private Vector2 mousePos;
+        public string controlScheme = "None";
+        public bool mouseFlag = false;
 
         public KeyboardInput(List<Tuple<Shared.Components.Input.Type, Keys>> mapping) : base(typeof(Shared.Components.Input))
         {
@@ -34,14 +36,16 @@ namespace Client.Systems
 
         public override void update(TimeSpan elapsedTime)
         {
+            if (controlScheme == "Mouse")
+            {
+                mouseFlag = true;
+            }
             mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
-            bool mouseFlag = false;
             // only update mousePos if mouse is moved
             if (mouseState.X != mousePos.X || mouseState.Y != mousePos.Y) {
                 // only update mousePos if mouse is within window
                 if (mouseState.X >= 0 && mouseState.Y >= 0 && mouseState.X <= 1300 && mouseState.Y <= 750) {
                     mousePos = new Vector2(mouseState.X, mouseState.Y);
-                    //System.Diagnostics.Debug.WriteLine(mousePos);
                 }
             }
             

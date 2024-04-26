@@ -36,6 +36,8 @@ namespace Client
         private SoundEffect m_grunt4;
         private SoundEffect m_grunt5;
         private SoundEffect m_grunt6;
+        public string controlScheme = "None";
+        private bool isControlSet = false;
 
         private Random random = new Random();
 
@@ -49,6 +51,11 @@ namespace Client
         /// </summary>
         public void update(TimeSpan elapsedTime)
         {
+            if (!isControlSet && controlScheme != "None")
+            {
+                m_systemKeyboardInput.controlScheme = controlScheme;
+                isControlSet = true;
+            }
             m_systemNetwork.update(elapsedTime, MessageQueueClient.instance.getMessages());
             m_systemKeyboardInput.update(elapsedTime);
             m_systemInterpolation.update(elapsedTime);

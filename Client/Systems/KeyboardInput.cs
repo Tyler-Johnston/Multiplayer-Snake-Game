@@ -86,8 +86,6 @@ namespace Client.Systems
                     {
                         playerY = playerY - playerYOffset;
                     }
-                    Console.WriteLine(playerX);
-                    Console.WriteLine(playerY);
 
                     // DEADZONED @ X: 600 to 700 / Y: 325 to 425
                     // UP

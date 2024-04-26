@@ -106,7 +106,6 @@ namespace Server
 
             foreach (uint id in updateKills)
             {
-                Console.WriteLine("got to this: " + id);
                 Entity snake = m_entities[id];
                 foreach (Entity entity in m_entities.Values)
                 {
@@ -115,7 +114,6 @@ namespace Server
                         KillCount killCountComponent = entity.get<KillCount>();
                         killCountComponent.killCount += 1;
 
-                        Console.WriteLine($"kills for snake: {entity.get<KillCount>().killCount}");
                         var myMessage = new Shared.Messages.UpdateEntity(entity, elapsedTime);
                         MessageQueueServer.instance.broadcastMessage(myMessage);
 

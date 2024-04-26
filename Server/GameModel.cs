@@ -106,13 +106,21 @@ namespace Server
 
             foreach (uint id in updateKills)
             {
+                Console.WriteLine("got to this: " + id);
                 Entity snake = m_entities[id];
-                if (snake.contains<KillCount>())
+                foreach (Entity entity in m_entities.Values)
                 {
-                    KillCount killCountComponent = snake.get<KillCount>();
-                    killCountComponent.killCount += 1;
-                    var myMessage = new Shared.Messages.UpdateEntity(snake, elapsedTime);
-                    MessageQueueServer.instance.broadcastMessage(myMessage);
+                    if (entity.contains<KillCount>() && snake.get<SnakeId>().id == entity.get<SnakeId>().id)
+                    {
+                        KillCount killCountComponent = entity.get<KillCount>();
+                        killCountComponent.killCount += 1;
+
+                        Console.WriteLine($"kills for snake: {entity.get<KillCount>().killCount}");
+                        var myMessage = new Shared.Messages.UpdateEntity(entity, elapsedTime);
+                        MessageQueueServer.instance.broadcastMessage(myMessage);
+
+                        
+                    }
                 }
             }
         }

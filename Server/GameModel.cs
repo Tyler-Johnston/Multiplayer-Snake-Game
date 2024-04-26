@@ -9,7 +9,7 @@ namespace Server
 {
     public class GameModel
     {
-        private Dictionary<int, float> m_invincible = new Dictionary<int, float>(); // SnakeIds of invincible snakes
+        private Dictionary<int, int> m_invincible = new Dictionary<int, int>(); // SnakeIds of invincible snakes
         private int m_nextSnakeId = 0;
         private int m_nextFoodId = 0;
         private HashSet<int> m_clients = new HashSet<int>();
@@ -43,7 +43,7 @@ namespace Server
             foreach (var item in m_invincible)
             {
                 m_invincible[item.Key] = item.Value + elapsedTime.Milliseconds;
-                if (item.Value >= 3000f) 
+                if (item.Value >= 3000) 
                 {
                     m_invincible.Remove(item.Key);
                 }
@@ -142,18 +142,24 @@ namespace Server
         {
             if (m_entities[id].contains<Score>() && m_entities[id].contains<Position>())
             {
+                List<Shared.Entities.Entity> foodToAdd = new List<Shared.Entities.Entity>();
                 // drop 1 food per 5 points the player had (can change this amount to whatever)
-                var score = m_entities[id].get<Score>().score;
-                var position = m_entities[id].get<Position>().position;
-                int numFoodtoDrop = score / 5;
-                for (int i = 0; i < numFoodtoDrop; i++)
+                foreach (var entity in m_entities.Values)
                 {
-                    int x = random.Next((int)position.X-30, (int)position.X+30);
-                    int y = random.Next((int)position.Y-30, (int)position.Y+30);
-                    x = Math.Max(minX + 30, Math.Min(maxX - 30, x));
-                    y = Math.Max(minY + 30, Math.Min(maxY - 30, y));
-                    int size = random.Next(minFoodSize, maxFoodSize);
-                    Entity food = Shared.Entities.Food.create(m_nextFoodId++, "Textures/egg", new Vector2(x, y), size);
+                    if (entity.contains<SnakeId>() && entity.get<SnakeId>().id == m_entities[id].get<SnakeId>().id && !entity.contains<Shared.Components.TurnPoint>())
+                    {
+                        var position = entity.get<Position>().position;
+                        int x = random.Next((int)position.X-30, (int)position.X+30);
+                        int y = random.Next((int)position.Y-30, (int)position.Y+30);
+                        x = Math.Max(minX + 30, Math.Min(maxX - 30, x));
+                        y = Math.Max(minY + 30, Math.Min(maxY - 30, y));
+                        int size = random.Next(minFoodSize, maxFoodSize);
+                        Entity food = Shared.Entities.Food.create(m_nextFoodId++, "Textures/egg", new Vector2(x, y), size);
+                        foodToAdd.Add(food);
+                    }
+                }
+                foreach (var food in foodToAdd)
+                {
                     m_foodList.Add(food);
                     addEntity(food);
                     MessageQueueServer.instance.broadcastMessage(new Shared.Messages.NewEntity(food));
@@ -414,7 +420,7 @@ namespace Server
             Entity player = Shared.Entities.Snake.createHead(++m_nextSnakeId, "Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f, 0, 0);
             // player.add(new PlayerType("Player"));
             Entity tail = Shared.Entities.Tail.createTail(m_nextSnakeId, "Textures/tail", new Vector2(x - 50, y), 50, 0.2f, 0f);
-            m_invincible[m_nextSnakeId] = 0f;
+            m_invincible[m_nextSnakeId] = 0;
 
             // Send the initial entities to the joining client
             MessageQueueServer.instance.sendMessage(clientId, new NewEntity(player));

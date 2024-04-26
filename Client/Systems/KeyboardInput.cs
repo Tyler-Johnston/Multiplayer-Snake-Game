@@ -25,6 +25,10 @@ namespace Client.Systems
         private Vector2 mousePos;
         public string controlScheme = "None";
         public bool mouseFlag = false;
+        public uint? m_playerId = null;
+        int VPW = 1300;
+        int VPH = 750;
+        private int WorldWidth = 750 * 3;
 
         public KeyboardInput(List<Tuple<Shared.Components.Input.Type, Keys>> mapping) : base(typeof(Shared.Components.Input))
         {
@@ -63,47 +67,131 @@ namespace Client.Systems
 
                 // MOUSE MOVEMENT
                 if (mouseFlag) {
+                    // Get viewport offsets
+                    Entity entity = m_entities[m_playerId.Value];
+                    var position = entity.get<Shared.Components.Position>().position;
+                    int m_viewportOffsetX = (int)Math.Min(Math.Max(position.X - VPW / 2, 0), WorldWidth - VPW);
+                    int m_viewportOffsetY = (int)Math.Min(Math.Max(position.Y - VPH / 2, 0), WorldWidth - VPH);
+                    int playerX = (m_viewportOffsetX == 0 || m_viewportOffsetX == WorldWidth - VPW) ? (int)position.X : (int)(VPW / 2);
+                    int playerY = (m_viewportOffsetY == 0 || m_viewportOffsetY == WorldWidth - VPH) ? (int)position.Y : (int)(VPH / 2);
+                    int viewportMaxXThreshold = WorldWidth - VPW / 2;
+                    int playerXOffset = WorldWidth - VPW;
+                    if (playerX > viewportMaxXThreshold)
+                    {
+                        playerX = playerX - playerXOffset;
+                    }
+                    int viewportMaxYThreshold = WorldWidth - VPH / 2;
+                    int playerYOffset = WorldWidth - VPH;
+                    if (playerY > viewportMaxYThreshold)
+                    {
+                        playerY = playerY - playerYOffset;
+                    }
+                    Console.WriteLine(playerX);
+                    Console.WriteLine(playerY);
+
                     // DEADZONED @ X: 600 to 700 / Y: 325 to 425
                     // UP
-                    if (mousePos.X >= 600 && mousePos.X <= 700 && mousePos.Y >= 0 && mousePos.Y <= 325) {
-                        inputs.Add(Shared.Components.Input.Type.TurnUp);
-                        turnPoint = Shared.Entities.Utility.turnUp(item.Value);
-                    }
-                    // DOWN
-                    if (mousePos.X >= 600 && mousePos.X <= 700 && mousePos.Y >= 425 && mousePos.Y <= 750) {
-                        inputs.Add(Shared.Components.Input.Type.TurnDown);
-                        turnPoint = Shared.Entities.Utility.turnDown(item.Value);
-                    }
-                    // LEFT
-                    if (mousePos.X >= 0 && mousePos.X <= 600 && mousePos.Y >= 325 && mousePos.Y <= 425) {
-                        inputs.Add(Shared.Components.Input.Type.TurnLeft);
-                        turnPoint = Shared.Entities.Utility.turnLeft(item.Value);
-                    }
-                    // RIGHT
-                    if (mousePos.X >= 700 && mousePos.X <= 1300 && mousePos.Y >= 325 && mousePos.Y <= 425) {
-                        inputs.Add(Shared.Components.Input.Type.TurnRight);
-                        turnPoint = Shared.Entities.Utility.turnRight(item.Value);
+                    // if (mousePos.X >= 600 && mousePos.X <= 700 && mousePos.Y >= 0 && mousePos.Y <= 325) {
+                    //     inputs.Add(Shared.Components.Input.Type.TurnUp);
+                    //     turnPoint = Shared.Entities.Utility.turnUp(item.Value);
+                    // }
+                    // // DOWN
+                    // if (mousePos.X >= 600 && mousePos.X <= 700 && mousePos.Y >= 425 && mousePos.Y <= 750) {
+                    //     inputs.Add(Shared.Components.Input.Type.TurnDown);
+                    //     turnPoint = Shared.Entities.Utility.turnDown(item.Value);
+                    // }
+                    // // LEFT
+                    // if (mousePos.X >= 0 && mousePos.X <= 600 && mousePos.Y >= 325 && mousePos.Y <= 425) {
+                    //     inputs.Add(Shared.Components.Input.Type.TurnLeft);
+                    //     turnPoint = Shared.Entities.Utility.turnLeft(item.Value);
+                    // }
+                    // // RIGHT
+                    // if (mousePos.X >= 700 && mousePos.X <= 1300 && mousePos.Y >= 325 && mousePos.Y <= 425) {
+                    //     inputs.Add(Shared.Components.Input.Type.TurnRight);
+                    //     turnPoint = Shared.Entities.Utility.turnRight(item.Value);
+                    // }
+
+
+                    if (mousePos.X >= playerX && mousePos.Y <= playerY) {
+                        if (Math.Abs(mousePos.X - playerX) < 100 || Math.Abs(mousePos.Y - playerY) < 100) {
+                            // RIGHT
+                            if (Math.Abs(mousePos.X - playerX) > Math.Abs(mousePos.Y - playerY) || playerX > 1290) {
+                                inputs.Add(Shared.Components.Input.Type.TurnRight);
+                                turnPoint = Shared.Entities.Utility.turnRight(item.Value);
+                            }
+                            // UP
+                            else {
+                                inputs.Add(Shared.Components.Input.Type.TurnUp);
+                                turnPoint = Shared.Entities.Utility.turnUp(item.Value);
+                            }
+
+                        }
+                        // UP-RIGHT
+                        else {
+                            inputs.Add(Shared.Components.Input.Type.TurnUpRight);
+                            turnPoint = Shared.Entities.Utility.turnUpRight(item.Value);
+                        }
                     }
 
-                    // UP-RIGHT
-                    if (mousePos.X >= 700 && mousePos.X <= 1300 && mousePos.Y >= 0 && mousePos.Y <= 325) {
-                        inputs.Add(Shared.Components.Input.Type.TurnUpRight);
-                        turnPoint = Shared.Entities.Utility.turnUpRight(item.Value);
-                    }
-                    // DOWN-RIGHT
-                    if (mousePos.X >= 700 && mousePos.X <= 1300 && mousePos.Y >= 425 && mousePos.Y <= 750) {
+                    if (mousePos.X >= playerX && mousePos.Y >= playerY) {
+                        if (Math.Abs(mousePos.X - playerX) < 100 || Math.Abs(mousePos.Y - playerY) < 100) {
+                            // RIGHT
+                            if (Math.Abs(mousePos.X - playerX) > Math.Abs(mousePos.Y - playerY) || playerX > 1290) {
+                                inputs.Add(Shared.Components.Input.Type.TurnRight);
+                                turnPoint = Shared.Entities.Utility.turnRight(item.Value);
+                            }
+                            // DOWN
+                            else {
+                                inputs.Add(Shared.Components.Input.Type.TurnDown);
+                                turnPoint = Shared.Entities.Utility.turnDown(item.Value);
+                            }
+                        }
+                        // DOWN-RIGHT
+                        else {
                         inputs.Add(Shared.Components.Input.Type.TurnDownRight);
                         turnPoint = Shared.Entities.Utility.turnDownRight(item.Value);
+                        }
                     }
-                    // UP-LEFT
-                    if (mousePos.X >= 0 && mousePos.X <= 600 && mousePos.Y >= 0 && mousePos.Y <= 325) {
-                        inputs.Add(Shared.Components.Input.Type.TurnUpLeft);
-                        turnPoint = Shared.Entities.Utility.turnUpLeft(item.Value);
+
+                    if (mousePos.X <= playerX && mousePos.Y <= playerY) {
+                        if (Math.Abs(mousePos.X - playerX) < 100 || Math.Abs(mousePos.Y - playerY) < 100) {
+                            // LEFT
+                            if (Math.Abs(mousePos.X - playerX) > Math.Abs(mousePos.Y - playerY) || playerX < 10) {
+                                inputs.Add(Shared.Components.Input.Type.TurnLeft);
+                                turnPoint = Shared.Entities.Utility.turnLeft(item.Value);
+                            }
+                            // UP
+                            else {
+                                inputs.Add(Shared.Components.Input.Type.TurnUp);
+                                turnPoint = Shared.Entities.Utility.turnUp(item.Value);
+                            }
+                        // UP-LEFT
+                        }
+                        else {
+                            inputs.Add(Shared.Components.Input.Type.TurnUpLeft);
+                            turnPoint = Shared.Entities.Utility.turnUpLeft(item.Value);
+                        }
                     }
-                    // DOWN-LEFT
-                    if (mousePos.X >= 0 && mousePos.X <= 600 && mousePos.Y >= 425 && mousePos.Y <= 750) {
-                        inputs.Add(Shared.Components.Input.Type.TurnDownLeft);
-                        turnPoint = Shared.Entities.Utility.turnDownLeft(item.Value);
+                   
+                    if (mousePos.X <= playerX && mousePos.Y >= playerY) {
+                        if (Math.Abs(mousePos.X - playerX) < 100 || Math.Abs(mousePos.Y - playerY) < 100) {
+                            // LEFT
+                            if (Math.Abs(mousePos.X - playerX) > Math.Abs(mousePos.Y - playerY) || playerX < 10) {
+                                inputs.Add(Shared.Components.Input.Type.TurnLeft);
+                                turnPoint = Shared.Entities.Utility.turnLeft(item.Value);
+                            }
+                            // DOWN
+                            else {
+                                inputs.Add(Shared.Components.Input.Type.TurnDown);
+                                turnPoint = Shared.Entities.Utility.turnDown(item.Value);
+                            }
+
+                        }
+                        // DOWN-LEFT
+                        else {
+                            inputs.Add(Shared.Components.Input.Type.TurnDownLeft);
+                            turnPoint = Shared.Entities.Utility.turnDownLeft(item.Value);
+                        }
                     }
 
                 }

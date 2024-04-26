@@ -377,6 +377,7 @@ namespace Client
                 {
                     isFirstEntityReceived = true;
                     m_systemRenderer.m_playerId = entity.id;
+                    m_systemKeyboardInput.m_playerId = entity.id;
                 }
             }
         }

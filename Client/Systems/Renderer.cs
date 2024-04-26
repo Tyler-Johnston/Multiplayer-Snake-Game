@@ -188,7 +188,7 @@ namespace Client.Systems
                 var texCenter = entity.get<Components.Sprite>().center;
 
                 m_viewportOffsetX = (int)Math.Min(Math.Max(position.X - VPW / 2, 0), WorldWidth - VPW);
-                m_viewportOffsetY = (int)Math.Min(Math.Max(position.Y - VPH / 2, 0), WorldWidth - VPH);
+                m_viewportOffsetY = (int)Math.Min(Math.Max(position.Y - VPH / 2, 0), WorldHeight - VPH);
 
                 // Build a rectangle centered at position, with width/height of size
                 int playerX = (m_viewportOffsetX == 0 || m_viewportOffsetX == WorldWidth - VPW) ? (int)position.X : (int)(VPW / 2);

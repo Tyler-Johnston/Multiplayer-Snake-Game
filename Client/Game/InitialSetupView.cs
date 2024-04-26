@@ -84,7 +84,7 @@ namespace CS5410
                     message = "Enter Name:";
                     break;
                 case 1:
-                    message = "Snake changes direction with keyboard controls";
+                    message = "Snake changes direction with keyboard controls.\nArrow keys are used for this by default.";
                     break;
             }
             stringSize = font.MeasureString(message);

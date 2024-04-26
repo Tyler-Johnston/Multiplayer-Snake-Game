@@ -142,18 +142,24 @@ namespace Server
         {
             if (m_entities[id].contains<Score>() && m_entities[id].contains<Position>())
             {
+                List<Shared.Entities.Entity> foodToAdd = new List<Shared.Entities.Entity>();
                 // drop 1 food per 5 points the player had (can change this amount to whatever)
-                var score = m_entities[id].get<Score>().score;
-                var position = m_entities[id].get<Position>().position;
-                int numFoodtoDrop = score / 5;
-                for (int i = 0; i < numFoodtoDrop; i++)
+                foreach (var entity in m_entities.Values)
                 {
-                    int x = random.Next((int)position.X-30, (int)position.X+30);
-                    int y = random.Next((int)position.Y-30, (int)position.Y+30);
-                    x = Math.Max(minX + 30, Math.Min(maxX - 30, x));
-                    y = Math.Max(minY + 30, Math.Min(maxY - 30, y));
-                    int size = random.Next(minFoodSize, maxFoodSize);
-                    Entity food = Shared.Entities.Food.create(m_nextFoodId++, "Textures/egg", new Vector2(x, y), size);
+                    if (entity.contains<SnakeId>() && entity.get<SnakeId>().id == m_entities[id].get<SnakeId>().id && !entity.contains<Shared.Components.TurnPoint>())
+                    {
+                        var position = entity.get<Position>().position;
+                        int x = random.Next((int)position.X-30, (int)position.X+30);
+                        int y = random.Next((int)position.Y-30, (int)position.Y+30);
+                        x = Math.Max(minX + 30, Math.Min(maxX - 30, x));
+                        y = Math.Max(minY + 30, Math.Min(maxY - 30, y));
+                        int size = random.Next(minFoodSize, maxFoodSize);
+                        Entity food = Shared.Entities.Food.create(m_nextFoodId++, "Textures/egg", new Vector2(x, y), size);
+                        foodToAdd.Add(food);
+                    }
+                }
+                foreach (var food in foodToAdd)
+                {
                     m_foodList.Add(food);
                     addEntity(food);
                     MessageQueueServer.instance.broadcastMessage(new Shared.Messages.NewEntity(food));

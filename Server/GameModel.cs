@@ -9,7 +9,7 @@ namespace Server
 {
     public class GameModel
     {
-        private Dictionary<int, float> m_invincible = new Dictionary<int, float>(); // SnakeIds of invincible snakes
+        private Dictionary<int, int> m_invincible = new Dictionary<int, int>(); // SnakeIds of invincible snakes
         private int m_nextSnakeId = 0;
         private int m_nextFoodId = 0;
         private HashSet<int> m_clients = new HashSet<int>();
@@ -43,7 +43,7 @@ namespace Server
             foreach (var item in m_invincible)
             {
                 m_invincible[item.Key] = item.Value + elapsedTime.Milliseconds;
-                if (item.Value >= 3000f) 
+                if (item.Value >= 3000) 
                 {
                     m_invincible.Remove(item.Key);
                 }
@@ -414,7 +414,7 @@ namespace Server
             Entity player = Shared.Entities.Snake.createHead(++m_nextSnakeId, "Textures/head", messageJoin.name, new Vector2(x, y), 50, 0.2f, 0, 0);
             // player.add(new PlayerType("Player"));
             Entity tail = Shared.Entities.Tail.createTail(m_nextSnakeId, "Textures/tail", new Vector2(x - 50, y), 50, 0.2f, 0f);
-            m_invincible[m_nextSnakeId] = 0f;
+            m_invincible[m_nextSnakeId] = 0;
 
             // Send the initial entities to the joining client
             MessageQueueServer.instance.sendMessage(clientId, new NewEntity(player));
